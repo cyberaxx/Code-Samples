@@ -133,13 +133,104 @@ public class Search {
     return lo;
   }
 
-  // find a max in a bitonic array
-  public static int bitonicMax(){
+  // find a max in a bitonic oredered array DISTINCT items
+  public static Comparable bitonicMax(Comparable[] items) {
+    if(items==null) return null;
+    if(items.length==0) return null;
+    return items[recursiveBitonicMax(items, 0, items.length-1)];
   }
-  public static void bitonicSearch(){}
-  public static void bitonicSort(){}
-  
 
+  // recursive solution: 1. Base case 2. Recurrence (Divide and Conquer)
+  private static int recursiveBitonicMax(Comparable[] items, int lo, int hi) {
+    // BASE CASE:
+    if(hi<=lo) return lo; // subarrays of size 1 or less, the lo is the index of the max element
+    if(hi-lo==1) { // subproblems of size 2
+      if(items[lo].compareTo(items[hi])>0) return lo;
+      else return hi;
+    }
+
+    // RECURRENCE: For subproblems of size 3 
+    // find the middle of the subarray:
+    int mid=(hi+lo)/2;
+
+    // compare the middle element with its right and left neighbours:
+    int cmpRight = items[mid].compareTo(items[mid+1]);
+    int cmpLeft = items[mid].compareTo(items[mid-1]);
+
+    // RECURSIVE CALLS:
+    // 1. if the mid is greater than or equal to the left and less than or equal to the right we are in the increasing half we must recurse on right half
+    if(cmpLeft>0 && cmpRight<0)  return recursiveBitonicMax(items, mid+1, hi);
+    // 2. if the mid is less than or equal to the left and greater than or equal to the right we are in the decreasing half we must recurse on left half
+    else if(cmpLeft<0 && cmpRight>0) return recursiveBitonicMax(items, lo, mid-1);
+    else // if cmpLeft>0 and cmpRight>0 : MAX
+      return mid;
+  }	
+
+  public static Comparable bitonicMin(Comparable[] items) {
+    if(items==null) return null;
+    if(items.length==0) return null;
+    return items[bitonicMinIndex(items, 0, items.length-1)];
+  }
+
+  private static int bitonicMinIndex(Comparable[] items, int lo, int hi) {
+    if(hi<lo) return -1;
+    if(hi==lo) return lo;
+
+    if(items[lo].compareTo(items[hi])<0) return lo;
+    else return hi;
+  }
+
+  public static int bitonicSearch(Comparable[] items, Comparable key) {
+    if(items==null) return -1;
+    if(key==null || items.length==0) return -1;
+    return recursiveBitonicSearch(items, 0, items.length-1, key);
+  }
+
+  // recursive method: 1. Base case 2. Recurrence
+  private static int recursiveBitonicSearch(Comparable [] items, int lo, int hi, Comparable key) {
+    // BASE CASE:
+    if(hi<lo) return -1; // 0-size subarray
+    if(hi==lo) { // 1-size subarray
+      if(key.compareTo(items[lo])==0) return lo;
+      else return -1;
+    }
+    if(hi-lo==1) { // 2-size subarray
+      if(key.compareTo(items[lo])==0)  return lo;
+      else if(key.compareTo(items[hi])==0) return hi;
+      else return -1; // failed search
+    }
+
+    // Divide and Conquer: For subarrays of size >1 (>=2)
+    int mid=(hi+lo)/2; // find middle of the subarray
+    // compare it to its left and right element to identify which part of the arry the mid element belongs to:
+    int cmpLeft=items[mid].compareTo(items[mid-1]);
+    int cmpRight=items[mid].compareTo(items[mid+1]);
+    int cmpKey = key.compareTo(items[mid]);
+
+    // 1. if mid is at the increasing portion of the array:
+    if(cmpLeft>0 && cmpRight<0) {
+      // if key is less than the middle
+      if(cmpKey<0) return recursiveBitonicSearch(items, lo, mid-1, key);
+      else if(cmpKey>0) return recursiveBitonicSearch(items, mid+1, hi, key);
+      else return mid;
+    }
+    // mid is at the decreasing side:
+    else if (cmpLeft<0 && cmpRight>0) {
+      // key is less than th middle:
+      if(cmpKey<0)  return recursiveBitonicSearch(items, mid+1, hi, key);
+      else if(cmpKey>0)  return recursiveBitonicSearch(items, lo, mid-1, key);
+      else return mid;
+    }
+    // split case where mid is a Max element
+    else {
+      // if key is less than Max recurse on its right
+      if(cmpKey<0)  return recursiveBitonicSearch(items, mid+1, hi, key);
+      else if(cmpKey>0)  return recursiveBitonicSearch(items, lo, mid-1, key);
+      else return mid;
+    }
+  }
+
+  public static void bitonicSort() {}
 
   // BS client code:
   public static void main(String [] args) {
@@ -192,6 +283,37 @@ public class Search {
     System.out.println("40's ranks is:" + rank(items, 40));
     System.out.println(items[rank(items, 40)]);
     System.out.println();
+ 
+    Integer[] bitonic = new Integer[]{8, 9, 10, 13, 15, 16, 22, 23, 15, 14, 13, 12, 9, 8, 7, 6, 5};
+    System.out.println("Bitonic Max is: " + bitonicMax(bitonic));
+    System.out.println("Bitonic Min is: " + bitonicMin(bitonic));
+    System.out.println("Bitonic array: ");
+    System.out.println(Arrays.toString(bitonic));
+    System.out.println("Bitonic Search: " + bitonicSearch(bitonic, 23));
+    System.out.println("Bitonic Search: " + bitonicSearch(bitonic, 12));
+    System.out.println("Bitonic Search: " + bitonicSearch(bitonic, 8));
+    System.out.println();
 
+    Integer[] bitonicUp = new Integer[]{8, 9, 10, 13, 15, 16, 22, 23, 122, 145, 188};
+    System.out.println("BitonicUp Max is: " + bitonicMax(bitonicUp));
+    System.out.println("BitonicUp Min is: " + bitonicMin(bitonicUp));
+    System.out.println("BitonicUp array: ");
+    System.out.println(Arrays.toString(bitonicUp));
+    System.out.println("Bitonic Search: " + bitonicSearch(bitonicUp, 23));
+    System.out.println("Bitonic Search: " + bitonicSearch(bitonicUp, 12));
+    System.out.println("Bitonic Search: " + bitonicSearch(bitonicUp, 8));
+    System.out.println();
+    System.out.println();
+
+    Integer[] bitonicDown = new Integer[]{23, 15, 14, 13, 12, 9, 8, 7, 6, 5};
+    System.out.println("BitonicDown Max is: " + bitonicMax(bitonicDown));
+    System.out.println("BitonicDown Min is: " + bitonicMin(bitonicDown));
+    System.out.println("Bitonic array: ");
+    System.out.println(Arrays.toString(bitonicDown));
+    System.out.println("Bitonic Search: " + bitonicSearch(bitonicDown, 23));
+    System.out.println("Bitonic Search: " + bitonicSearch(bitonicDown, 12));
+    System.out.println("Bitonic Search: " + bitonicSearch(bitonicDown, 8));
+    System.out.println();
+    System.out.println();
   }
 }
