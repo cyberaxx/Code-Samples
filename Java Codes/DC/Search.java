@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Search {
   
   /* Ordered operation in a sorted array
@@ -10,7 +12,7 @@ public class Search {
 
   public static boolean contains(Comparable[] items, Comparable key) {
     // extreme test cases:
-    if (key==null || items.length==0) return null;
+    if (key==null || items.length==0) return false;
     return recursiveContains(items, 0, items.length-1, key);
   }
   
@@ -30,10 +32,7 @@ public class Search {
     if(items[mid].compareTo(key)==0) return true;
     else if(key.compareTo(items[mid])<0) return recursiveContains(items, lo, mid-1, key);
     else // key.compareTo(items[mid])>0
-      recursiveContains(items, mid+1, hi, key);
-
-    
-  
+      return recursiveContains(items, mid+1, hi, key);
   }
 
   public static int indexOf(){return -1;}
@@ -41,4 +40,20 @@ public class Search {
   public static int bitonicMax(){return -1;}
   public static void bitonicSort(){}
   public static void bitonicSearch(){}
+
+
+  // BS client code:
+  public static void main(String [] args) {
+    Integer [] items = new Integer[]{1,34, 5, 23, 26, 12, 5, 6, 5, 5, 8, 4, 3, 2, 34, 21, 16, 89};
+    // Sort the array:
+    Arrays.sort(items); // sort array of Comparable types in-place, using Dual-Pivot Quick Sort E(RT)=NlogN
+    System.out.println(contains(items, 13));
+    System.out.println(contains(items, 4));
+    System.out.println(contains(items, 26));
+
+    System.out.println(Arrays.binarySearch(items, 13)>=0);
+    System.out.println(Arrays.binarySearch(items, 4)>=0);
+    System.out.println(Arrays.binarySearch(items, 26)>=0);
+    
+  }
 }
