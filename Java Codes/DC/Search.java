@@ -90,7 +90,35 @@ public class Search {
       return mid;
   }
 
-  public static int select(){return -1;}
+  // O(1) is ordered array
+  public static Comparable select(Comparable[] items, int k) {
+    int index=k-1;
+    if(index<0 || index>=items.length) return null;
+    return items[index];
+  }
+
+  // Given a Comparable key, what is the rank of the key (#of keys less than the given key) in an ORDERED array: both search hit and search miss can
+  // represent the rank
+  public static int rank(Comparable[] items, Comparable key) {
+    // extreme cases:
+    if(key==null || items.length==0) return -1;
+    return recursiveRank(items, 0, items.length-1, key); 
+  }
+  
+  // recusive method: 1. Base cas, 2. Recurrence (Divide, Conquer, and Combine)
+  private static int recursiveRank(Comparable[] items, int lo, int hi, Comparable key) {
+    // Base case: where to stop division (subproblems (subarrays) of size 1 or less)
+    // search hit/miss (unsuccessful search) : return the position that the given "key" belongs to
+    if(hi<=lo) return lo;
+
+    // fid the middle element in the ASCENDING ordered array:
+    int mid=(hi+lo);
+    if(key.compareTo(items[mid])<0) return recursiveRank(items, lo, mid-1, key);
+    else if(key.compareTo(items[mid])>0) return recursiveRank(items, mid+1, hi, key);
+    else // search hit: key is to equal the  middle element:
+      return mid;
+  }
+
   public static int bitonicMax(){return -1;}
   public static void bitonicSort(){}
   public static void bitonicSearch(){}
@@ -122,6 +150,31 @@ public class Search {
     System.out.println(Arrays.binarySearch(items, 13)>=0);
     System.out.println(Arrays.binarySearch(items, 4)>=0);
     System.out.println(Arrays.binarySearch(items, 26)>=0);
-    
+
+    System.out.println();
+    System.out.println();
+
+    System.out.println(select(items, 4));
+    System.out.println(select(items, 5));
+    System.out.println(select(items, 8));
+    System.out.println(items[3]);
+    System.out.println(items[4]);
+    System.out.println(items[7]);
+
+    System.out.println();
+    System.out.println();
+
+    System.out.println(Arrays.toString(items));
+    System.out.println();
+    System.out.println("10's ranks is:" + rank(items, 10));
+    System.out.println(items[rank(items, 10)]);
+    System.out.println();
+    System.out.println("20's ranks is:" + rank(items, 20));
+    System.out.println(items[rank(items, 20)]);
+    System.out.println();
+    System.out.println("40's ranks is:" + rank(items, 40));
+    System.out.println(items[rank(items, 40)]);
+    System.out.println();
+
   }
 }
