@@ -102,7 +102,8 @@ public class Search {
   public static int rank(Comparable[] items, Comparable key) {
     // extreme cases:
     if(key==null || items.length==0) return -1;
-    return recursiveRank(items, 0, items.length-1, key); 
+//    return recursiveRank(items, 0, items.length-1, key);
+    return rank(items, 0, items.length-1, key); 
   }
   
   // recusive method: 1. Base cas, 2. Recurrence (Divide, Conquer, and Combine)
@@ -119,9 +120,25 @@ public class Search {
       return mid;
   }
 
-  public static int bitonicMax(){return -1;}
-  public static void bitonicSort(){}
+  private static int rank(Comparable[] items, int lo, int hi, Comparable key) {
+    // search for the key within ORDERED subarray [lo hi]: using binarySearch
+    while(hi>=lo) {
+      int mid=(hi+lo)/2;
+      if(key.compareTo(items[mid])<0) hi=mid-1;
+      else if (key.compareTo(items[mid])>0) lo=mid+1;
+      else // equal to the middle elemet: SEARCH HIT:
+        return mid;
+    }
+    // Search miss (subproblem of size one hi=lo=>mid=hi or lo): hi<lo (case 1: lo get updated to hi+1 (lo+1) , case 2: hi get update to lo-1):
+    return lo;
+  }
+
+  // find a max in a bitonic array
+  public static int bitonicMax(){
+  }
   public static void bitonicSearch(){}
+  public static void bitonicSort(){}
+  
 
 
   // BS client code:
