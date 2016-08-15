@@ -13,9 +13,24 @@ public class Search {
   public static boolean contains(Comparable[] items, Comparable key) {
     // extreme test cases:
     if (key==null || items.length==0) return false;
-    return recursiveContains(items, 0, items.length-1, key);
+//    return recursiveContains(items, 0, items.length-1, key);
+    return contains(items, 0, items.length-1, key);
   }
   
+  // Assumption: Input array is SORTED (ordered)
+  private static boolean contains(Comparable [] items, int lo, int hi, Comparable key) {
+    while (hi>=lo) {
+      // middle of subarray (for an ordered array this is the MEDIAN)
+      int mid=(hi+lo)/2;
+
+      if(key.compareTo(items[mid]) < 0) hi=mid-1;
+      else if(key.compareTo(items[mid])>0) lo=mid+1;
+      else // if key.compareTo(items[mid])==0 equal:
+        return true;
+    }
+    return false;
+  }
+
   // Divide and Conquer search subroutine: 1. Divde 2. Conquer 3. Combine
   // T(N) = T(N/2) + O(1) => MM case 2: T(n)=O(lgN)
   private static boolean recursiveContains(Comparable[] items, int lo, int hi, Comparable key) {
@@ -35,7 +50,46 @@ public class Search {
       return recursiveContains(items, mid+1, hi, key);
   }
 
-  public static int indexOf(){return -1;}
+  public static int indexOf(Comparable [] items, Comparable key){
+    // extreme test case:
+    if(!contains(items, key)) return -1; // items array does not contain the key
+//    return recursiveIndexOf(items, 0, items.length-1, key);   
+    return indexOf(items, 0, items.length-1, key);
+    
+  }
+
+  // Assumption input is in ASCENDING order:
+  private static int indexOf(Comparable[] items, int lo, int hi, Comparable key) {
+    if(!contains(items, key)) return -1; // if items array does not contain the key return -1
+    while(hi>=lo) {
+      int mid=(hi+lo)/2;
+      if(key.compareTo(items[mid])<0) hi=mid-1;
+      else if(key.compareTo(items[mid])>0) lo=mid+1;
+      else // key.compareTo(items[mid])==0 equal:
+        return mid;
+    }
+    return -1;
+  }
+  // recursive solution: 1. Base case 2. Recurrence
+  private static int recursiveIndexOf(Comparable[] items, int lo, int hi, Comparable key) {
+    // 1. Base case: stop dividing -> for subproblem (subarray) of size 1 or less
+    if(hi<lo) return -1; // 0-size subarray
+    // 1-size subarray:
+    if(hi==lo) {
+      if(key.compareTo(items[lo])==0) return lo;
+      else return -1;
+    }
+
+    // find the middle element: helps to divide the prolem into two subproblem of half size N->N/2
+    int mid=(hi+lo)/2;
+    
+    // 2. recursive calls
+    if(key.compareTo(items[mid])<0) return recursiveIndexOf(items, lo, mid-1, key); // T(N/2)
+    else if(key.compareTo(items[mid])>0) return recursiveIndexOf(items, mid+1, hi, key); // T(N/2)
+    else // if key is equal to the items[mid]:
+      return mid;
+  }
+
   public static int select(){return -1;}
   public static int bitonicMax(){return -1;}
   public static void bitonicSort(){}
@@ -50,6 +104,20 @@ public class Search {
     System.out.println(contains(items, 13));
     System.out.println(contains(items, 4));
     System.out.println(contains(items, 26));
+
+    System.out.println();
+    System.out.println();
+
+    System.out.println(indexOf(items, 13));
+    System.out.println(indexOf(items, 4));
+    System.out.println(indexOf(items, 26));
+
+    System.out.println(Arrays.binarySearch(items, 13));
+    System.out.println(Arrays.binarySearch(items, 4));
+    System.out.println(Arrays.binarySearch(items, 26));
+
+    System.out.println();
+    System.out.println();
 
     System.out.println(Arrays.binarySearch(items, 13)>=0);
     System.out.println(Arrays.binarySearch(items, 4)>=0);
