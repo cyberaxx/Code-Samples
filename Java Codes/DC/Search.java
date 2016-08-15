@@ -102,16 +102,17 @@ public class Search {
   public static int rank(Comparable[] items, Comparable key) {
     // extreme cases:
     if(key==null || items.length==0) return -1;
-//    return recursiveRank(items, 0, items.length-1, key);
-    return rank(items, 0, items.length-1, key); 
+    return recursiveRank(items, 0, items.length-1, key);
+//    return rank(items, 0, items.length-1, key); 
   }
   
   // recusive method: 1. Base cas, 2. Recurrence (Divide, Conquer, and Combine)
   private static int recursiveRank(Comparable[] items, int lo, int hi, Comparable key) {
     // Base case: where to stop division (subproblems (subarrays) of size 1 or less)
-    // search hit/miss (unsuccessful search) : return the position that the given "key" belongs to
-    if(hi<=lo) return lo;
+    // Search miss (unsuccessful search) : return the position that the given "key" belongs to
+    if(hi<lo) return lo;
 
+    // RECURRENCE:
     // fid the middle element in the ASCENDING ordered array:
     int mid=(hi+lo);
     if(key.compareTo(items[mid])<0) return recursiveRank(items, lo, mid-1, key);
@@ -347,6 +348,31 @@ public class Search {
   }
 
   public static void bitonicSort() {}
+  
+  public static void binaryInsertionSort(Comparable[] items){
+    // scann the array from let to right: i scanner takes care of that
+    for(int i=1; i<items.length; i++) {
+      // for each item: find its rightful position using the rank operation
+      int k=rank(items, 0, i-1, items[i]); // logN
+      // put j in-place: by pushing everything on its right one spot to the right for j=k:N
+      if(i!=k) {
+        Comparable item=items[i];
+	for(int j=k+1; j<items.length; j++) {
+	  items[j]=items[j-1];
+        }   
+      }
+    }
+  }
+
+  private static boolean less(Comparable v, Comparable w) {
+    return v.compareTo(w)<0;
+  }
+
+  private static void exch(Comparable [] items, int i, int j) {
+    Comparable temp=items[i];
+    items[i]=items[j];
+    items[j]=temp;
+  }
 
   // BS client code:
   public static void main(String [] args) {
@@ -390,11 +416,11 @@ public class Search {
 
     System.out.println(Arrays.toString(items));
     System.out.println();
-    System.out.println("10's ranks is:" + rank(items, 10));
-    System.out.println(items[rank(items, 10)]);
+    System.out.println("-1's ranks is:" + rank(items, -1));
+    System.out.println(items[rank(items, -1)]);
     System.out.println();
-    System.out.println("20's ranks is:" + rank(items, 20));
-    System.out.println(items[rank(items, 20)]);
+    System.out.println("2's ranks is:" + rank(items, 2));
+    System.out.println(items[rank(items, 2)]);
     System.out.println();
     System.out.println("40's ranks is:" + rank(items, 40));
     System.out.println(items[rank(items, 40)]);
