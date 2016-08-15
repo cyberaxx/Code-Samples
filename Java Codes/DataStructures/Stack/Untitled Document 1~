@@ -1,0 +1,13 @@
+
+
+  public static void main (String [] args) {
+    String s = "Shervin is a good boy!";
+    String [] ss = stringScanner(s);
+    for(String string : ss) System.out.println(string);
+  }
+  
+  public static String [] stringScanner (String input) {
+    String [] strings = input.split(" ");
+    return strings;
+  }
+

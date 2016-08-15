@@ -1,0 +1,41 @@
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class Queue<Item> implements Iterable<Item> {
+  /**
+   Linked List Implementation of Queue<Item>
+   Queue is a Collection data type, that maintains a
+   collecrton of items in form of queue.
+
+   In Queue of item the least recently added item, would 
+   get removed first.
+
+   So, Queue adds items to its end, and removes items 
+   from its beginning (FIFO) similar to real queue
+
+   to implement Queue with singly linked list:
+   we need two sentinel references to beginning
+   and end of the queue to do add and remove operations
+   in constant time.
+  */
+
+   private Node start; // reference to the beginning of the Q
+   private Node end; // reference to the end of the Q
+   private int size; // number of items in the Q
+   
+   // inner class Node<Item> to make linked list
+   private class Node<Item> {
+     // data field:
+     private Item data;
+     // reference field:
+     private Node next;
+
+     // Constructor:
+     public Node(Item item) {
+       data = item;
+       next = null;
+     }
+   }
+
+   
+}
