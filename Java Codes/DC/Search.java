@@ -137,7 +137,39 @@ public class Search {
   public static Comparable bitonicMax(Comparable[] items) {
     if(items==null) return null;
     if(items.length==0) return null;
-    return items[recursiveBitonicMax(items, 0, items.length-1)];
+//    return items[recursiveBitonicMax(items, 0, items.length-1)];
+//    return items[bitonicMax(items, 0, items.length-1)];
+     return items[(recBitonicMax(items, 0, items.length-1))];
+  }
+
+  private static int bitonicMax(Comparable [] items, int lo, int hi) {
+    while(hi>lo) {
+      int mid=(hi+lo)/2;
+      int cmp=items[mid].compareTo(items[mid+1]);
+      if(cmp>0) hi=mid;
+      else if(cmp<0) lo=mid+1;
+      else return mid;
+    }
+    return lo;
+  }
+
+  // ASSUMPTION: items is a bitonic array
+  private static int recBitonicMax(Comparable[] items, int lo, int hi) {
+    // BASE CASE: subarrys of size 1 and less
+    if(hi<=lo)  return lo;
+    // RECURRENCE:
+    // find the middle element in the subarray of size 2 or more:
+    int mid=(hi+lo)/2;
+    // compare the middle element with the element on its right in the array
+    int cmp=items[mid].compareTo(items[mid+1]);
+
+    // Divide and Conquer:
+    // Case1: if the middle item is less than the item on its right: search for max on its right (exclusive):
+    if(cmp<0)  return recBitonicMax(items, mid+1, hi);
+    // Case2: if the middle item is greater than the item on its right: search for max on its left (inclusive):
+    else if(cmp>0)  return recBitonicMax(items, lo, mid);
+    // case3: if equal:
+    else return mid;
   }
 
   // recursive solution: 1. Base case 2. Recurrence (Divide and Conquer)
@@ -183,7 +215,7 @@ public class Search {
   public static int bitonicSearch(Comparable[] items, Comparable key) {
     if(items==null) return -1;
     if(key==null || items.length==0) return -1;
-    return recursiveBitonicSearch(items, 0, items.length-1, key);
+//    return recursiveBitonicSearch(items, 0, items.length-1, key);
   }
 
   // recursive method: 1. Base case 2. Recurrence
