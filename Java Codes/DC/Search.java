@@ -216,6 +216,90 @@ public class Search {
     if(items==null) return -1;
     if(key==null || items.length==0) return -1;
 //    return recursiveBitonicSearch(items, 0, items.length-1, key);
+//    return bitonicSearch(items, 0, items.length-1, key);
+    return recBitonicSearch(items, 0, items.length-1, key);
+
+  }
+
+  // Recursive approach: 1. Base case, 2. Recurrence (Divide and Conquer
+  private static int recBitonicSearch(Comparable[] items, int lo, int hi, Comparable key) {
+    // BASE CASE:
+    if(hi<lo) return -1; // subarray of size 0: key is not found
+    if(hi==lo) { // for subarrays of size 1:
+      if(key.compareTo(items[lo])==0) return lo;
+      else return -1;
+    }
+    
+    // RECURRENCE (Divide and Conquer): for subproblems (subarrays) of size 2 or more:
+    // division: 
+    // 1a. find the middle elemnt
+    int mid=(lo+hi)/2;
+    // 1b. compare the middle element to the element on its right to IDENTIFY which part (increasing portion or decreasing part) of array it belongs to:
+    int cmpRight=items[mid].compareTo(items[mid+1]);
+    // 1c. compare the given key to the middle element:
+    int cmpKey=key.compareTo(items[mid]);
+
+    // conquer: solve subproblems of half-size of the orginal problem by recurssing on left-half or right-half of the original array:
+    // 1. if the item at the middle is greater than its right neighbour (decreasing part)
+    if(cmpRight>0) {
+      // key is less the middle element:
+      if(cmpKey<0)  return recBitonicSearch(items, mid+1, hi, key);
+      // if key is greater than mid element:
+      else if(cmpKey>0) return recBitonicSearch(items, lo, mid-1, key);
+      else // if key is equal to mid element:
+        return mid;
+    }
+    
+    // 2. if the middle item is less than its right neighbour (increasing part)
+    else {
+      if(cmpKey<0)  return recBitonicSearch(items, lo, mid-1, key); // search for the key on the left half
+      else if(cmpKey>0)  return recBitonicSearch(items, mid+1, hi, key); // search for the key on the right half
+      else // if key is equal to the middle element:
+        return mid; // key is found
+    }
+  }
+
+  private static int bitonicSearch(Comparable[] items, int lo, int hi, Comparable key) {
+    // for subarrays of size 2 or more
+    while(hi>lo) {
+      // find the middle element:
+      int mid=(lo+hi)/2;
+
+      // compare the middle element with item on its right (generic comparison using compareTo method):
+      // NOTE: mid+1 element always exist!!!!
+      int cmpRight=items[mid].compareTo(items[mid+1]);
+      // compare the given key with the middle element:
+      int cmpKey=key.compareTo(items[mid]);
+
+      // case 1: if middle element is LESS THAN the element on its right (we are within the increasing portion of the array):
+      if(cmpRight<0) {
+        // 1a. if given key is less the middle element: key must be on its left (exclusive):
+        if(cmpKey<0)  hi=mid-1;
+        // 1b. if given key is greater the middle element: key must be on its right (exclusive):
+        else if(cmpKey>0)  lo=mid+1;
+        // 1c. if equal: return the index:
+        else return mid;
+      }
+
+      // case 2: if the middle element is greater than the element on its right: we are an the decreasing portion of the bitonic array
+      // NOTE: we do NOT need to have another case for equal because two neighbours in bitonic array must be STRICTLY greater/less than each other.
+      else {
+        // 2a. if key is less than the middle element, search on middle's right (exclusive)
+        if(cmpKey<0)  lo=mid+1;
+        // 2b. if key is greater than the middle element: we have to search on left of the middle element:
+        else if(cmpKey>0)  hi=mid-1;
+        // 2c. if equal:
+        else return mid;
+      }
+    }
+
+    // subproblem of size 1:
+    if(hi==lo) {
+      if(key.compareTo(items[lo])==0) return lo;
+      else return -1;
+    }
+    // item not found
+    return -1;
   }
 
   // recursive method: 1. Base case 2. Recurrence
