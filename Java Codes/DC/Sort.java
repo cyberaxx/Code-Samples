@@ -27,7 +27,63 @@ public class Sort {
       }
     }
   }
+
+  // given an array of Comparable objects, this method returns how many elements are out of place
+  public static int inversionCounter(Comparable[] items) {
+    // non-distructive implementation:
+    Comparable[] copy=new Comparable[items.length];
+    System.arraycopy(items, 0, copy, 0, items.length); // copy the original array
+    Comparable[] aux=new Comparable[items.length]; // aux array
+
+    // recursive helper method using the copy array:
+    return inversionCounter(copy, aux, 0, items.length-1);
+    
+  }
+
+  // recursive method: 1. Base case, 2, Recurrence:   
+  private static int inversionCounter(Comparable[] items, Comparable [] aux, int lo, int hi) {
+    // BASE CASE:
+    // for subarrays of size 1 or less -> 0 inversions
+    if(hi<=lo) return 0;
+
+    // RECURRENCE (D&C): For subarrays of size 2 and more
+    // Divide: find the middle element of the subarray
+    int mid=(hi+lo)/2;
+    
+    // Conquer: count the number of left-half subarray and right-half subarray recursively:
+    int leftInversions=inversionCounter(items, aux, lo, mid); // [lo mid]
+    int rightInversions=inversionCounter(items, aux, mid+1, hi); // [mid+1 hi]
+
+    // Combine: count the number of split inversion (inversions within subarray [lo hi] after merging [lo mid] with [mid+1 hi]
+    int splitInversions=mergeAndCount(items, aux, lo, mid, hi);
+
+    return leftInversions+rightInversions+splitInversions;
+  }
+
+  // merge two sorted subarrays and count the number of split inversions (number of out of place items BEFORE merging two subarrays)
+  private static int mergeAndCount(Comparable [] items, Comparable [] aux, int lo, int mid, int hi) {
+    // copy from original array to the aux array before sort: [lo hi], hi-lo+1 items
+    System.arraycopy(items, lo, aux, lo, hi-lo+1);
+
+    int i=lo; // left-half pointer
+    int j=mid+1; // right-half pointer
+    int counter=0; // inversion counter: initialized to 0
    
+    // scann aux array from lo to hi (inclusive) and populate items array and count inversions
+    for(int k=lo; k<=hi; k++) {
+      // as long as left subarray is used to copy over to the original items we are good, no inversions
+      if(i>mid) items[k]=aux[j++];
+      else if(j>hi)  items[k]=aux[i++];
+      else if(less(aux[j], aux[i])) {
+        items[k]=aux[j++];
+        counter=counter+(mid-i+1); // add the number of element remaining in the left subarray to the counter
+      }
+      else items[k]=aux[i++];
+    }
+
+    return counter;
+  }
+
   // recursive method on a reference type input: we need to write a helper method that works on different portion of the reference type input:
   // RECURSIVE APPROACH: 1. Base case, 2. Recurrence (Divide and Conquer)
   private static void sort(Comparable[] items, Comparable[] aux, int lo, int hi) {
