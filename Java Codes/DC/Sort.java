@@ -10,6 +10,23 @@ public class Sort {
     Comparable[] aux=new Comparable[items.length];
     sort(items, aux, 0, items.length-1);
   }
+
+  // iterative merge sort:
+  public static void sortBU(Comparable [] items) {
+    // aux array of same size:
+    Comparable[] aux=new Comparable[items.length];
+
+    int mid, hi;
+    // for subproblem of size 1, 2, 4, and higher to N (items.length)
+    for(int subSize=1; subSize<items.length; subSize*=2) { // this for loop runs logN times (each time double the size of the subproblem
+      for(int lo=0; lo+subSize<items.length ; lo=lo+2*subSize) {
+        // merge lo-lo+subSize with lo+subSize -to- lo+2*subSize
+        mid=lo+subSize-1;
+        hi=Math.min(lo+2*subSize-1, items.length-1); // check if hi is not out of array bounds
+        merge(items, aux, lo, mid, hi);
+      }
+    }
+  }
    
   // recursive method on a reference type input: we need to write a helper method that works on different portion of the reference type input:
   // RECURSIVE APPROACH: 1. Base case, 2. Recurrence (Divide and Conquer)
@@ -32,10 +49,15 @@ public class Sort {
     sort(items, aux, mid+1, hi);
     // right-half is sorted
 
-    // COMBINE:
-    // pass sorted subarrays (left and right) into the merge subroutine:
-    merge(items, aux, lo, mid, hi);
-    // the subarray from lo to hi is sorted
+    // OPTIMIZATION: Check if left half and right half are already inplace:
+    // check if the right most item of the left half (the biggest element) is smaller than the left most element of the right half (its smallest element)
+    if(less(items[mid+1],items[mid])) {
+      // COMBINE:
+      // pass sorted subarrays (left and right) into the merge subroutine:
+      merge(items, aux, lo, mid, hi);
+      // the subarray from lo to hi is sorted
+    }
+    else return;
   
   } // T(N)=2T(N/2)+O(N)-> MERGE => a=2 (branching factor=number of subproblems), b^d=2 => a=b^d => MM case 2: T(N)=O(NlgN)
 
