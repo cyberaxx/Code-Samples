@@ -361,7 +361,7 @@ public class Search {
       if(i!=k) {
         // move everything from its rightful position to right
         Comparable item=items[i];
-        // shift elements on k's right to the right (overwiret the j element)
+        // shift elements on k's right to the right (overwiret the i element)
 	for(int j=i; j>k; j--) {
 	  items[j]=items[j-1]; // shift to right from k to i 
         }
