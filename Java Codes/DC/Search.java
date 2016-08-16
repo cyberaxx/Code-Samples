@@ -351,15 +351,22 @@ public class Search {
   
   public static void binaryInsertionSort(Comparable[] items){
     // scann the array from let to right: i scanner takes care of that
-    for(int i=1; i<items.length; i++) {
-      // for each item: find its rightful position using the rank operation
-      int k=rank(items, 0, i-1, items[i]); // logN
-      // put j in-place: by pushing everything on its right one spot to the right for j=k:N
+    for(int i=0; i<items.length; i++) {
+      // SEARCH (for rightful position within the sorted subarray): this part takes care of generic comparison using compareTo method
+      // for each item: find its rightful position using the rank operation in (items, 0, i) subarray
+      int k=rank(items, 0, i, items[i]); // logN 
+
+      // INSERTION: O(N)
+      // if the item is not already inplace:
       if(i!=k) {
+        // move everything from its rightful position to right
         Comparable item=items[i];
-	for(int j=k+1; j<items.length; j++) {
-	  items[j]=items[j-1];
-        }   
+        // shift elements on k's right to the right (overwiret the j element)
+	for(int j=i; j>k; j--) {
+	  items[j]=items[j-1]; // shift to right from k to i 
+        }
+        // k is ready:
+        items[k]=item;
       }
     }
   }
@@ -378,6 +385,17 @@ public class Search {
   public static void main(String [] args) {
     Integer [] items = new Integer[]{1,34, 5, 23, 26, 12, 5, 6, 5, 5, 8, 4, 3, 2, 34, 21, 16, 89};
     // Sort the array:
+    System.out.print("Original array: \n" + Arrays.toString(items));
+    System.out.println();
+
+    binaryInsertionSort(items);
+    System.out.print("Binary Insertion Sort: \n" + Arrays.toString(items));
+    System.out.println();
+
+    Arrays.sort(items);
+    System.out.print("System Sort: \n" + Arrays.toString(items));
+    System.out.println();
+   
     Arrays.sort(items); // sort array of Comparable types in-place, using Dual-Pivot Quick Sort E(RT)=NlogN
     System.out.println(contains(items, 13));
     System.out.println(contains(items, 4));
