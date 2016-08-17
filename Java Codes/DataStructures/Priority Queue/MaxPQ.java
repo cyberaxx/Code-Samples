@@ -20,7 +20,7 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   // Constructor:
   public MaxPQ() {
     N=0; // empty MaxPQ
-    items = (Key[]) new Object[4]; // UGLY CASTING: Java does NOT allow generci array creation
+    items = (Key[]) new Comparable[4]; // UGLY CASTING: Java does NOT allow generci array creation
   }
 
   // instance methods:
@@ -32,7 +32,7 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
        before addition check if the array is full:
        double the size of the array
     */
-    if(N==items.length-1) resize(2*items.length);   
+    if(N>=items.length-1) resize(2*items.length);   
     // add the new key to the end of the items array:
     // start inserting from index 1:
     items[++N]=key; // and update the N (number of element in the MaxPQ)
@@ -58,8 +58,8 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     // prevent loitering:
     items[N+1]=null;
 
-    // RESIZING: if N==(items.length/4) - 1 shrink to half
-    if(N==(items.length/4)-1) resize(items.length/2);
+    // RESIZING: if N==(items.length-1)/4  shrink to half
+    if(N>0 && N==(items.length-1)/4) resize(items.length/2);
 
     // return the MAX:
     return max;
@@ -67,7 +67,11 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
   // number of elements in MaxPQ instance:
   public int size(){return N;}
-  public Key max(){return items[1];}
+  // sneek peek at the max:
+  public Key max(){
+    if(isEmpty()) throw new NoSuchElementException("Failed to perfom max() operation because the MaxPQ instance is empty!");
+    return items[1];
+  }
   public boolean isEmpty() {return N==0;}
 
   // Helper instance methods:
@@ -106,9 +110,9 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   // array resizing: make insertion O(logN) AMORTIZED for N insertion
   private void resize(int capacity) {
     // create a new array with new size:
-    Key[] temp=(Key[]) new Object[capacity]; // UGLY CASTIN: NO GENERIC ARRAY CREATION!!!
+    Key[] temp=(Key[]) new Comparable[capacity]; // UGLY CASTIN: NO GENERIC ARRAY CREATION!!!
     // copy items over from the original array to the new array:
-    for(int i=1; i<items.length; i++)
+    for(int i=1; i<=N; i++)
       temp[i]=items[i];
     items=temp;
   }
@@ -132,17 +136,17 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     overrding its abstract method iterator():
   */
   @Override
-  public Iterator<Key> iterator() {return new ListIterator();}
+  public Iterator<Key> iterator() {return new HeapIterator();}
 
   /* ListIterator class implements Java Iterator interface by
      overriding its abstract methods next() and hasNext():
      NOTE: The iterator does not return the elements in any particular order!
   */ 
-  private class ListIterator implements Iterator<Key> {
+  private class HeapIterator implements Iterator<Key> {
     private int current;
-    public ListIterator() {current=1;}
+    public HeapIterator() {current=1;}
     @Override
-    public boolean hasNext(){return items[current]==null;}
+    public boolean hasNext(){return items[current]!=null;}
     @Override
     public Key next(){
       // check if it hasNext():
