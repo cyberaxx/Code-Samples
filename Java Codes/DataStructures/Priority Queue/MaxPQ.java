@@ -20,7 +20,7 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   // Constructor:
   public MaxPQ() {
     N=0; // empty MaxPQ
-    items = (Key[]) new Comparable[4]; // UGLY CASTING: Java does NOT allow generci array creation
+    items = (Key[]) new Comparable[2]; // UGLY CASTING: Java does NOT allow generci array creation
   }
 
   // instance methods:
