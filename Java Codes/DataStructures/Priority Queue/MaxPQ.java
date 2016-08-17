@@ -25,6 +25,8 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
   // instance methods:
   // API: insert(Key key), delMAx(), size(), isEmpty(), max()
+
+  // O(logN) AMORTIZED
   public void add(Key key) {
     /* OVERFLOW:
        before addition check if the array is full:
@@ -38,6 +40,7 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     swim(N); // O(logN)
   }
 
+  // O(logN) AMORTIZED
   public Key delMax() {
     /* UNDERFLOW: 
        check if MaxPQ is not empty already:
@@ -51,7 +54,7 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     N--;
     // PAY the Piper to maintanin MaxPQ INVARIANCE:
     // sink down the new root to its rightful position in the heap
-    sink(1); // O(logN) AMORTIZED
+    sink(1); // O(logN)
     // prevent loitering:
     items[N+1]=null;
 
@@ -69,8 +72,9 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
   // Helper instance methods:
 
-  /* PROMOTION: after inserting a new node to a MaxPQ instance
-     if a child's key is greater than is parent, it has to SWIM up to its rightful position in the MaxPQ
+  /* PROMOTION: 
+     insertion, a new node added to a MaxPQ instance
+     if its key was greater than its parent, it has to SWIM up to its rightful position in the MaxPQ
   */
   private void swim(int i) {
     // while we have not hit the root node, and i's parent's key is less than its own key, SWIM up
@@ -80,9 +84,24 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     }
   }
 
-// node demotion after deletion
-  private void sink(int i){} 
+  /* DEMOTION:
+     deletion, a new root is out of place, it has to SINK down to its rightful position until we hit the last level or the node's key is no less than its childern's
+     otherwise, swap the node with its child with the largest key and keep sinking!
+  */
+  private void sink(int i){
+    // while the current node still have a child:
+    while(2*i<=N) {
+      int j=2*i; // left child
+      // compare left and right if right exist
+      if( j+1<=N && less(j, j+1) ) j++; // pick the right child for promotion, OW the left child
+      // compare parent with the bigger of the left and right child (if exists)
+      if(!less(i, j)) break; // parent is no less than the bigger of its childern
 
+      // Otherwise:
+      exch(i, j); // exchange parent and the bigger child
+      i=j; // demote the parent to its child level
+    }
+  } 
 
   // array resizing: make insertion O(logN) AMORTIZED for N insertion
   private void resize(int capacity) {
