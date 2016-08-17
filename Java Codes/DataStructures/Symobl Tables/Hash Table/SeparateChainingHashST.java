@@ -91,7 +91,6 @@ public class SeparateChainingHashST<Key, Value> implements Iterable<Key> {
   // remove an item from HashST given the key
   public Value remove(Key key) {return null;}
 
-
   private void resize(int capacity) {}
 
   /* in order to implement java iterable interface, we have override
