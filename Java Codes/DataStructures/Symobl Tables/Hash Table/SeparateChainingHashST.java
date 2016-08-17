@@ -1,10 +1,10 @@
 import java.util.Iterator;
 
 public class SeparateChainingHashST<Key, Value> implements Iterable<Key> {
-  // Instance variable:
-  private int m;
-  private Node[] table;
-  private int size;
+  // Instance variables:
+  private int m; // number of buckets in the table
+  private Node[] table; // data structure to maintain ST items 
+  private int size; // number of items currently in the SeparateChainingHashST data type
 
   public SeparateChainingHashST() {
     // set table size m initially to a prime number like 97:
@@ -36,6 +36,18 @@ public class SeparateChainingHashST<Key, Value> implements Iterable<Key> {
   // API
   // insert item to the HashST
   public void put(Key key, Value val){
+    /* Under Uniform Hashing assumption (where keys are distribute uniformly random), the expected length of each chain (LL) associated to each 
+       bucket is E(L)=N/M (where N denotes the number of keys and M denotes the number buckets): 1/M is the probablity to get hashed to each of M buckets
+       RT of search, and insert consequently governs by the length of the chain, and so to have a average constant time insert and search we need to ke the 
+       chains short, by choosing M proportional N such that N=O(M) -> O(L) = O(1)
+    */
+
+    // EXPANSION:
+    // check if the number buckets (m) is with constant factor of number keys (size):
+    // other wise double the size of the table
+    if(size>= 5*m) resize(2*m);
+
+
     // 1. Compute the corresponding integer index of the given key (of type Key) in the hash table (using the Key hashCode and modular function)
     int hashIndex=hash(key);
 
@@ -57,12 +69,30 @@ public class SeparateChainingHashST<Key, Value> implements Iterable<Key> {
     size++; // update the number of element in the table
   }
 
-  // search HashST for a given key
-  public boolean contains(Key key){return false;}
+  // search HashST for a given key (based on get method)
+  public boolean contains(Key key){return get(key)!=null;}
+
   // search HashST for a given key, return its value
-  public Value get(Key key) {return null;}
+  public Value get(Key key) {
+    // 1. compute its hash value: its corresponding index in the HST:
+    int hashIndex=hash(key);
+    // 2. go to the bucket with index "hashIndex", and traverse its corresponding chain:
+    for(Node x=table[hashIndex]; x!=null; x=x.next) {
+      // case 1: if we foud a node with a key equal to the key in the query:
+      if(x.key.equals(key)) {
+        // return its corresponding value
+        return (Value) x.value; // UGLY CASTING (because of NODE definition
+      }
+    }
+    // search miss: there were no items with key equal to the key in the query in the chain associated to the hashIndex bucket in the HST
+    return null;
+  }
+
   // remove an item from HashST given the key
   public Value remove(Key key) {return null;}
+
+
+  private void resize(int capacity) {}
 
   /* in order to implement java iterable interface, we have override
      its abstract method: iterator:
