@@ -475,5 +475,10 @@ public class Search {
     System.out.println("Bitonic Search: " + bitonicSearch(bitonicDown, 8));
     System.out.println();
     System.out.println();
+
+
+    System.out.println();
+    System.out.println("Test: " + (-10%4));
+    System.out.println();
   }
 }
