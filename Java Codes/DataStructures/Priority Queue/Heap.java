@@ -20,22 +20,26 @@ public class Heap {
 
   // Assumption: input array of items is a Binaray Heap representation of a MaxPQ
   private static void heapSort(Comparable[] items) {
-    // Heap size:
+    // MaxPQ size:
     int N=items.length;
-    // exchange the root with the last item in the heap:
-    exch(items, 1, N--); // reduce the size of the heap
-    sink(items, 1, N); // sink the new root to its proper level of competence
-  }
+    // delMax from MaxPQ iteratively and preserve MaxPQ INVARIANCE (N times)
+    for(int i=0; i<N; i++) {
+      // exchange the root with the last item in the heap:
+      exch(items, 1, N--); // reduce the size of the heap
+      sink(items, 1, N); // sink the new root to its proper level of competence {O(logN)}
+    }
+  } // O(NlogN)
 
   // Demote a new root to its level of competence
   private static void sink(Comparable [] items, int i, int N) {
+    
   }
 
   // NOTE: 0-base Array vs. 1-base MAxPQ
 
   // generic comparison to compare to Comparable instances:
-  private static boolean less(Comparable v, Comparable w) {
-    return v.compareTo(w)<0; // return TRUE if v was "less than" w
+  private static boolean less(Comparable [] items, int i, int j) {
+    return false;
   }
 
   // exchange the position of two items in a given array of Comparable items
