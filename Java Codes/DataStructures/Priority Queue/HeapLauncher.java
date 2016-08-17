@@ -45,7 +45,19 @@ public class HeapLauncher {
     }
 
     // HEAP SORT:
-    // Heap.sort(strs);
+    Heap.sort(strs);
+    System.out.println();
+    System.out.println();
+    System.out.print(Arrays.toString(strs));
+    System.out.println();
+
+
+    Integer[] ints = new Integer[]{23,2432,1243,12,121,11, 12, 33, 23, 23, 5423, 1234};
+    Heap.sort(ints);
+    System.out.println();
+    System.out.println();
+    System.out.print(Arrays.toString(ints));
+    System.out.println();
   }
   
 }
