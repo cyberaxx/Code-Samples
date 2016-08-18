@@ -98,6 +98,11 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     return items[1];
   }
   public boolean isEmpty() {return N==0;}
+  public Key[] toArray() {
+    Key[] pq = (Key[]) new Comparable[N]; // UGLY CASTING
+    for(int i=0; i<N; i++) pq[i]=items[i+1]; // 1-base index to 0-base index
+    return pq;
+  }
 
   // Helper instance methods:
 
@@ -181,9 +186,9 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
      overriding its abstract methods next() and hasNext():
      NOTE: The iterator does not return the elements in any particular order!
   */ 
-  private class HeapIterator implements Iterator<Key> {
+  private class ListIterator implements Iterator<Key> {
     private int current;
-    public HeapIterator() {current=1;}
+    public ListIterator() {current=1;}
     @Override
     public boolean hasNext(){return current<=N;}
     @Override
@@ -194,4 +199,22 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
       return next;
     }
   }
+
+  // Concrete class that implements java Iterator interface must always be
+  // an Inner class because it is associated with an instance of Collection type
+  // in this case MaxPQ:
+  private class HeapIterator implements Iterator<Key> {
+    private MaxPQ<Key> copyMaxPQ;
+    public HeapIterator() {
+      copyMaxPQ=new MaxPQ<Key>(MaxPQ.this.toArray());
+    }
+    @Override
+    public boolean hasNext() {return !copyMaxPQ.isEmpty();}
+    @Override
+    public Key next() {
+      Key item = copyMaxPQ.delMax();
+      return item;
+    }
+  }
+
 }
