@@ -38,6 +38,7 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     items[++N]=key; // and update the N (number of element in the MaxPQ)
     // swim up the key to its rightful positon in the MaxPQ instance:
     swim(N); // O(logN)
+    assert isMaxPQ(1);
   }
 
   // O(logN) AMORTIZED
@@ -55,6 +56,8 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     // PAY the Piper to maintanin MaxPQ INVARIANCE:
     // sink down the new root to its rightful position in the heap
     sink(1); // O(logN)
+    assert isMaxPQ(1);
+
     // prevent loitering:
     items[N+1]=null;
 
@@ -75,6 +78,20 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   public boolean isEmpty() {return N==0;}
 
   // Helper instance methods:
+
+  // check if subtree rooted at k is a MaxPQ:
+  // recursive 1. base case, 2. Recurrence (Divide and Conquer)
+  private boolean isMaxPQ(int k) {
+    // BASE CASE:
+    if(k>N) return true; // if node is outside the MaxPQ bound, new node rooted at itseld is a MaxPQ
+    // RECURRENCE:
+    int left=2*k;
+    int right=2*k+1;
+    // if node has a child:
+    if(left<=N)   if(less(k, left))   return false;
+    if(right<=N)  if(less(k, right))  return false;
+    return isMaxPQ(left) && isMaxPQ(right);
+  }
 
   /* PROMOTION: 
      insertion, a new node added to a MaxPQ instance
