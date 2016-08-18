@@ -104,6 +104,12 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     return pq;
   }
 
+  /* Find the minimum:
+     Add a min() method to MaxPQ.java. 
+     Your implementation should use constant time and constant extra space. 
+  */
+  public Key min() {return null;}
+
   // Helper instance methods:
 
   // check if subtree rooted at k is a MaxPQ:
