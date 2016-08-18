@@ -32,7 +32,6 @@ public class HeapLauncher {
     System.out.println(names.size());
     System.out.println(names.isEmpty());
 
-
     System.out.println();
     System.out.println("MaxPQ members with no particular order:");
     Iterator<String> it=names.iterator();
@@ -51,7 +50,6 @@ public class HeapLauncher {
     System.out.print(Arrays.toString(strs));
     System.out.println();
 
-
     Integer[] ints = new Integer[]{23,2432,1243,12,121,11, 12, 33, 23, 23, 5423, 1234};
     MaxPQ<Integer> pq = new MaxPQ<Integer>(ints);
     System.out.println();
@@ -66,5 +64,5 @@ public class HeapLauncher {
     System.out.print(Arrays.toString(ints));
     System.out.println();
   }
-  
+ 
 }
