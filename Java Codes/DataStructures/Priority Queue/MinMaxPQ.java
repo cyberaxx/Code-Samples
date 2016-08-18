@@ -8,4 +8,4 @@ The key in a node at an even level is less than (or equal to) the keys in its su
 Note that the maximum value is stored at the root and the minimum value is stored at one of the root's children.
 */
 
-public class MinMaxPQ
+public class MinMaxPQ{}
