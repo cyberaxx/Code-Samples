@@ -40,6 +40,8 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     for(int i=N/2; i>=1; i--) {
       sink(i);
     }
+
+    assert isMaxPQ(1);
     
   }
  
