@@ -53,6 +53,13 @@ public class HeapLauncher {
 
 
     Integer[] ints = new Integer[]{23,2432,1243,12,121,11, 12, 33, 23, 23, 5423, 1234};
+    MaxPQ<Integer> pq = new MaxPQ<Integer>(ints);
+    System.out.println();
+    System.out.println();
+    for(Integer item : pq)
+      System.out.println(item);
+
+    System.out.println();
     Heap.sort(ints);
     System.out.println();
     System.out.println();

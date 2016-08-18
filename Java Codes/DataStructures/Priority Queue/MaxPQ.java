@@ -23,6 +23,26 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     items = (Key[]) new Comparable[2]; // UGLY CASTING: Java does NOT allow generci array creation
   }
 
+  // Constructor with array input:
+  public MaxPQ(Key[] input) {
+    // initialize the number of element
+    N=0;
+    // initialize the items array
+    items=(Key[]) new Comparable[input.length+1]; // UGLY CASTING
+
+    // Copy over the input array to the instance array:
+    for(int i=0; i<input.length; i++) {
+      items[i+1]=input[i]; // instance array starts at index 1, rather than 0
+      N++;
+    }
+
+    // HEAPIFY the items array: O(n)
+    for(int i=N/2; i>=1; i--) {
+      sink(i);
+    }
+    
+  }
+ 
   // instance methods:
   // API: insert(Key key), delMAx(), size(), isEmpty(), max()
 
@@ -163,7 +183,7 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     private int current;
     public HeapIterator() {current=1;}
     @Override
-    public boolean hasNext(){return items[current]!=null;}
+    public boolean hasNext(){return current<=N;}
     @Override
     public Key next(){
       // check if it hasNext():
