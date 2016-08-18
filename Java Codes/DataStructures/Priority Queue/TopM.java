@@ -49,5 +49,17 @@ public class TopM {
 
     System.out.print(pq);
     System.out.println();
+
+    // clear the PriorityQueue
+    pq.clear();
+    pq=new PriorityQueue<Integer>(Arrays.asList(1,2,3,4,5,6,7,8,9,10));
+    System.out.println();
+    System.out.print(pq);
+    System.out.println();
+    
+    Integer[] input=new Integer[]{10, 9 , 8 , 7, 1, 0};
+    MaxPQ<Integer> maxpq=new MaxPQ<Integer>(input);
+    System.out.print(Arrays.toString(maxpq.toArray()));
+    System.out.println();
   }
 }
