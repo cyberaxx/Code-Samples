@@ -28,19 +28,15 @@ public class TopM {
       repetition=randomRepetition.nextInt(4-1)+1; // [1 4)
       for(int j=0; j<=repetition; j++) {
         /* To maintain top M items:
-	   Check if the Min Oriented Priority Queue contains less than M item
-	      a. If so, add the new item to the Collection type
-	      b. if not:
-                 1. remove the Min from the current Collection
-		 2. add the new item to the collection
+           1. add the new item to MinPQ
+	   2. Check if the Min Oriented Priority Queue contains more than M items
+	      a. If so, remove the Min from the current Collection
 	*/
 
-        if(pq.size()<M)  pq.offer(entry); // O(logM)
-        else {
-  	  // remove smallest items from the MinPQ to make some room for new items
-          while(pq.size()>=M)  pq.poll(); // O(logM)
-          pq.offer(entry);
-        }
+        // 1. add to the MinPQ
+        pq.offer(entry); // O(logM)
+        // 2. check if there are more than M items in the MinPQ
+        if(pq.size()>M)  pq.poll();// remove the min: O(logM)
       }
     } 
         
