@@ -109,17 +109,11 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
   // number of elements in MaxPQ instance:
   public int size(){return N;}
+
   // sneek peek at the max:
   public Key max(){
     if(isEmpty()) throw new NoSuchElementException("Failed to perfom max() operation because the MaxPQ instance is empty!");
     return items[1];
-  }
-  public boolean isEmpty() {return N==0;}
-
-  public Key[] toArray() {
-    Key[] pq = (Key[]) new Comparable[N]; // UGLY CASTING
-    for(int i=0; i<N; i++) pq[i]=items[i+1]; // 1-base index to 0-base index
-    return pq;
   }
 
   /* Find the minimum:
@@ -129,6 +123,22 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   public Key min() {
     if(isEmpty()) throw new NoSuchElementException("Failed to perform min() operatino on an instance of MaxPQ because the instance is empty!");
     return min;    
+  }
+
+  // check if MaxPQ is empty:
+  public boolean isEmpty() {return N==0;}
+
+  /*
+    NOTE: UGLY CASTING:
+    Clearly a new Object[] is not an Integer[].
+    Notice how the cast gets moved to somewhere you did not explicitly put it. 
+    This is why (E[])new Object[size] was an unchecked cast and displayed a warning.
+    Instead, you should use Object[] and perform the unchecked cast only when you need to return an element to the outside world.
+  */
+  public Key[] toArray() {
+    Key[] pq = (Key[]) new Comparable[N];
+    for(int i=0; i<N; i++) pq[i]=items[i+1]; // 1-base index to 0-base index
+    return pq;
   }
 
   // Helper instance methods:

@@ -57,5 +57,6 @@ public class TopM {
     MaxPQ<Integer> maxpq=new MaxPQ<Integer>(input);
     System.out.print(Arrays.toString(maxpq.toArray()));
     System.out.println();
+
   }
 }
