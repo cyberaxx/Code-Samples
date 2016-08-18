@@ -16,10 +16,12 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   // instance variables:
   private int N; // elements in the MaxPQ
   private Key[] items; // maintain collection of keys in resizing array:
+  private Key min; // the min item in MaxPQ
 
   // Constructor:
   public MaxPQ() {
     N=0; // empty MaxPQ
+    min=null;
     items = (Key[]) new Comparable[2]; // UGLY CASTING: Java does NOT allow generci array creation
   }
 
@@ -27,13 +29,19 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   public MaxPQ(Key[] input) {
     // initialize the number of element
     N=0;
+
     // initialize the items array
     items=(Key[]) new Comparable[input.length+1]; // UGLY CASTING
+
+    // initialize the min
+    min=input[0];
 
     // Copy over the input array to the instance array:
     for(int i=0; i<input.length; i++) {
       items[i+1]=input[i]; // instance array starts at index 1, rather than 0
       N++;
+      // update the min if required:
+      if(less(input[i], min))  min=input[i];
     }
 
     // HEAPIFY the items array: O(n)
@@ -55,6 +63,11 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
        double the size of the array
     */
     if(N>=items.length-1) resize(2*items.length);   
+
+    // update min:
+    if(isEmpty())  min=key;
+    else if(less(key, min)) min=key;
+
     // add the new key to the end of the items array:
     // start inserting from index 1:
     items[++N]=key; // and update the N (number of element in the MaxPQ)
@@ -86,6 +99,10 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     // RESIZING: if N==(items.length-1)/4  shrink to half
     if(N>0 && N==(items.length-1)/4) resize(items.length/2);
 
+    // update min:
+    // if MaxPQ is empty after deletion, set min back to null 
+    if(isEmpty())  min=null;
+
     // return the MAX:
     return max;
   }
@@ -98,6 +115,7 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     return items[1];
   }
   public boolean isEmpty() {return N==0;}
+
   public Key[] toArray() {
     Key[] pq = (Key[]) new Comparable[N]; // UGLY CASTING
     for(int i=0; i<N; i++) pq[i]=items[i+1]; // 1-base index to 0-base index
@@ -108,7 +126,10 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
      Add a min() method to MaxPQ.java. 
      Your implementation should use constant time and constant extra space. 
   */
-  public Key min() {return null;}
+  public Key min() {
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform min() operatino on an instance of MaxPQ because the instance is empty!");
+    return min;    
+  }
 
   // Helper instance methods:
 
@@ -172,6 +193,11 @@ public class MaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     // because Key instnaces are subtype of Comparable type:
     // they must have a TOTAL ORDERTING and a compareTo method to implement that ordering
     return items[i].compareTo(items[j])<0;
+  }
+
+  // static generic comparison method to use for min
+  private static boolean less(Comparable v, Comparable w) {
+    return v.compareTo(w)<0;
   }
 
   // exch method

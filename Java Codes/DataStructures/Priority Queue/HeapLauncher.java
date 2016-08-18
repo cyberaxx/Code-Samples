@@ -24,9 +24,11 @@ public class HeapLauncher {
     names.add("aashedfrvidfsn");
     names.add("cshaeasdrvsaidsfn");
     names.add("zsahsadefdsrsdfvfdidfn");
-    System.out.println(names.max());
+    System.out.println("Max is :" + names.max());
     System.out.println(names.delMax());
-    System.out.println(names.max());
+    System.out.println("Max is :" + names.max());
+    System.out.println("Min is :" + names.min());
+
 
     System.out.println();
     System.out.println(names.size());
@@ -42,6 +44,12 @@ public class HeapLauncher {
       System.out.println(strs[i]);
       i++;
     }
+
+    System.out.println("Max is :" + names.max());
+    System.out.println("Min is :" + names.min());
+
+    System.out.println();
+    System.out.println();
 
     // HEAP SORT:
     Heap.sort(strs);
