@@ -71,15 +71,27 @@ public class MedianPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   public boolean isEmpty(){return N==0;}
 
   // return an array representation on of an instance of a MedianPQ
-  public Key[] toArray(){return null;}
+  public Key[] toArray(){
+    // instantiate a new array of generic type Key (subtype of java Comparable interface)
+    Key[] temp=(Key[]) new Comparable[N]; // UGLY CASTING
+    for(int i=1; i<=N; i++)  temp[i-1]=items[i]; // handle the 1-based to 0-based conversion
+    return temp;
+  }
 
   // Helper methods:
   private void resize(int capacity){
+    // instantiate a new array of type Key[] with a new capacity:
+    Key[]temp=(Key[]) new Comparable[capacity]; // UGLY CASTIN
+    // COPY over from the original array of items, to the new array (NOTE: 1-based array is used to represent binary heap!)
+    for(int i=1; i<=N; i++) {
+      temp[i]=items[i]; // do Not touch the 0-index item
+    }
+    items=temp;
   } 
   
   // Sink and swim operations:
   // Sink down a new root to its rightful level of competence:
-  private void sink(int k){}
+  private void sink(int k) {}
  
   // Swim up the new added node to its rightful level of competence:
   private void swim(int k){}
