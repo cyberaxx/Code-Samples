@@ -3,6 +3,8 @@ Dynamic-median finding:
 Design a data type that supports insert in logarithmic time, find the median in constant time, and remove the median in logarithmic time.
 */
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import java.util.Deque;
 import java.util.ArrayDeque;
 
@@ -39,16 +41,31 @@ public class MedianPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   public Key delMedian(){return null;}
 
   // return the median of an instance of a MedianPQ:
-  public Key median(){return null;}
+  public Key median(){
+    // if priority queue is empty throw exception:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perfom median() operation because a MedianPQ is Empty!");
+    // otherwise return the head of the array items[1]
+    return items[1];
+  }
 
   // return the min of an instance of a MedianPQ:
-  public Key min(){return null;}
+  public Key min(){
+    // if priority queue is empty throw exception:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perfom min() operation because a MedianPQ is Empty!");
+    // otherwise return the top of the min stack
+    return minStack.peek();
+  }
 
   // return the max of an instance of a MedianPQ:
-  public Key max(){return null;}
+  public Key max(){
+    // if priority queue is empty throw exception:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perfom max() operation because a MedianPQ is Empty!");
+    // otherwise return the top of the max stack
+    return maxStack.peek();
+  }
 
   // return the number of elements in an instance of MedianPQ
-  public int max(){return N;}
+  public int size(){return N;}
 
   // check if an instance of a MedianPQ is empty:
   public boolean isEmpty(){return N==0;}
@@ -57,7 +74,8 @@ public class MedianPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   public Key[] toArray(){return null;}
 
   // Helper methods:
-  private void resize(int capacity){} 
+  private void resize(int capacity){
+  } 
   
   // Sink and swim operations:
   // Sink down a new root to its rightful level of competence:
@@ -67,9 +85,17 @@ public class MedianPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   private void swim(int k){}
 
   // generic comparison and swap method
-  private boolean less(int i, int j) {return false;}
-  private boolean greater(int i, int j) {return false;}
-  private void exchange(int i, int j){}
+  private boolean less(int i, int j) {
+    return items[i].compareTo(items[j])<0;
+  }
+  private boolean greater(int i, int j) {
+    return items[i].compareTo(items[j])>0;
+  }
+  private void exchange(int i, int j) {
+    Key temp=items[i];
+    items[i]=items[j];
+    items[j]=temp;
+  }
 
   // check if an instance of a MedianPQ satisfies Median-Heap-Ordered condintion
   private boolean isMedianPQ(){return false;}
