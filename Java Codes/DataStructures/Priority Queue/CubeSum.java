@@ -27,9 +27,9 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
   */
 
   // an instance of a CubSum class must have following fields:
-  private int i;
-  private int j;
-  private int sum;
+  public int i;
+  public int j;
+  public int sum;
 
   // Constructor:
   public CubeSum(int i, int j) {
@@ -45,8 +45,32 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
     return 0;
   }
 
+  // Prints out all integers of the form a^3 + b^3 where
+  // a and b are integers between 0 and N in sorted order
+  // without using excessive space.
+  public static void printCubes(int n) {
+    // instantiate from PriorityQueue Class (an unbounded Collection type that can maintain a collection of Comparable CubeSum objects)
+    // with constant access to min (min oriented priority queue implemented by a binary heap)
+    PriorityQueue<CubeSum> pq=new PriorityQueue();
+
+    // insert CubeSum objects to the min oriented priority queue 
+    for(int i=0; i<=n; i++)
+      pq.add(new CubeSum(i, 0)); // add a CubeSum instance to a min oriented priority queue 
+
+    // while priority queue is not empty:
+    while(pq.size()>0) {
+      // remove the item at the head of the priority queue:
+      CubeSum head=pq.poll(); // the cubesum object with min sum field value
+      System.out.println(head.sum);
+      if(head.j<head.i) {
+        head=new CubeSum(head.i, head.j+1);
+        pq.offer(head);
+      }
+    }
+    
+  }
   // client of CubeSum class:
   public static void main(String[] args) {
-    CubeSum
+    printCubes(5);
   }
 }
