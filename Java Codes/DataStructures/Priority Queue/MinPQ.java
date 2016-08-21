@@ -5,13 +5,13 @@ import java.util.NoSuchElementException;
 // It's type prameter is Key
 public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   /* Data Structure Invariant:
-     Min is alway accessible at the head of priority queue O(1) time. 
+     Min elemnt is alway accessible at the head of priority queue in O(1) time. 
      This invariant has to be presevered after any structural changes to priority queue (insertion/deletion)
   */
   // Instance variable:
   private Key[] items; // An array of generic type Key to maintain a collection of items
   private int N; // number of items in an instance of MinPQ
-  private Key max;
+  private Key max; // the Max element in MinPQ collection of Comparable items (items with a total order -> Natural ordering due to their corresponding compareTo() method)
 
   // Constructor:
   public MinPQ() {
@@ -21,15 +21,56 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
     items=(Key[]) new Comparable[2]; // UGLY CASTING: Java does NOT allow generic array creation
   }
 
-  public MinPQ(Key[] inputArray) {}
+  // Constructor:
+  // takes an array of Comparable items as input, and create a MinPQ using binary heap datastructure (Complete binary tree with min-heap-ordered condition)
+  public MinPQ(Key[] input) {
+    // items array is 1-based index:
+    items=(Key[]) new Comparable[input.length+1];
+    N=0; // initialize the number of element in the heap
+    max=input[0]; // initialize max
+    for(int i=0; i<input.length; i++) {
+      items[i+1]=input[i];
+      N++; // add to the number of element in the heap
+      // update the max:
+      if(greater(input[i], max)) max=input[i];
+    }
+
+    // heapify the items array: 1-based array -> root is at index 1:
+    for(int i=N/2; i>=1; i--) {
+      // sink node i to its rightful level of competence (after this operation the subtree rooted at i would satisfy the heap-order condition)
+      sink(i);
+      // check if subarry items[i N] is a valid representation of a MinPQ (a complete binary tree with min-heap-order condition)
+      assert isMinPQ(i);
+    }
+    assert isMinPQ(); // check if the item array is a valid representation of a binary min heap (a complete binary tree with min-heap-order condition)
+  }
+
   // Instance methods:
   // API: insert/delete/isEmpty/size/min/max/toArray
 
   // Add a key to an instance of MinPQ:
-  public void add(Key key){}
+  public void add(Key key) {
+    // OVERFLOW: compare the array size with the number of element already inside the array:
+    // if array is full (consider one extra array entry for 1-based indexing), double its size:
+    if(N==items.length-1)  resize(2*(items.length)+1);
+
+    // update the max:
+    // case 1: check if MinPQ is already empty:
+    if(isEmpty())  max=key;// the new key is min and max!
+    else if(greater(key, max))  max=key;
+
+    // add the new key to the end of the binary heap (1-based index array representation)
+    items[++N]=key;
+
+    // swim it up to its rightful position:
+    swim(N);
+  }
 
   // delete Min for an instance of a MinPQ:
-  public Key delMin(){return null;}
+  public Key delMin(){
+    // UNDERFLOW:
+    return null;
+  }
 
   // return the Min of an instance of a MinPQ:
   public Key min(){
@@ -70,24 +111,10 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
     }
     items=temp;
   } 
-  
+
   // Sink and swim operations:
   // Sink down a new root to its rightful level of competence:
-  private void sink(int k) {
-    // while we have not hit the lowest level in the binary heap: (still exists item in 2*k)
-    while(2*k<=N) {
-      int j=2*k; // left child of the current node
-      int small=j;
-      int big=j;
-      // check if the it has a right child as well
-      if(j+1<=N) {
-        if(less(j, j+1)) big=j+1;
-	else small=j+1;
-      }
-
-      
-    }
-  }
+  private void sink(int k) {}
  
   // Swim up the new added node to its rightful level of competence:
   private void swim(int k){}
@@ -106,8 +133,21 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   }
 
   // check if an instance of a MinPQ satisfies Min-Heap-Ordered condintion
-  private boolean isMinPQ(){return false;}
+  private boolean isMinPQ(){return isMinPQ(1); }// heap rooted at root :)
+  // check if the subarray items[i N] is a valid representation of MinPQ:
+  // A complete binary tree that satisfies min-heap-ordered condition: no parent has a key greater than its childern's
+  private boolean isMinPQ(int i){
+    //BASE CASE:
+    // leaves and empty MinPQ are all heap:
+    if(i>=N) return true;
 
+    // RECURRENCE:
+    int left=2*i;
+    int right=2*i+1;
+    if(left<=N && greater(i, left)) return false; // root is greater than the left child -> min-heap order condition
+    if(right<=N && greater(i, right)) return false; // root is greater than the right child -> min-heap order condition
+    return isMinPQ(left) && isMinPQ(right); // check if subtree rooted at left and right indeces isMinPQ
+  }
 
   // Iterator:
   /*
@@ -116,4 +156,24 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
    to iterate over items within the Min Priority Queue Collection typ:
   */
    public Iterator<Key> iterator(){return null;} 
+
+  // Heap Sort using MinPQ
+  public static void sort(Comparable[] items){}
+
+  private static void heapify(Comparable[] items) {
+    // extreme test cases: empty array, and array with one item is heapified already: 
+    if(items.length<2) return ;     
+    // For arrays with 2 items or more:
+    // N is the index of the last node of the biary heap represented by items array
+    int n=items.length; 
+    // go to N's node parent and check if heap-order condition is violated:
+    for(int i=n/2; i>=0; i--) {
+      sink(items, i, n);
+    }
+  }
+
+  public static void exch (Comparable[] items, int i, int j){}
+  public static boolean greater (Comparable[] items, int i, int j){return false;}
+  private static boolean greater(Comparable v, Comparable w) {return v.compareTo(w)>0;}
+  public static void sink (Comparable[] items, int i, int N){}
 }
