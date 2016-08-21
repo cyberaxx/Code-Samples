@@ -93,39 +93,39 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
   public static HashMap<Integer, List<Integer>> distinctInts(int n) { 
     // min oriented queue of all cubesums [0 10^6]:
     PriorityQueue<CubeSum> pq=orderedCubes(n);
-    Deque<CubeSum> stack=new ArrayDeque<CubeSum>();
+    Deque<CubeSum> stack=new ArrayDeque<CubeSum>(); // stack of duplicates recovered from MinPQ
     HashMap<Integer, List<Integer>> hm=new HashMap<Integer, List<Integer>>();
     
-    // trivial case: if pq is empty:
-    if(pq.size()==0) return hm; // return an empty hashmap
-    // trivial case: if pq has only one item:
-    if(pq.size()==1) {
-      CubeSum item= pq.poll();
-      List<Integer> list=new ArrayList<Integer>(Arrays.asList(item.i, item.j));
-      hm.put(item.sum, list);
-      return hm;
-    } // return the hm with the only item in min oriented priority queue
+    // 0 or 1 items in MinPQ means there is not such a quad!
+    // trivial case: if pq is empty or has only one item:
+    if(pq.size()<2) return hm; // return an empty hashmap
     
     // while MinPQ instance is not empty:
     // removing from the min-oriented priority queue (removed item would be in ascending order)
     while(pq.size()>0) {
+
       // poll the head of MinPQ
       CubeSum prev=pq.poll();
-      // add it to the result stack temporarily:
+      // add it to the stack of duplicate temporarily:
       stack.push(prev);
 
       // check if the MinPQ is not empty:
       if(pq.size()>0) {
         // sneak peak at the new head of MinPQ (smallest item)
-        CubeSum current=pq.peek();
+        if(stack.peek().compareTo(pq.peek())==0) {
+          // compare the pq head item with the previously removed item from the MinPQ (top of the stack of duplicates)
+          while (stack.peek().compareTo(pq.peek())==0 && pq.size()>0)  stack.push(pq.poll()); // keep the prev item in the stack of duplicates
+        }
+	else stack.pop();// remove the privous item from the stack of duplicates
+      }
 
-        // compare the new item with the previously removed item from the MinPQ
-        if(stack.peek().compareTo(current)==0)  stack.push(pq.poll());
-	else stack.pop();// remove the privous item added to the stack
+      // if MinPQ was empty:
+      else {
+	stack.pop(); // remove the last item added to the stack
       }
     }
 
-    // iterate over the stack: O(n)
+    // iterate over the stack of ORDERED distinct cubes: O(n)
     for(CubeSum item: stack) {
       if(hm.containsKey(item.sum)) {
         // use item.sum as a key in the hash map:
@@ -145,9 +145,8 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
   // client of CubeSum class:
   public static void main(String[] args) {
     // printCubeSums(5);
-    HashMap<Integer, List<Integer>> distinctMap = distinctInts(13); // O(NlogN)
+    HashMap<Integer, List<Integer>> distinctMap = distinctInts(100); // O(NlogN)
     for(Integer key:distinctMap.keySet())
-      if(key==1729)
-        System.out.println("sum: " + key + " ==> a,b,c,d are: " + Arrays.toString(distinctMap.get(key).toArray()));
+      System.out.println("sum: " + key + " ==> a,b,c,d are: " + Arrays.toString(distinctMap.get(key).toArray()));
   }
 }
