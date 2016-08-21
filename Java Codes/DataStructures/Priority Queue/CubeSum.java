@@ -3,8 +3,13 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import java.util.PriorityQueue;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /*
 Computational number theory:
 Write a program CubeSum.java that prints out all integers of the form a^3 + b^3 where a and b are integers between 0 and N in sorted order, without using excessive space. That is, instead of computing an array of the N^2 sums and sorting them, build a minimum-oriented priority queue, initially containing (03, 0, 0), (1^3, 1, 0), (2^3, 2, 0), ..., (N^3, N, 0). Then, while the priority queue is nonempty, remove the smallest item (i^3 + j^3, i, j), print it, and then, if j < N, insert the item (i3 + (j+1)^3, i, j+1). Use this program to find all distinct integers a, b, c, and d between 0 and 10^6 such that a^3 + b^3 = c^3 + d^3, e.g., 1729 = 9^3 + 10^3 = 1^3 + 12^3.
@@ -28,9 +33,9 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
   */
 
   // an instance of a CubSum class must have following fields:
-  public int i;
-  public int j;
-  public int sum;
+  private int i;
+  private int j;
+  private int sum;
 
   // Constructor:
   public CubeSum(int i, int j) {
@@ -81,35 +86,68 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
       System.out.println("sum : " + item.sum + ", i: " + item.i + ", j: " + item.j);
   }
  
+
+  // O(nlogn): Linearithmic time algorithm
   // find all distinct integers a, b, c, and d between 0 and 10^6 such that
   // a^3 + b^3 = c^3 + d^3, e.g., 1729 = 9^3 + 10^3 = 1^3 + 12^3.
-  public static Iterable<CubeSum> distinctInts(int n) {
+  public static HashMap<Integer, List<Integer>> distinctInts(int n) { 
     // min oriented queue of all cubesums [0 10^6]:
     PriorityQueue<CubeSum> pq=orderedCubes(n);
-    List<CubeSum> result=new ArrayList<CubeSum>();
+    Deque<CubeSum> stack=new ArrayDeque<CubeSum>();
+    HashMap<Integer, List<Integer>> hm=new HashMap<Integer, List<Integer>>();
+    
+    // trivial case: if pq is empty:
+    if(pq.size()==0) return hm; // return an empty hashmap
+    // trivial case: if pq has only one item:
+    if(pq.size()==1) {
+      CubeSum item= pq.poll();
+      List<Integer> list=new ArrayList<Integer>(Arrays.asList(item.i, item.j));
+      hm.put(item.sum, list);
+      return hm;
+    } // return the hm with the only item in min oriented priority queue
+    
+    // while MinPQ instance is not empty:
+    // removing from the min-oriented priority queue (removed item would be in ascending order)
+    while(pq.size()>0) {
+      // poll the head of MinPQ
+      CubeSum prev=pq.poll();
+      // add it to the result stack temporarily:
+      stack.push(prev);
 
-    // while removing from the min-oriented priority queue (removed item would be in ascending order or equal
-    while(pq.size()>1) {
-      CubeSum head=pq.poll();
-      // add it to the result temporarily:
-      result.add(head);
+      // check if the MinPQ is not empty:
+      if(pq.size()>0) {
+        // sneak peak at the new head of MinPQ (smallest item)
+        CubeSum current=pq.peek();
 
-      // remove items from the min oriented priority queue: while equal to the head
-      while(head.compareTo(pq.peek())==0 && pq.size()>0) {
-        result.add(pq.poll());
+        // compare the new item with the previously removed item from the MinPQ
+        if(stack.peek().compareTo(current)==0)  stack.push(pq.poll());
+	else stack.pop();// remove the privous item added to the stack
       }
-      // remove the head of the queue from the result list:
-      if(result.size()<2) result.clear();
     }
-    return result;
+
+    // iterate over the stack: O(n)
+    for(CubeSum item: stack) {
+      if(hm.containsKey(item.sum)) {
+        // use item.sum as a key in the hash map:
+        List<Integer> list = hm.get(item.sum);
+        list.addAll(Arrays.asList(item.i, item.j));
+        hm.put(item.sum, list);
+      }
+      else {
+        List<Integer> list=new ArrayList<Integer>(Arrays.asList(item.i, item.j));
+        hm.put(item.sum, list);
+      }
+    }
+
+    return hm;
   }
 
   // client of CubeSum class:
   public static void main(String[] args) {
     // printCubeSums(5);
-    Iterable<CubeSum> cs = distinctInts(20);
-    for(CubeSum item:cs)
-      if(item.sum==1729)
-        System.out.println("sum 1: " + item.sum + ", i: " + item.i + ", j: " + item.j);
+    HashMap<Integer, List<Integer>> distinctMap = distinctInts(13); // O(NlogN)
+    for(Integer key:distinctMap.keySet())
+      if(key==1729)
+        System.out.println("sum: " + key + " ==> a,b,c,d are: " + Arrays.toString(distinctMap.get(key).toArray()));
   }
 }
