@@ -19,7 +19,6 @@ Find the smallest integers that can be expressed as the sum of cubes of integers
 
 Computational number theory:
 Find all solutions to the equation a + 2b^2 = 3c^3 + 4d^4 for which a, b, c, and d are less than 100,000. Hint: use one min heap and one max heap.
-
 */
 
 public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a Comparable type
@@ -125,7 +124,7 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
       }
     }
 
-    // iterate over the stack of ORDERED distinct cubes: O(n)
+    // iterate over the stack of ORDERED duplicate cubes: O(n)
     for(CubeSum item: stack) {
       if(hm.containsKey(item.sum)) {
         // use item.sum as a key in the hash map:
@@ -139,6 +138,7 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
       }
     }
 
+    // Map of distinct cubes with no particular order: HashMap is UNORDERD.
     return hm;
   }
 
