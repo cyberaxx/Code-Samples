@@ -97,11 +97,11 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
     
     // 0 or 1 items in MinPQ means there is not such a quad!
     // trivial case: if pq is empty or has only one item:
-    if(pq.size()<2) return hm; // return an empty hashmap
+    if(pq.isEmpty() || pq.size()<2) return hm; // return an empty hashmap
     
     // while MinPQ instance is not empty:
     // removing from the min-oriented priority queue (removed item would be in ascending order)
-    while(pq.size()>0) {
+    while(!pq.isEmpty()) {
 
       // poll the head of MinPQ
       CubeSum prev=pq.poll();
@@ -109,18 +109,18 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
       stack.push(prev);
 
       // check if the MinPQ is not empty:
-      if(pq.size()>0) {
+      if(!pq.isEmpty()) {
         // sneak peak at the new head of MinPQ (smallest item)
         if(stack.peek().compareTo(pq.peek())==0) {
           // compare the pq head item with the previously removed item from the MinPQ (top of the stack of duplicates)
-          while (stack.peek().compareTo(pq.peek())==0 && pq.size()>0)  stack.push(pq.poll()); // keep the prev item in the stack of duplicates
+          while (stack.peek().compareTo(pq.peek())==0 && !pq.isEmpty())  stack.push(pq.poll()); // keep the prev item in the stack of duplicates
         }
 	else stack.pop();// remove the privous item from the stack of duplicates
       }
 
       // if MinPQ was empty:
       else {
-	stack.pop(); // remove the last item added to the stack
+	stack.pop(); // remove the last item added to the stack of duplicates
       }
     }
 
@@ -150,3 +150,51 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
       System.out.println("sum: " + key + " ==> a,b,c,d are: " + Arrays.toString(distinctMap.get(key).toArray()));
   }
 }
+
+/* Output:
+sum: 32832 ==> a,b,c,d are: [32, 4, 30, 18]
+sum: 110656 ==> a,b,c,d are: [48, 4, 40, 36]
+sum: 65728 ==> a,b,c,d are: [33, 31, 40, 12]
+sum: 1729 ==> a,b,c,d are: [12, 1, 10, 9]
+sum: 195841 ==> a,b,c,d are: [58, 9, 57, 22]
+sum: 314496 ==> a,b,c,d are: [68, 4, 66, 30]
+sum: 262656 ==> a,b,c,d are: [64, 8, 60, 36]
+sum: 955016 ==> a,b,c,d are: [98, 24, 89, 63]
+sum: 1009736 ==> a,b,c,d are: [96, 50, 93, 59]
+sum: 513856 ==> a,b,c,d are: [78, 34, 72, 52]
+sum: 525824 ==> a,b,c,d are: [66, 62, 80, 24]
+sum: 13832 ==> a,b,c,d are: [24, 2, 20, 18]
+sum: 4104 ==> a,b,c,d are: [16, 2, 15, 9]
+sum: 20683 ==> a,b,c,d are: [27, 10, 24, 19]
+sum: 984067 ==> a,b,c,d are: [98, 35, 92, 59]
+sum: 320264 ==> a,b,c,d are: [68, 18, 66, 32]
+sum: 886464 ==> a,b,c,d are: [90, 54, 96, 12]
+sum: 885248 ==> a,b,c,d are: [80, 72, 96, 8]
+sum: 994688 ==> a,b,c,d are: [92, 60, 99, 29]
+sum: 149389 ==> a,b,c,d are: [53, 8, 50, 29]
+sum: 39312 ==> a,b,c,d are: [34, 2, 33, 15]
+sum: 327763 ==> a,b,c,d are: [67, 30, 58, 51]
+sum: 216027 ==> a,b,c,d are: [60, 3, 59, 22]
+sum: 110808 ==> a,b,c,d are: [48, 6, 45, 27]
+sum: 171288 ==> a,b,c,d are: [55, 17, 54, 24]
+sum: 165464 ==> a,b,c,d are: [54, 20, 48, 38]
+sum: 704977 ==> a,b,c,d are: [86, 41, 89, 2]
+sum: 46683 ==> a,b,c,d are: [36, 3, 30, 27]
+sum: 373464 ==> a,b,c,d are: [72, 6, 60, 54]
+sum: 593047 ==> a,b,c,d are: [84, 7, 70, 63]
+sum: 558441 ==> a,b,c,d are: [72, 57, 81, 30]
+sum: 40033 ==> a,b,c,d are: [34, 9, 33, 16]
+sum: 402597 ==> a,b,c,d are: [69, 42, 61, 56]
+sum: 515375 ==> a,b,c,d are: [71, 54, 80, 15]
+sum: 64232 ==> a,b,c,d are: [39, 17, 36, 26]
+sum: 134379 ==> a,b,c,d are: [51, 12, 43, 38]
+sum: 920673 ==> a,b,c,d are: [97, 20, 96, 33]
+sum: 513000 ==> a,b,c,d are: [75, 45, 80, 10]
+sum: 842751 ==> a,b,c,d are: [94, 23, 84, 63]
+sum: 805688 ==> a,b,c,d are: [92, 30, 93, 11]
+sum: 443889 ==> a,b,c,d are: [76, 17, 73, 38]
+sum: 684019 ==> a,b,c,d are: [82, 51, 75, 64]
+sum: 439101 ==> a,b,c,d are: [76, 5, 69, 48]
+sum: 216125 ==> a,b,c,d are: [60, 5, 50, 45]
+sum: 1016496 ==> a,b,c,d are: [97, 47, 90, 66]
+*/
