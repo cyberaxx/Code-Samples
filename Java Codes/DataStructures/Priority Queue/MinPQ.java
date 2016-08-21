@@ -52,7 +52,7 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   public void add(Key key) {
     // OVERFLOW: compare the array size with the number of element already inside the array:
     // if array is full (consider one extra array entry for 1-based indexing), double its size:
-    if(N==items.length-1)  resize(2*(items.length)+1);
+    if(N==items.length-1)  resize(2*(items.length));
 
     // update the max:
     // case 1: check if MinPQ is already empty:
@@ -64,12 +64,32 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
 
     // swim it up to its rightful position:
     swim(N);
+
+    assert isMinPQ(); // after sink operation check if the items array represent a binaray min-heap
   }
 
   // delete Min for an instance of a MinPQ:
   public Key delMin(){
     // UNDERFLOW:
-    return null;
+    if(isEmpty()) throw new NoSuchElementException("Failed to perfom delMin() operation because a MinPQ is Empty!");
+    // delete the MinPQ head item:
+    Key item=items[1];
+    // Pay the piper to maintain the DS invariance: items[1] always contain the min of elements in the MinPQ collection instance:
+    exch(1, N); // exchange the last node of the binary heap (the item in the array with the root elements)
+    N--; // decrease the number of elements in the MinPQ before sinking;
+    // sink the new root node to its rightful level of competenece in a new binary min heap with N-1 nodes:
+    sink(1);
+
+    assert isMinPQ(); // after sink operation check if the items array represent a binaray min-heap
+
+    // loitering avoidance:
+    items[N+1]=null;
+
+    // Check if shrinking required for memory efficiency: if array is quarter full: shrink it to 1/2 size:
+    if(N==( (items.length)/4) - 1)  resize(items.length/2);
+
+    // return the min from the MinPQ instance:
+    return item;
   }
 
   // return the Min of an instance of a MinPQ:
@@ -126,7 +146,7 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   private boolean greater(int i, int j) {
     return items[i].compareTo(items[j])>0;
   }
-  private void exchange(int i, int j) {
+  private void exch(int i, int j) {
     Key temp=items[i];
     items[i]=items[j];
     items[j]=temp;
