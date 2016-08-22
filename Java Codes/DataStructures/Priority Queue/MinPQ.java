@@ -157,6 +157,32 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
     return true;
   }
 
+  // Update: Linear Time operation: N for search/remove old value, logN for reinsertion of updated value
+  public boolean update(Key oldVal, Key newVal) {
+    // check if MinPQ instance is not Empty()
+    if(isEmpty()) return false;
+
+    // check if the key is comparible with Key datatype:
+    if(items[1].getClass()!=oldVal.getClass()) return false;
+
+    // check if oldVal is in the MinPQ instance:
+    if(!contains(oldVal)) return false;
+
+    // check if oldVal and newVal are compatible datatype: 
+    if(oldVal.getClass()!=newVal.getClass()) return false;
+
+    // remove the old value from the MinPQ instance by performing a linear search: O(N) Linear time operation
+    if(!remove(oldVal)) return false; // failed to remove
+
+    // insert the new key:
+    add(newVal);
+
+    // check if DS invariance preserved after this structrual change:
+    assert isMinPQ();
+
+    return true;
+  }
+
   // Linear time search operation: if miss return -1, otherwise the index in binary heap array representation
   private int indexOf(Key key) {
      // extreme test cases: 1. Empty MinPQ instace:
