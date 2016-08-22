@@ -316,24 +316,27 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   public static void sort(Comparable[] items){
     // 1. heapify the array:
     heapify(items); // N compares and exchanges
-
     // 2. reptead extracting Min from the array: 2NlogN compares and exchanges
-    for(int i=0; i<items.length; i++) {
-    
-    }
+    for(int i=0; i<items.length; i++) delMin(items, items.length-i);
     // 3. reverse the order of items to get the ascending order 
     reverse(items); // O(N): N array accesses
-
   }
 
   private static void heapify(Comparable[] items) {}
-
+  public static void delMin(Comparable[] items, int N) {
+    exch(items, 1, N); // move the root of the MinPQ to the end of the array
+    N--; // update the boudaries of the MinPQ
+    sink(items,1, N); // sink the new root to its rightful level of competence
+    // check if items is still is a MinPQ (DS invariance is maintained):
+    assert isMinPQ(items, 1, N);
+  }
+  
   public static void reverse(Comparable [] items) {for(int i=0; i<=items.length/2; i++) exch(items, i, items.length-1-i);}
   public static void exch (Comparable[] items, int i, int j){}
   public static boolean greater (Comparable[] items, int i, int j){return false;}
   private static boolean greater(Comparable v, Comparable w) {return v.compareTo(w)>0;}
   public static void sink (Comparable[] items, int i, int N){}
-  public static boolean isMinPQ (Comparable[] items, int i, int N){return false;}
+  public static boolean isMinPQ (Comparable[] items, int i, int N){return true;}
   public static boolean isMaxPQ (Comparable[] items, int i, int N){return false;}
 
 }
