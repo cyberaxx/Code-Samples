@@ -310,16 +310,46 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
    by overriding its public abstract method iterator() to enable a client 
    to iterate over items within the Min Priority Queue Collection typ:
   */
-   public Iterator<Key> iterator(){return null;} 
+   public Iterator<Key> iterator(){return new HeapIterator();} 
+
+  /* to implement the iterator() method, we need to implement a concrete class
+     that provides implementation for the java Iterator interface and overrides
+     its abstract methods next() and hasNext().
+     Since the iterator is associate with an instance of a MinPQ class, it has to 
+     defined as inner class:
+  */
+  private class HeapIterator implements Iterator<Key> {
+    // instance variables:
+    MinPQ<Key> copy;
+
+    // constructor:
+    public HeapIterator(){
+      copy=MinPQ.this; // take of copy of the this MinPQ instance
+    }
+
+    // instance methods:
+    @Override
+    public boolean hasNext(){return !copy.isEmpty();}
+    @Override
+    public Key next() {
+      if(!hasNext()) throw new NoSuchElementException("Failed to iterate!");
+      Key item=copy.delMin();
+      return item;
+    }
+  }
 
   // Heap Sort using MinPQ
   public static void sort(Comparable[] items){
+    // test cases: 1. array with one element, sorted arrays:
+    if(items.length==1 || isSorted(items)) return ;
+
     // 1. heapify the array:
     heapify(items); // N compares and exchanges
     // 2. reptead extracting Min from the array representation of MinPQ (binary heap): 2NlogN compares and exchanges
     for(int i=0; i<items.length; i++) delMin(items, items.length-i);
     // 3. reverse the order of items to get the ascending order 
     reverse(items); // O(N): N array accesses
+    assert isSorted(items);
   }
 
   private static void heapify(Comparable[] items) {
@@ -374,9 +404,26 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   private static boolean greater(Comparable v, Comparable w) {return v.compareTo(w)>0;}
 
   // Take care of array index differences between the given array (0-based indexed) and the binary heap that has been built based on it (1-based indexed):
-  public static boolean isMinPQ (Comparable[] items, int i, int N){
-    return true;
-  }
-  public static boolean isMaxPQ (Comparable[] items, int i, int N){return false;}
+  // Binary heap is a recursive data structure: 1. Complete binary tree 2. with heap-ordered condition
+  // isMinPQ VERIFIES if the given array representation (level order traversal of binary heap) violated heap order condition at any node (indeces [i...N]) or not:
+  public static boolean isMinPQ (Comparable[] items, int i, int N) {
+    // BASE CASE: if i is a leaf then i is a binary heap
+    if(i>=N)  return true;
 
+    // RECURRENCE: Divide and Conquer:
+    // if node i is not a leaf: compare it with its left and right child (if existed)
+    int left=2*i;
+    int right=2*i+1;
+    if(left<=N && greater(items, i, left)) return false;
+    if(right<=N && greater(items, i, right)) return false;
+    return isMinPQ(items, left, N) && isMinPQ(items, right, N);
+  }
+
+  // check if the array is sorted
+  private static boolean isSorted(Comparable [] items) {
+    for(int i=1; i<items.length; i++) {
+      if(greater(items[i-1], items[i])) return false;
+    }
+    return true;
+  }  
 }

@@ -124,6 +124,9 @@ public class HeapLauncher {
     System.out.print(Arrays.toString(numbers));
     System.out.println();
 
+
+    for(String item:mpqq)  System.out.println(item);
+
   }
  
 }

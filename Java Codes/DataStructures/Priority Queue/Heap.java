@@ -69,4 +69,6 @@ public class Heap {
   private static boolean less(Comparable v, Comparable w) {
     return v.compareTo(w)<0;
   }
+
+  public static boolean isMaxPQ (Comparable[] items, int i, int N){return false;}
 }
