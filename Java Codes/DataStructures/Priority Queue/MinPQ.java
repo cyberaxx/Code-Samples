@@ -316,13 +316,23 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   public static void sort(Comparable[] items){
     // 1. heapify the array:
     heapify(items); // N compares and exchanges
-    // 2. reptead extracting Min from the array: 2NlogN compares and exchanges
+    // 2. reptead extracting Min from the array representation of MinPQ (binary heap): 2NlogN compares and exchanges
     for(int i=0; i<items.length; i++) delMin(items, items.length-i);
     // 3. reverse the order of items to get the ascending order 
     reverse(items); // O(N): N array accesses
   }
 
-  private static void heapify(Comparable[] items) {}
+  private static void heapify(Comparable[] items) {
+    int N=items.length;
+    // go to the parent of the last level in the binary heap: 
+    // 1. check if heap-ordered condition is violated by sinking down the node to its rightful level of competence
+    // 2. go to the next root until reaching the root
+    for(int i=N/2; i>0;i--) {
+      sink(items, i, N);
+      assert isMinPQ(items, i, N); // check if DS invariance is presereved for the binary heap rooted at node i
+    }
+  }
+
   public static void delMin(Comparable[] items, int N) {
     exch(items, 1, N); // move the root of the MinPQ to the end of the array
     N--; // update the boudaries of the MinPQ
@@ -330,13 +340,43 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
     // check if items is still is a MinPQ (DS invariance is maintained):
     assert isMinPQ(items, 1, N);
   }
+
+  public static void sink (Comparable[] items, int i, int N) {
+    // while node i has a child within boundaries of the binary heap MinPQ instance: [1  N]
+    while(2*i<=N) {
+      int j=2*i;
+      // right child? Is the right subordinate better than the left one?
+      if(j+1<=N && greater(items, j, j+1)) j++;
+      // Is the best subordinate better than the boss?
+      if(greater(items, j, i)) break; // the boss is at its rightful level of competence
+      
+      // demote boss to j-th level of comptenece:
+      exch(items, i, j);
+      // repeat until the node i placed at its rightful position or hitting the bottom of the MinPQ (no subordinate to get compare with)
+      i=j;
+    }
+
+    // check if the subtree rooted at i is MinPQ binary heap
+    assert isMinPQ(items, i, N);
+  }
   
-  public static void reverse(Comparable [] items) {for(int i=0; i<=items.length/2; i++) exch(items, i, items.length-1-i);}
-  public static void exch (Comparable[] items, int i, int j){}
-  public static boolean greater (Comparable[] items, int i, int j){return false;}
+  public static void reverse(Comparable [] items) {for(int i=0; i<=items.length/2; i++) exch(items, i+1, items.length-i);}
+
+  // Take care of array index differences between the given array (0-based indexed) and the binary heap that has been built based on it (1-based indexed):
+  public static void exch (Comparable[] items, int i, int j) {
+    Comparable temp=items[i-1];
+    items[i-1]=items[j-1];
+    items[j-1]=temp;
+  }
+
+  // Take care of array index differences between the given array (0-based indexed) and the binary heap that has been built based on it (1-based indexed):
+  public static boolean greater (Comparable[] items, int i, int j){return items[i-1].compareTo(items[j-1])>0;}
   private static boolean greater(Comparable v, Comparable w) {return v.compareTo(w)>0;}
-  public static void sink (Comparable[] items, int i, int N){}
-  public static boolean isMinPQ (Comparable[] items, int i, int N){return true;}
+
+  // Take care of array index differences between the given array (0-based indexed) and the binary heap that has been built based on it (1-based indexed):
+  public static boolean isMinPQ (Comparable[] items, int i, int N){
+    return true;
+  }
   public static boolean isMaxPQ (Comparable[] items, int i, int N){return false;}
 
 }

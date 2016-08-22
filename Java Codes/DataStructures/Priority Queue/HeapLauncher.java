@@ -111,6 +111,19 @@ public class HeapLauncher {
     System.out.print(pqq);
     System.out.println();
 
+
+    System.out.println();
+    System.out.println("Heap sort:");
+    Integer[] numbers=new Integer[]{234,12,34,56,123,786,2123,54656,56,897,1234,5645,8979,34, 234, 4534, 2312, 234, 897};
+    MinPQ.sort(numbers);
+    System.out.print(Arrays.toString(numbers));
+    System.out.println();
+    System.out.println("System sort:");
+    numbers=new Integer[]{234,12,34,56,123,786,2123,54656,56,897,1234,5645,8979,34, 234, 4534, 2312, 234, 897};
+    Arrays.sort(numbers);
+    System.out.print(Arrays.toString(numbers));
+    System.out.println();
+
   }
  
 }
