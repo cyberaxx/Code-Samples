@@ -87,7 +87,7 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
     items[N+1]=null;
 
     // Check if shrinking required for memory efficiency: if array is quarter full: shrink it to 1/2 size:
-    if(N==( (items.length)/4) - 1)  resize(items.length/2);
+    if(N==(items.length-1)/4)  resize(items.length/2);
 
     // return the min from the MinPQ instance:
     return item;
