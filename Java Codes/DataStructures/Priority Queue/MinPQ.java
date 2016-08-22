@@ -1,5 +1,6 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 // MinPQ is a Collection data type which contain generic keys that have total ordering:
 // It's type prameter is Key
@@ -140,23 +141,32 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
 
     // Search for an item:
     if(!contains(key)) return false; // failed to remove
-    int index=indexOf(key); // find the index of the given item in 1-base index array that represent the instance of MinPQ
+    int index=indexOf(key); // find the index of the given item in 1-base index array that represent the instance of MinPQ: O(N)
     if(index<1) return false; // failed to remove
 
-    // exchange the item at the given index with the last item:
-    exch(index, N);
-    N--;
-    // Pay the piper to maintain DS invariance O(logN)
-    sink(index); // sink the new item at index "index" down to its rightful position in the MinPQ instance
-
-    // Check if DS invariance preserved after the structural change that has been made by remove
-    assert isMinPQ(index); // check if binary heap root at the index is MinPQ
-    assert isMinPQ(); // check if the DS invariance is preserved
-
-    items[N+1]=null; // prevent loitering
-    return true;
+    // remove an item at the given index: O(logN)
+    return remove(index); // if succeed returns true, OW returns false
   }
 
+  // pick an item uniformly at random and delete it from the MinPQ instance:
+  public Key delRandom(){
+    //  check if the MinPQ instance is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform delRandom() because the MinPQ instance is empty!");
+ 
+    // instantiate form the Random class:
+    Random random=new Random();
+    // generate a random number within [1 N] range:
+    int randomIndex=random.nextInt(N+1-1)+1;
+
+    // Copy the key at the random index:
+    Key item=items[randomIndex];
+    // remove the item at the given index:
+    if(!remove(randomIndex))  throw new NoSuchElementException("Failed to perform remove(index)!");
+
+    // return the key:
+    return item;
+  }
+   
   // Update: Linear Time operation: N for search/remove old value, logN for reinsertion of updated value
   public boolean update(Key oldVal, Key newVal) {
     // check if MinPQ instance is not Empty()
@@ -196,6 +206,30 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
      return -1; // search miss
   }
   
+  private boolean remove(int index) {
+    // check in MinPQ is empty:
+    if(isEmpty()) throw new NoSuchElementException("Failed to remove(index) because the MinPQ instance is empty!");
+    // extreme test cases: removing item outside the binary heap representation
+    if(index<1 || index>N) return false;
+
+    // exchange the item at the given index with the item at the end of MinPQ instance:
+    exch(index, N);
+    N--; // update the size: binary heap boudaries in the array that is representing it
+
+    // sink down the item newly placed at the index in the MinPQ to its rightful level of competence: Maintain heap-order condition
+    sink(index);
+
+    // Check if DS invariance (heap-ordered condition is violated):
+    assert isMinPQ(index);
+    assert isMinPQ();
+
+    // loitering prevention:
+    items[N+1]=null;
+
+    return true;
+  }
+  
+
   // Helper methods:
   private void resize(int capacity){
     // instantiate a new array of type Key[] with a new capacity:
