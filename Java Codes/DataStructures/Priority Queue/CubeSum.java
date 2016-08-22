@@ -126,6 +126,7 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
 
     // iterate over the stack of ORDERED duplicate cubes: O(n)
     for(CubeSum item: stack) {
+      // Search and insert to the HMST in O(1) time using java HashMap Collection
       if(hm.containsKey(item.sum)) {
         // use item.sum as a key in the hash map:
         List<Integer> list = hm.get(item.sum);
