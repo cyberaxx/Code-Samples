@@ -71,6 +71,46 @@ public class HeapLauncher {
     System.out.println();
     System.out.print(Arrays.toString(ints));
     System.out.println();
+
+
+    System.out.println("MinPQ");
+    System.out.println();
+    MinPQ<String> mpq=new MinPQ<String>(new String[]{"sadasd", "asdsad", "sdsad", "gdgdf", "nngfdf", "sdfsdf"});
+    System.out.println();
+    System.out.println(names.size());
+    System.out.println(names.isEmpty());
+
+    System.out.println();
+    mpq.add("aashedfrvidfsn");
+    mpq.add("cshaeasdrvsaidsfn");
+    mpq.add("zsahsadefdsrsdfvfdidfn");
+    System.out.println();
+    System.out.println(names.size());
+    System.out.println(names.isEmpty());
+
+    System.out.println();
+    System.out.println(mpq.min());
+    System.out.println(mpq.delMin());
+    System.out.println(mpq.max());
+
+    System.out.println();
+    System.out.println(mpq.min());
+    System.out.println(mpq.delMin());
+    System.out.println(mpq.max());
+    System.out.println();
+    System.out.println(names.size());
+    System.out.println(names.isEmpty());
+
+
+
+    MinPQ<String> mpqq=new MinPQ<String>(new String[]{"sadasd", "asdsad", "sdsad", "gdgdf", "nngfdf", "sdfsdf"});
+    System.out.println();
+    System.out.print(Arrays.toString(mpqq.toArray()));
+    System.out.println();
+    PriorityQueue<String> pqq= new PriorityQueue<String>(Arrays.asList("sadasd", "asdsad", "sdsad", "gdgdf", "nngfdf", "sdfsdf"));
+    System.out.print(pqq);
+    System.out.println();
+
   }
  
 }

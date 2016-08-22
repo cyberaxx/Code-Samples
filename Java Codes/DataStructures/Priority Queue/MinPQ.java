@@ -244,6 +244,23 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   // Sink and swim operations:
   // Sink down a new root to its rightful level of competence:
   private void sink(int k) {
+    // while the item at index k has a child (using index arithmetic): if 2k is still within the binary heap indeces [1  N]:
+    while (2*k<=N) {
+      // check if had both left and right child:
+      int j=2*k; // left child index
+
+      // choose the best subordinate to replace the new root with:
+      if(j+1<=N && greater(j, j+1)) j++; // if right child was less than the left child then right child is the best subordinate
+
+      // check if the best subordinate is better than the new root
+      if(greater(j,k))  break; // the new root is less than or equal the best subordinate -> it is at its rightful position
+
+      // demote the new root to the level of the better subordinate
+      exch(k, j);
+      // go to the new position of the node k and repeat the process until reaching the lowest level in the binary heap (nodes with no children-->leaves) or
+      // it reaches its rightful position
+      k=j;
+    }
   }
  
   // Swim up the new added node to its rightful level of competence:
@@ -296,20 +313,22 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
    public Iterator<Key> iterator(){return null;} 
 
   // Heap Sort using MinPQ
-  public static void sort(Comparable[] items){}
+  public static void sort(Comparable[] items){
+    // 1. heapify the array:
+    heapify(items); // N compares and exchanges
 
-  private static void heapify(Comparable[] items) {
-    // extreme test cases: empty array, and array with one item is heapified already: 
-    if(items.length<2) return ;     
-    // For arrays with 2 items or more:
-    // N is the index of the last node of the biary heap represented by items array
-    int n=items.length; 
-    // go to N's node parent and check if heap-order condition is violated:
-    for(int i=n/2; i>=0; i--) {
-      sink(items, i, n);
+    // 2. reptead extracting Min from the array: 2NlogN compares and exchanges
+    for(int i=0; i<items.length; i++) {
+    
     }
+    // 3. reverse the order of items to get the ascending order 
+    reverse(items); // O(N): N array accesses
+
   }
 
+  private static void heapify(Comparable[] items) {}
+
+  public static void reverse(Comparable [] items) {for(int i=0; i<=items.length/2; i++) exch(items, i, items.length-1-i);}
   public static void exch (Comparable[] items, int i, int j){}
   public static boolean greater (Comparable[] items, int i, int j){return false;}
   private static boolean greater(Comparable v, Comparable w) {return v.compareTo(w)>0;}
