@@ -108,7 +108,7 @@ public class CubeSum implements Comparable<CubeSum> { // CubeSum data type is a 
       // add it to the stack of duplicate temporarily:
       stack.push(prev);
 
-      // check if the MinPQ is not empty:
+      // check if the MinPQ is not empty: pq.peek() will return null for null pq and compareTo method does not accept null as input arguement
       if(!pq.isEmpty()) {
         // sneak peak at the new head of MinPQ (smallest item)
         if(stack.peek().compareTo(pq.peek())==0) {
