@@ -146,8 +146,10 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
     // exchange the item at the given index with the last item:
     exch(index, N);
     N--;
+    // Pay the piper to maintain DS invariance O(logN)
     sink(index); // sink the new item at index "index" down to its rightful position in the MinPQ instance
 
+    // Check if DS invariance preserved after the structural change that has been made by remove
     assert isMinPQ(index); // check if binary heap root at the index is MinPQ
     assert isMinPQ(); // check if the DS invariance is preserved
 
