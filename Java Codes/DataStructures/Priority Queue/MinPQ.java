@@ -121,6 +121,53 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
     return temp;
   }
 
+  // Linear time contain operation: perform a linear search
+  public boolean contains(Key key) {
+     // extreme test cases: 1. Empty MinPQ instace:
+     if(isEmpty())  return false;
+
+     // if not empty: search the entire array in Linear time
+     for(int i=1; i<=N; i++)
+       if(items[i].compareTo(key)==0) return true; // search hit
+
+     return false; // search miss
+  }
+
+  // Linear time remove based on search (contains(key) operation):
+  public boolean remove (Key key) {
+    // for any query first we have to check if MinPQ is not empty:
+    if(isEmpty())  throw new NoSuchElementException("Failed to perform remove(object) because the MinPQ instance is empty");
+
+    // Search for an item:
+    if(!contains(key)) return false; // failed to remove
+    int index=indexOf(key); // find the index of the given item in 1-base index array that represent the instance of MinPQ
+    if(index<1) return false; // failed to remove
+
+    // exchange the item at the given index with the last item:
+    exch(index, N);
+    N--;
+    sink(index); // sink the new item at index "index" down to its rightful position in the MinPQ instance
+
+    assert isMinPQ(index); // check if binary heap root at the index is MinPQ
+    assert isMinPQ(); // check if the DS invariance is preserved
+
+    items[N+1]=null; // prevent loitering
+    return true;
+  }
+
+  // Linear time search operation: if miss return -1, otherwise the index in binary heap array representation
+  private int indexOf(Key key) {
+     // extreme test cases: 1. Empty MinPQ instace:
+     if(isEmpty())  return -1;
+     if(!contains(key))  return -1;
+
+     // if not empty: search the entire array in Linear time
+     for(int i=1; i<=N; i++)
+       if(items[i].compareTo(key)==0) return i; // search hit
+
+     return -1; // search miss
+  }
+  
   // Helper methods:
   private void resize(int capacity){
     // instantiate a new array of type Key[] with a new capacity:
@@ -134,10 +181,19 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
 
   // Sink and swim operations:
   // Sink down a new root to its rightful level of competence:
-  private void sink(int k) {}
+  private void sink(int k) {
+  }
  
   // Swim up the new added node to its rightful level of competence:
-  private void swim(int k){}
+  private void swim(int k) {
+    // while there is still exist a heigher parent level (k/2: k's parent exist in items[1 ...N] array) and
+    // the current node is less than its corresponding parent greater(k/2, k), swim it up
+    while (k/2>=1 && greater(k/2, k)) {
+      exch(k/2, k);
+      // move up the new node:
+      k=k/2;
+    }
+  }
 
   // generic comparison and swap method
   private boolean less(int i, int j) {
@@ -196,4 +252,7 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   public static boolean greater (Comparable[] items, int i, int j){return false;}
   private static boolean greater(Comparable v, Comparable w) {return v.compareTo(w)>0;}
   public static void sink (Comparable[] items, int i, int N){}
+  public static boolean isMinPQ (Comparable[] items, int i, int N){return false;}
+  public static boolean isMaxPQ (Comparable[] items, int i, int N){return false;}
+
 }
