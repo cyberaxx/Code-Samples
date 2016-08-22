@@ -14,7 +14,9 @@ public class Heap {
     while(i>=1) {
       sink(items, i, items.length); // sink the node i within the Binary Heap rooted at i
       i--;
+      assert isMaxPQ(items, i, items.length);
     }
+    assert isMaxPQ(items, 1, items.length);
 
     // 2. delMax from MaxPQ iteratively and preserve MaxPQ INVARIANCE
     // MaxPQ size:
@@ -24,6 +26,7 @@ public class Heap {
       // exchange the root with the last item in the heap:
       exch(items, 1, N--); // reduce the size of the heap
       sink(items, 1, N); // sink the new root to its proper level of competence {O(logN)}
+      assert isMaxPQ(items, 1, items.length);
     } // O(NlogN)
     assert isSorted(items);
   }
@@ -44,6 +47,8 @@ public class Heap {
        exch(items, i, j); // exchange values
        i=j; // demote node i to j's position
      }
+
+     assert isMaxPQ(items, i, items.length);
   }
 
   // NOTE: 0-base Array vs. 1-base MAxPQ
@@ -70,5 +75,17 @@ public class Heap {
     return v.compareTo(w)<0;
   }
 
-  public static boolean isMaxPQ (Comparable[] items, int i, int N){return false;}
+  // CHECK if the binary heap rooted at node i is MaxPQ:
+  public static boolean isMaxPQ (Comparable[] items, int i, int N) {
+    // BASE CASE: no leaves -> is a MaxPQ
+    if(i>=N) return true;
+
+    // RECURRENCE: Divide and Conquer
+    // if it has left, right or both childer check if the heap order condition is violated:
+    int left=2*i; // index of a possible left child
+    int right=2*i+1; // index of a possible right child 
+    if(left<=N && less(i, left))  return false;
+    if(right<=N && less(i, right))  return false;
+    return isMaxPQ(items, left, N) && isMaxPQ(items, right, N);
+  }
 }
