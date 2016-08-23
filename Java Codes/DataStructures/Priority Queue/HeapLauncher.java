@@ -77,16 +77,16 @@ public class HeapLauncher {
     System.out.println();
     MinPQ<String> mpq=new MinPQ<String>(new String[]{"sadasd", "asdsad", "sdsad", "gdgdf", "nngfdf", "sdfsdf"});
     System.out.println();
-    System.out.println(names.size());
-    System.out.println(names.isEmpty());
+    System.out.println(mpq.size());
+    System.out.println(mpq.isEmpty());
 
     System.out.println();
     mpq.add("aashedfrvidfsn");
     mpq.add("cshaeasdrvsaidsfn");
     mpq.add("zsahsadefdsrsdfvfdidfn");
     System.out.println();
-    System.out.println(names.size());
-    System.out.println(names.isEmpty());
+    System.out.println(mpq.size());
+    System.out.println(mpq.isEmpty());
 
     System.out.println();
     System.out.println(mpq.min());
@@ -98,8 +98,8 @@ public class HeapLauncher {
     System.out.println(mpq.delMin());
     System.out.println(mpq.max());
     System.out.println();
-    System.out.println(names.size());
-    System.out.println(names.isEmpty());
+    System.out.println(mpq.size());
+    System.out.println(mpq.isEmpty());
 
 
 
@@ -111,6 +111,9 @@ public class HeapLauncher {
     System.out.print(pqq);
     System.out.println();
 
+    for(String item:mpqq)  System.out.println(item);
+    System.out.println(mpqq.size());
+    System.out.println(mpqq.isEmpty());	
 
     System.out.println();
     System.out.println("Heap sort:");
@@ -123,9 +126,6 @@ public class HeapLauncher {
     Arrays.sort(numbers);
     System.out.print(Arrays.toString(numbers));
     System.out.println();
-
-
-    for(String item:mpqq)  System.out.println(item);
 
   }
  

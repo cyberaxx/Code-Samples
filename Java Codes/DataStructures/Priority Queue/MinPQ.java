@@ -324,7 +324,11 @@ public class MinPQ<Key extends Comparable<Key>> implements Iterable<Key> {
 
     // constructor:
     public HeapIterator(){
-      copy=MinPQ.this; // take of copy of the this MinPQ instance
+      // initialize the copy MinPQ instance
+      copy=new MinPQ<Key>();
+
+      // take of copy of the current MinPQ instance to copy:
+      for(int i=1; i<=N; i++) copy.add(items[i]);
     }
 
     // instance methods:
