@@ -3,9 +3,9 @@
 public class IndexMinPQ<Key extends Comparable<Key>> {
   // instance variables:
   // Parallel array to maintain keys, indeces, heap indeces, number of elements in the heap and max number of elements:
-  private Key[] items; // maintain a collection of comparable keys indexed by external index
-  private int[] pq; // indeces 1-based Min oriented priority queue array representation
-  private int[] qp; // external indeces for a given index in min orieted priortiy queue (1-base array representation
+  private Key[] items; // maintain a collection of comparable keys indexed by external index [0 MAX-1]
+  private int[] pq; // 1-based indeces of EXTENALLY INDEXED item in the Min oriented priority queue array representation [0  MAX-1] => pq[0 MAX-1]:[1   N]
+  private int[] qp; // external indeces for a given 1-BASED index in min orieted priortiy queue (1-base array representation) [1  N] => qp[1  N]:[0  Max-1]
 
   private int N; // number of items in the MinPQ
   private final int MAX; // maximum number of element to put in MinPQ specified by the client
@@ -42,5 +42,14 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
   public Key min(){return items[minIndex()];}
 
   // Helper methods:
+  // swim up newly added item to the tail of the MinPQ (during insertion) to its rightful level of competence: logN operation
+  private void swim(int i){}
+  // sink down newly placed item as a HEAD of the MinPQ (during deletion) to its rightful level of competence: logN operation
+  private void sink(int i){}
+
+  // generic comparison:
+  private boolean greater(int i, int j){return false;}
+  // exchange method:
+  private void exch(int i, int j){}
 }
 
