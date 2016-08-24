@@ -2,8 +2,9 @@
 Index priority-queue implementation. Implement IndexMaxPQ.java by modifying MaxPQ.java as follows: Change pq[] to hold indices, add an array keys[] to hold the key values, and add an array qp[] that is the inverse of pq[] — qp[i] gives the position of i in pq[] (the index j such that pq[j] is i). Then modify the code to maintain these data structures. Use the convention that qp[i] is -1 if i is not on the queue, and include a method contains() that tests this condition. You need to modify the helper methods exch() and less() but not sink() or swim().
 */
 import java.util.NoSuchElementException;
+import java.util.Iterator;
 
-public class IndexMaxPQ<Key extends Comparable<Key>> {
+public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   // instance variables:
   private Key[] keys; // Key[] of key to maintain collection of java Comparable type keys
   private int[] pq; // an array that maintains the external index for any given heap position in 1-based array that represent MaxPQ
@@ -205,5 +206,25 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
     qp[pq[i]]=j; 
   }
 
-  // iterator:
+  // Iterable: override iterator method from java Iterable interface:
+  @Override
+  public Iterator<Key> iterator(){return new HeapIterator();}
+
+  // inner class that provide implementation for java Iterator interface:
+  private class MaxHeapIterator implements Iterator<Key> {
+    // instance variable:
+    private IndexMaxPQ<Key> copy;
+    // Constructor:
+    public MaxHeapIterator() {
+      for(int i=1; i<=N; i++)
+        copy.insert(pq[i], keys[pq[i]]);
+    }
+    @Override
+    public boolean hasNext(){return !current.isEmpty();}
+    @Override
+    public Key next(){
+      if(!hasNext()) throw new NoSuchElementException("Failed to perform next() operation because there has been no next element in IndexMaxPQ instance!");
+      return copy.delMax();
+    }
+  }
 }
