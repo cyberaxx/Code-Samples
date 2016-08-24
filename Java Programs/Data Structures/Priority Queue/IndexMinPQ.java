@@ -1,24 +1,27 @@
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class IndexMinPQ<Key extends Comparable<Key>> {
   // instance variables:
-  // Parallel array to maintain keys, indeces, heap indeces, number of elements in the heap and max number of elements:
-  private Key[] items; // maintain a collection of comparable keys indexed by external index [0 MAX-1]
-  private int[] pq; // 1-based indeces of EXTENALLY INDEXED item in the Min oriented priority queue array representation [0  MAX-1] => pq[0 MAX-1]:[1   N]
-  private int[] qp; // external indeces for a given 1-BASED index in min orieted priortiy queue (1-base array representation) [1  N] => qp[1  N]:[0  Max-1]
+  private Key[] items; // maintains a collection of comparable keys indexed by external index [0 MAX-1]
+  private int[] pq; // maintains external index for each heap position [1...N]->[0 MAX-1]
+  private int[] qp; // maintains heap position of each external index  [0 MAX-1]->[1...N]
 
-  private int N; // number of items in the MinPQ
+  private int N; // number of items in the IndexMinPQ
   private final int MAX; // maximum number of element to put in MinPQ specified by the client
 
   // Constructor: clinet should specify the max number of elements wanted to maintain in IndexMinPQ
   public IndexMinPQ(int max) {
+    // check if max is non-negative value
+    if(max<0) throw new IllegalArgumentException();
+
     // initialize the instance variables
     this.MAX=max;
     N=0;
+    pq=new int[MAX+1];
     items=(Key[]) new Comparable[MAX]; // UGLY CASTING: java does not allow generic array creation 
-    pq=new int[MAX]; // indeces of the 1-based array represntation of the Min oriented PQ (represented by a binary heap DS)
-    qp=new int[MAX+1]; // external indeces [0 MAX-1] corresponding to each MinPQ interal index [1  N]: qp[pq[i]]=i;
-    for(int i=1; i<=MAX; i++)  qp[i]=-1; // initialize them -1
+    qp=new int[MAX];
+    for(int i=0; i<MAX; i++) qp[i]=-1; // initialize heap positons of all indeces to be -1
   }
 
   // API:
@@ -76,12 +79,24 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
   }
 
   // check if index i is associated with any key in MinPQ
-  public boolean contains(int index){return pq[index]>0;}
+  public boolean contains(int index){
+    if(index<0 || index>=MAX) throw new IndexOutOfBoundsException();
+    return qp[index]!=-1;
+  }
 
   // return the external index of the min item:
   public int minIndex(){
-    return qp[1];
+    // check if MinPQ instance is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform minIndex() operation because the MinPQ instance is empty!");
+    return pq[1];
   }
+
+  public Key min(){
+    // check if MinPQ instance is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform min() operation because the MinPQ instance is empty!");
+    return items[minIndex()];
+  }
+
   
   // delete the Min element in the MinPQ instance and return its external index
   public int delMin() {
@@ -111,67 +126,78 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
   // MinPQ functionalies:
   public int size(){return N;}
   public boolean isEmpty(){return N==0;}
-  public Key min(){
-    // check if MinPQ instance is not empty:
-    if(isEmpty()) throw new NoSuchElementException("Failed to perform min() operation because the MinPQ instance is empty!");
-    return items[minIndex()];
-  }
 
   // Helper methods:
   // swim up newly added item to the tail of the MinPQ (during insertion) to its rightful level of competence: logN operation
-  private void swim(int index){
-    /* NOTE: 
-       1. index denotes the EXTERNAL index of the given key:
-       2. pq[index]/2 denotes the parent index in the min oriented binary heap
-       3-1. pq[index]*2 denotes the left child index in the min oriented binary heap
-       3-2. pq[index]*2+1 denotes the right child in the min oriented binary heap
-    */
-
+  // swim based on heap position:
+  private void swim(int k){
     // While not reaching the root of binary heap at index 1 AND its heap order condition is violated:
-    while(pq[index]<1 && greater(items[qp[(pq[index])/2]], items[index])) {
-      // promote the key in binary heap:
-      int parentIndex=qp[(pq[index])/2];
-      exch(index, parentIndex); // exchange values in pq array
-      index=parentIndex;
+    while(k>1 && greater(k/2, k)) {
+      // promote the key in binary heap to its parnet level
+      exch(k, k/2);
+      k=k/2;
     }
   }
 
   // sink down newly placed item as a HEAD of the MinPQ (during deletion) to its rightful level of competence: logN operation
-  private void sink(int index) {
-    /* NOTE:
-       1. index denote an EXTERNAL index
-       2. N specifies the binary heap index boundary
-       3-0. pq[index]/2 denotes the parent index in the min oriented binary heap (MinPQ instance)
-       3-1. pq[index]*2 denotes the left child index in the min oriented binary heap (MinPQ instance)
-       3-2. pq[index]*2+1 denotes the right child in the min oriented binary heap (MinPQ instance)
-    */
-    
-     // sink down:
-     while(2*pq[index]<=N) {
-       int left=2*pq[index];
-       int right=2*pq[index];
-       int candidate=left;// initially candidate the left child to replace the new boss
+  // sink based on heap position k
+  private void sink(int k) {  
+     // loop until node k has no child (there is no lower level in the binary heap):
+     while(2*k<=N) {
+       int j=2*k;
 
-       // check if it has a right child and right child is inface the better subordinate:
-       if(right<=N && greater(items[qp[left]], items[qp[left]]))  candidate=right;
+       // check if node k has a right child and right child is infact the better subordinate:
+       if(j+1<=N && greater(j, j+1))  j++;
 
        // compare the candidate subordinate with the boss:
        // if boss is at its rightfull level of competence do nothing
-       if(greater(items[qp[candidate]], items[index]))  break;
+       if(!greater(k, j))  break;
        
        // otherwise: replace the boss with the candiate suboridnate and sink the boss down to a lower level:
-       exch(index, qp[candidate]);
-       index=qp[candidate];
+       exch(k, j);
+       k=j;// demote the boss to one of its child's level
      }
   }
 
-  // generic comparison:
-  private boolean greater(Comparable v, Comparable w){return v.compareTo(w)>0;}
-  // exchange method: exchange happens withing the pq array:
+  // generic comparison: base on heap positions
+  private boolean greater(int i, int j){return items[pq[i]].compareTo(items[pq[i]])>0;}
+  // exchange method: based on heap positions
   private void exch(int i, int j) {
-    // index of the item in the MinPQ instance
+    // exchange indeces:
     int temp=pq[i];
     pq[i]=pq[j];
     pq[j]=temp;
+   
+    // exchange heap positions:
+    qp[pq[i]]=i;
+    qp[pq[j]]=j;
+  }
+
+  // test client fot IndexMinPQ
+  public static void main(String[] args) {
+    IndexMinPQ<String> impq=new IndexMinPQ<String>(5);
+    impq.insert(1, "abcd");
+    impq.insert(0, "dfed");
+    impq.insert(3, "fasdfed");
+    System.out.println("Min is: "+impq.min());
+    System.out.println("Size is: "+ impq.size());
+    System.out.println("isEmpt()? "+ impq.isEmpty());
+
+    System.out.println();
+    System.out.println();
+    
+    impq.change(1, "zaszz");
+    System.out.println("Min is: "+impq.min());
+    System.out.println("Size is: "+ impq.size());
+    System.out.println("isEmpt()? "+ impq.isEmpty());
+
+    System.out.println();
+    System.out.println();
+    
+    impq.delete(2);
+    System.out.println("Min is: "+impq.min());
+    System.out.println("Size is: "+ impq.size());
+    System.out.println("isEmpt()? "+ impq.isEmpty());
+
   }
 }
