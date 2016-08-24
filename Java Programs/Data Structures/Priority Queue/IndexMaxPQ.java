@@ -47,14 +47,15 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
     // a. take a copy of the maximum item:
     Key max=max();
     int maxIndex=maxIndex();
-    /* remove it from max oriented priority:
-       1. exchange it with the last node:
-       2. decrease the N by one
+
+    /* b. remove the current max from max oriented priority:
+       1. exchange it with the last node in the heap:
+       2. decrease the N by one: N--
        3. check if IndexMaxPQ is already empty
        4. if not, sink down the new root to its rightful level of comptence
     */
     
-    // b. update all 3-parallel arrays:the heap position associate with the max external index to -1;
+    // c. update all 3-parallel arrays
     keys[maxIndex]=null; // prevent loitering 
     qp[maxIndex]=-1; // the heap position associate with the max external index to -1;
 
@@ -85,6 +86,11 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
   public int size(){return N;}
 
   // Helper methods: sink, swim, generic comparison, exchange
+
+  // generic comparison:
+  private boolean less(int indexFirst, int indexSecond) {return keys[indexFirst].compareTo(keys[indexSecond])<0;}
+  // exchange method:
+  private void exch(){}
 
   // iterator:
 }
