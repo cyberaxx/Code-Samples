@@ -1,4 +1,4 @@
-
+import java.util.NoSuchElementException;
 
 public class IndexMinPQ<Key extends Comparable<Key>> {
   // instance variables:
@@ -28,7 +28,6 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
   public void insert(int index, Key key){
     // OVERFLOW: indexe must be within [0 MAX-1] range:
     if(index<0 || index>=MAX) throw new IndexOutOfBoundsException("Failed to perform insert(index, key) because the given index was out of bounds.");
-
     // if the index is valid:
     // 1. increase the number of elements in the MinPQ:
     N++;
@@ -38,17 +37,34 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     pq[index]=swim(index);
     // put the EXTERNAL index in the qp array associate with the pq indeces:
     qp[pq[index]]=index;
-
   }
 
   // change the key at external index i:
-  public void change(int index, Key key){} 
-  // check if index i is associated with any key in MinPQ
-  public boolean contains(int index){return false;}
+  public void change(int index, Key key){
+    // check if IndexMinPQ is not empty() or any element at the given index exist in the MinPQ using contains method
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform change(index,key) because the MinPQ instance is empty!");
+    if(!contains(index)) throw new NoSuchElementException("Failed to perform change(index,key) because there is no key in MinPQ instance associated with "+index+" index!");
+    // Otherwise:
+    // 1. delete old key associated with the index from MinPQ:
+    delete(index);
+    // 2. add the new key to the MinPQ
+    insert(index, key);
+  } 
+
   // delete an item at external index i from the MinPQ (maintain the DS invariance -> min item always is at the head of queue)
-  public Key delete(int i){return null;}
+  public void delete(int index) {
+    // check if IndexMinPQ is not empty() or any element at the given index exist in the MinPQ using contains method:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform delete(index) because the MinPQ instance is empty!");
+    if(!contains(index)) throw new NoSuchElementException("Failed to perform delete(index) because there is no key in MinPQ instance associated with "+index+" index!");
+
+    
+  }
+
+  // check if index i is associated with any key in MinPQ
+  public boolean contains(int index){return pq[index]>0;}
+
   // return the external index of the min item:
-  public int minIndex(){return -1;}
+  public int minIndex(){return qp[1];}
 
   // MinPQ functionalies:
   public Key delMin() {return null;}
@@ -63,8 +79,13 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
   private int sink(int i){return 0;}
 
   // generic comparison:
-  private boolean greater(int i, int j){return false;}
-  // exchange method:
-  private void exch(int i, int j){}
+  private boolean greater(Comparable v, Comparable w){return v.compareTo(w)>0;}
+  // exchange method: exchange happens withing the pq array:
+  private void exch(int i, int j) {
+    // index of the item in the MinPQ instance
+    int temp=pq[i];
+    pq[i]=pq[j];
+    pq[i]=temp;
+  }
 }
 
