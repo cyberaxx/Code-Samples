@@ -34,9 +34,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     // 2. add the key to the collection keys index by EXTERNAL indeces:
     items[index]=key;
     // find out index of the new item in MinPQ binary heap [1  N]
-    pq[index]=swim(index);
-    // put the EXTERNAL index in the qp array associate with the pq indeces:
-    qp[pq[index]]=index;
+    swim(index);
   }
 
   // change the key at external index i:
@@ -57,26 +55,70 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     if(isEmpty()) throw new NoSuchElementException("Failed to perform delete(index) because the MinPQ instance is empty!");
     if(!contains(index)) throw new NoSuchElementException("Failed to perform delete(index) because there is no key in MinPQ instance associated with "+index+" index!");
 
-    
+    // remove the item at the given index from MinPQ
+    exch(index, qp[N]); // swap it with the last item in MinPQ
+    // reduce the number of elements in MinPQ:
+    N--;
+    // sink the item to its rightful level of competence:
+    sink(index);
+
+    // loitering prevention:
+    items[index]=null;
+    // remove it from binary heap indeces:
+    pq[index]=-1;
   }
 
   // check if index i is associated with any key in MinPQ
   public boolean contains(int index){return pq[index]>0;}
 
   // return the external index of the min item:
-  public int minIndex(){return qp[1];}
+  public int minIndex(){
+    return qp[1];
+  }
+  
+  // delete the Min element in the MinPQ instance and return its external index
+  public int delMin() {
+    // check if MinPQ instance is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform min() operation because the MinPQ instance is empty!");
+    
+    // 1. extract the index of the MinPQ head:
+    int index=qp[1]; // index of the head of the MinPQ instance
+    
+    // 2. exchange the MinPQ head with its tails:
+    int head=qp[N];
+    exch(index, head);
+    // 3. reduce the number of element is MinPQ
+    N--;
+
+    // 4. sink the new head to its proper level of comptence:
+    sink(head);
+
+    // 5. loitering prevention:
+    items[index]=null;
+    pq[index]=-1;
+
+    return index;
+  }
 
   // MinPQ functionalies:
-  public Key delMin() {return null;}
   public int size(){return N;}
   public boolean isEmpty(){return N==0;}
-  public Key min(){return items[minIndex()];}
+  public Key min(){
+    // check if MinPQ instance is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform min() operation because the MinPQ instance is empty!");
+    return items[minIndex()];
+  }
 
   // Helper methods:
   // swim up newly added item to the tail of the MinPQ (during insertion) to its rightful level of competence: logN operation
-  private int swim(int i){return 0;}
+  private void swim(int index){
+    // put the EXTERNAL index in the qp array associate with the pq indeces:
+    qp[pq[index]]=index;
+  }
+
   // sink down newly placed item as a HEAD of the MinPQ (during deletion) to its rightful level of competence: logN operation
-  private int sink(int i){return 0;}
+  private void sink(int index) {
+  }
 
   // generic comparison:
   private boolean greater(Comparable v, Comparable w){return v.compareTo(w)>0;}
@@ -85,7 +127,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     // index of the item in the MinPQ instance
     int temp=pq[i];
     pq[i]=pq[j];
-    pq[i]=temp;
+    pq[j]=temp;
   }
 }
 
