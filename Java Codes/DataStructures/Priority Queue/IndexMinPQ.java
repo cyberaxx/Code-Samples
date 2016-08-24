@@ -22,7 +22,6 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
   }
 
   // API:
-
   // NEW functionalities added to MinPQ:
   // insertion by external index:
   public void insert(int index, Key key){
@@ -33,8 +32,12 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     N++;
     // 2. add the key to the collection keys index by EXTERNAL indeces:
     items[index]=key;
-    // find out index of the new item in MinPQ binary heap [1  N]
-    swim(index);
+
+    // 3. find out index of the new item in MinPQ binary heap [1  N] (update the pq array)
+    swim(index); // restore heap order condition
+
+    // 4. update the qp array by putting the EXTERNAL index in the qp array associate with the pq indeces:
+    qp[pq[index]]=index;
   }
 
   // change the key at external index i:
@@ -44,9 +47,9 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     if(!contains(index)) throw new NoSuchElementException("Failed to perform change(index,key) because there is no key in MinPQ instance associated with "+index+" index!");
     // Otherwise:
     // 1. delete old key associated with the index from MinPQ:
-    delete(index);
+    delete(index); // logN
     // 2. add the new key to the MinPQ
-    insert(index, key);
+    insert(index, key); // logN
   } 
 
   // delete an item at external index i from the MinPQ (maintain the DS invariance -> min item always is at the head of queue)
@@ -56,16 +59,20 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     if(!contains(index)) throw new NoSuchElementException("Failed to perform delete(index) because there is no key in MinPQ instance associated with "+index+" index!");
 
     // remove the item at the given index from MinPQ
-    exch(index, qp[N]); // swap it with the last item in MinPQ
+    int i=qp[N]; // i is the external index of the last item in MinPQ
+    exch(index, i); // swap the item at the given index with the last item in MinPQ
     // reduce the number of elements in MinPQ:
     N--;
-    // sink the item to its rightful level of competence:
-    sink(index);
+
+    // sink the new item to its rightful level of competence in the MinPQ instance:
+    sink(i); // restore heap order condition
 
     // loitering prevention:
     items[index]=null;
     // remove it from binary heap indeces:
     pq[index]=-1;
+    // update the qp for the i
+    qp[pq[i]]=i;
   }
 
   // check if index i is associated with any key in MinPQ
@@ -96,6 +103,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     // 5. loitering prevention:
     items[index]=null;
     pq[index]=-1;
+    qp[pq[head]]=head; // update the qp array
 
     return index;
   }
@@ -112,8 +120,20 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
   // Helper methods:
   // swim up newly added item to the tail of the MinPQ (during insertion) to its rightful level of competence: logN operation
   private void swim(int index){
-    // put the EXTERNAL index in the qp array associate with the pq indeces:
-    qp[pq[index]]=index;
+    /* NOTE: 
+       1. index denotes the EXTERNAL index of the given key:
+       2. pq[index]/2 denotes the parent index in the min oriented binary heap
+       3-1. pq[index]*2 denotes the left child index in the min oriented binary heap
+       3-2. pq[index]*2+1 denotes the rightchild child in the min oriented binary heap
+    */
+
+    // While not reaching the root of binary heap at index 1 AND its heap order condition is violated:
+    while(pq[index]<1 && greater(items[qp[(pq[index])/2]], items[index])) {
+      // promote the key in binary heap:
+      int parentIndex=qp[(pq[index])/2];
+      exch(index, parentIndex); // exchange values in pq array
+      index=parentIndex;
+    }
   }
 
   // sink down newly placed item as a HEAD of the MinPQ (during deletion) to its rightful level of competence: logN operation
@@ -130,4 +150,3 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     pq[j]=temp;
   }
 }
-
