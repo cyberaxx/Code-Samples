@@ -208,7 +208,7 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
   // Iterable: override iterator method from java Iterable interface:
   @Override
-  public Iterator<Key> iterator(){return new HeapIterator();}
+  public Iterator<Key> iterator(){return new MaxHeapIterator();}
 
   // inner class that provide implementation for java Iterator interface:
   private class MaxHeapIterator implements Iterator<Key> {
@@ -220,7 +220,7 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
         copy.insert(pq[i], keys[pq[i]]);
     }
     @Override
-    public boolean hasNext(){return !current.isEmpty();}
+    public boolean hasNext(){return !copy.isEmpty();}
     @Override
     public Key next(){
       if(!hasNext()) throw new NoSuchElementException("Failed to perform next() operation because there has been no next element in IndexMaxPQ instance!");
