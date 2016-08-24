@@ -42,10 +42,18 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
   public Key delMax(){return null;}
 
   // sneek peek at the Max element in the Max oriented priority queue instance (if exists such a element)
-  public Key max() {return null;}
+  public Key max() {
+    // check if the IndexMaxPQ instance is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Failed to retrieve the maximum item in the IndexMaxPQ instance because it was empty!");
+    return keys[pq[1]];// external index for a key at the heap position 1: root of the MaxPQ
+  }
 
   // returns the external index associated with the max element in the Max oriented priority queue instance (if exists such a element)
-  public int maxIndex() {return -1;}
+  public int maxIndex() {
+    // check if the IndexMaxPQ instance is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Failed to retrieve the index of max item in the IndexMaxPQ instance because it was empty!");
+    return pq[1];// external index for a key at the heap position 1: root of the MaxPQ
+  }
 
   // check if there exists any key associated with the given index in the Max oriented priority queue instance
   public boolean contains(int index){return false;}
