@@ -124,7 +124,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
        1. index denotes the EXTERNAL index of the given key:
        2. pq[index]/2 denotes the parent index in the min oriented binary heap
        3-1. pq[index]*2 denotes the left child index in the min oriented binary heap
-       3-2. pq[index]*2+1 denotes the rightchild child in the min oriented binary heap
+       3-2. pq[index]*2+1 denotes the right child in the min oriented binary heap
     */
 
     // While not reaching the root of binary heap at index 1 AND its heap order condition is violated:
@@ -138,6 +138,31 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
 
   // sink down newly placed item as a HEAD of the MinPQ (during deletion) to its rightful level of competence: logN operation
   private void sink(int index) {
+    /* NOTE:
+       1. index denote an EXTERNAL index
+       2. N specifies the binary heap index boundary
+       3-0. pq[index]/2 denotes the parent index in the min oriented binary heap (MinPQ instance)
+       3-1. pq[index]*2 denotes the left child index in the min oriented binary heap (MinPQ instance)
+       3-2. pq[index]*2+1 denotes the right child in the min oriented binary heap (MinPQ instance)
+    */
+    
+     // sink down:
+     while(2*pq[index]<=N) {
+       int left=2*pq[index];
+       int right=2*pq[index];
+       int candidate=left;// initially candidate the left child to replace the new boss
+
+       // check if it has a right child and right child is inface the better subordinate:
+       if(right<=N && greater(items[qp[left]], items[qp[left]]))  candidate=right;
+
+       // compare the candidate subordinate with the boss:
+       // if boss is at its rightfull level of competence do nothing
+       if(greater(items[qp[candidate]], items[index]))  break;
+       
+       // otherwise: replace the boss with the candiate suboridnate and sink the boss down to a lower level:
+       exch(index, qp[candidate]);
+       index=qp[candidate];
+     }
   }
 
   // generic comparison:
