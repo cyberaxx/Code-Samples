@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public class IndexMaxPQ<Key extends Comparable<Key>> {
   // instance variables:
   private Key[] keys; // Key[] of key to maintain collection of java Comparable type keys
-  private int[] pq; // an array that maintains the external index for any given index in 1-based array that represent MaxPQ
+  private int[] pq; // an array that maintains the external index for any given heap position in 1-based array that represent MaxPQ
   private int[] qp; // an array that maintains the heap position of any given external index
 
   private int N; // number of items in the MaxPQ instance
@@ -48,7 +48,7 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
     pq[N]=index;
 
     // swim up the new item to its level of competence:
-    swim(index);
+    swim(index); // logN
   }
 
   // delete the key associate with the given index from the Max oriented priority queue instance (preserve Max oriented priority queue HEAP-ORDERED condition)
@@ -89,27 +89,23 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
     // a. take a copy of the maximum item:
     Key max=max();
     int maxIndex=maxIndex();
-    int heapTailIndex=pq[N];
 
     /* b. remove the current max from max oriented priority:
        1. exchange it with the last node in the heap:
        2. decrease the N by one: N--
-       3. check if IndexMaxPQ is already empty
-       4. if not, sink down the new root to its rightful level of comptence
+       3. sink down the new root to its rightful level of comptence
     */
     
     // 1. exchange it with the last node in the heap: exchange heap positions for a given pair of indeces
-    exch(maxIndex, heapTailIndex);
-
+    exch(1, N);
     // 2. decrease heap size N by one: 
     N--;
+    // 3. sink down the new root to its rightful level of comptence
+    sink(1);
 
-    // sink down the new root to its rightful level of comptence
-    sink(heapTailIndex);
-
-    // c. update all 3-parallel arrays
+    // c. update all parallel arrays
     keys[maxIndex]=null; // prevent loitering 
-    // pq[N+1]=null;
+    // pq[N+1]=-1;
     qp[maxIndex]=-1; // the heap position associate with the max external index to -1;
 
     return max;
@@ -164,47 +160,43 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
   public int size(){return N;}
 
   // Helper methods: sink, swim, generic comparison, exchange
-  private void sink(int index){
-    while(2*qp[index]<=N) {
+  private void sink(int k){
+    while(2*k<=N) {
 
-      int left=qp[index]*2;
-      int right=qp[index]*2+1;
-      int candidate=left;
+      int j=2*k;
       // pick the best subordinate to replace the new boss
-      if(right<=N && less(pq[left], pq[right])) candidate=right;
+      if(j+1<=N && less(j, j+1)) j++;
 
       // compare the best subordinate with the new boss:
-      if(!less(index, pq[candidate]))  break;
+      if(!less(k, j))  break;
 
       // demote the new boss to level of the best suboridnate
-      exch(index, pq[candidate]);
-      index=pq[candidate];
+      exch(k, j);
+      k=j;
     }
   }
 
-  private void swim(int index){
-    while(qp[index]>1 && less(pq[qp[index]/2], index)) {
-      // promote the new member to its rightful level of competence:
-      exch(index, pq[qp[index]/2]);
-      index=pq[qp[index]/2];
+  // promote the new member to its rightful level of competence:
+  private void swim(int k){
+    while(k>1 && less(k/2, k)) {
+      exch(k, k/2);
+      k=k/2;
     }
   }
 
   // generic comparison:
-  private boolean less(int indexFirst, int indexSecond) {return keys[indexFirst].compareTo(keys[indexSecond])<0;}
+  private boolean less(int i, int j) {return keys[pq[i]].compareTo(keys[pq[j]])<0;}
 
   // exchange method: exchange heap positions for the given pair of indeces:
-  private void exch(int indexFirst, int indexSecond) {
-    int heapIndexFirst=qp[indexFirst];
-    int heapIndexSecond=qp[indexSecond];
+  private void exch(int i, int j) {
+    // exchange corresponding external indeces first for heap positions i , j :
+    int temp=pq[i];
+    pq[i]=pq[j];
+    pq[j]=temp;
 
-    int temp=qp[indexFirst];
-    qp[indexFirst]=qp[indexSecond];
-    qp[indexSecond]=temp;
-
-    temp=pq[heapIndexFirst];
-    pq[heapIndexFirst]=pq[heapIndexSecond];
-    temp=pq[heapIndexSecond];
+    // exchange priorities for exteranl indeces pq[i], pq[j] as well:
+    qp[pq[j]]=i;
+    qp[pq[i]]=j; 
   }
 
   // iterator:
