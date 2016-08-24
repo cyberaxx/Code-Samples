@@ -39,7 +39,27 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
   public void delete(int index){}
 
   // exctract the max Key from the Max oriented priority queue instance (preserve Max oriented priority queue HEAP-ORDERED condition)
-  public Key delMax(){return null;}
+  public Key delMax(){
+    // UNDERFLOW: 
+    // check if the IndexMaxPQ instance is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Failed to delete maximum item in the IndexMaxPQ instance because it was empty!");
+    
+    // a. take a copy of the maximum item:
+    Key max=max();
+    int maxIndex=maxIndex();
+    /* remove it from max oriented priority:
+       1. exchange it with the last node:
+       2. decrease the N by one
+       3. check if IndexMaxPQ is already empty
+       4. if not, sink down the new root to its rightful level of comptence
+    */
+    
+    // b. update all 3-parallel arrays:the heap position associate with the max external index to -1;
+    keys[maxIndex]=null; // prevent loitering 
+    qp[maxIndex]=-1; // the heap position associate with the max external index to -1;
+
+    return max;
+  }
 
   // sneek peek at the Max element in the Max oriented priority queue instance (if exists such a element)
   public Key max() {
