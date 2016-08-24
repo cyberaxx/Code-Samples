@@ -121,10 +121,15 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
     // check if the IndexMaxPQ instance has any key associate with the given index:
     if(!contains(index)) throw new NoSuchElementException("Failed to perform change(index,key) because IndexMaxPQ instance does not contain such a key!");
 
-    // 1. delete the intem at the given index from the IndexMaxPQ instace:
+    /* 1. delete the intem at the given index from the IndexMaxPQ instace:
     delete(index);
-    // 2. insert the new key asociated with the given index to the IndexMaxPQ instance:
+       2. insert the new key asociated with the given index to the IndexMaxPQ instance:
     insert(index,key);
+    */
+
+    keys[index]=key;
+    swim(qp[index]);  // swim up if it's possible
+    sink(qp[index]);  // sink down if it's applicable
   }
 
   // sneek peek at the Max element in the Max oriented priority queue instance (if exists such a element)
