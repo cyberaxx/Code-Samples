@@ -3,6 +3,7 @@ Index priority-queue implementation. Implement IndexMaxPQ.java by modifying MaxP
 */
 import java.util.NoSuchElementException;
 import java.util.Iterator;
+import java.util.Arrays;
 
 public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   // instance variables:
@@ -21,9 +22,9 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     // Otherwise: initialize instance variables:
     this.maxN=max;
     N=0;
-    keys=(Key[]) new Comparable[maxN];// UGLY CASTING: java does not allow GENERIC array creation
+    keys=(Key[]) new Comparable[maxN+1];// UGLY CASTING: java does not allow GENERIC array creation
     pq=new int[maxN+1]; // pq[i]: i can be within [1 maxN] => pq.length must be maxN+1
-    qp=new int[maxN]; // qp[i]: i can be any within [0 maxN-1]
+    qp=new int[maxN+1]; // qp[i]: i can be any within [0 maxN-1]
     // initialize heap indeces for all external indeces to be -1:
     for(int i=0; i<maxN; i++)
       qp[i]=-1; 
@@ -149,10 +150,6 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
   // check if there exists any key associated with the given index in the Max oriented priority queue instance
   public boolean contains(int index){
-    // UNDERFLOW: 
-    // check if the IndexMaxPQ instance is not empty:
-    if(isEmpty()) throw new NoSuchElementException("Failed to perform contains(indeX) because the IndexMaxPQ instance is empty!");
-
     // Index out of bounds:
     // check if the given index is within the key array index range: [0 maxN-1]
     if(index<0 || index>=maxN) throw new IndexOutOfBoundsException();
@@ -202,8 +199,8 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     pq[j]=temp;
 
     // exchange priorities for exteranl indeces pq[i], pq[j] as well:
-    qp[pq[j]]=i;
-    qp[pq[i]]=j; 
+    qp[pq[i]]=i;
+    qp[pq[j]]=j; 
   }
 
   // Iterable: override iterator method from java Iterable interface:
@@ -216,6 +213,8 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     private IndexMaxPQ<Key> copy;
     // Constructor:
     public MaxHeapIterator() {
+      // instantiate from IndexMaxPQ class:
+      copy=new IndexMaxPQ<Key>(pq.length-1);
       for(int i=1; i<=N; i++)
         copy.insert(pq[i], keys[pq[i]]);
     }
@@ -226,5 +225,50 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
       if(!hasNext()) throw new NoSuchElementException("Failed to perform next() operation because there has been no next element in IndexMaxPQ instance!");
       return copy.delMax();
     }
+  }
+
+  // test client fot IndexMinPQ
+  public static void main(String[] args) {
+    IndexMaxPQ<String> impq=new IndexMaxPQ<String>(5);
+    impq.insert(1, "abcd");
+    impq.insert(0, "dfed");
+    impq.insert(3, "fasdfed");
+    impq.insert(2, "asd");
+   
+    System.out.println("Max is: "+impq.max());
+    System.out.println("Size is: "+ impq.size());
+    System.out.println("isEmpt()? "+ impq.isEmpty());
+
+    System.out.println();
+    System.out.println();
+    
+    impq.change(1, "zaszz");
+    System.out.println("Max is: "+impq.max());
+    System.out.println("Size is: "+ impq.size());
+    System.out.println("isEmpt()? "+ impq.isEmpty());
+
+    System.out.println();
+    System.out.println();
+    
+    impq.delete(2);
+    System.out.println("Max is: "+impq.max());
+    System.out.println("Size is: "+ impq.size());
+    System.out.println("isEmpty()? "+ impq.isEmpty());
+
+    System.out.println();
+    System.out.println();
+
+    for(String item:impq) System.out.println(item);
+    System.out.println();
+
+    System.out.println();
+    System.out.println();
+
+
+    System.out.println("Max is: "+impq.max());
+    System.out.println("deMax: "+impq.delMax());
+    System.out.println("Max is: "+impq.max());
+    System.out.println("Size is: "+ impq.size());
+    System.out.println("isEmpty()? "+ impq.isEmpty());
   }
 }
