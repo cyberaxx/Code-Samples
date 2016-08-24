@@ -31,29 +31,44 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   public void insert(int index, Key key){
     // OVERFLOW: indexe must be within [0 MAX-1] range:
     if(index<0 || index>=MAX) throw new IndexOutOfBoundsException("Failed to perform insert(index, key) because the given index was out of bounds.");
-    // if the index is valid:
-    // 1. increase the number of elements in the MinPQ:
+
+    // 1. increase the size of binary heap:
     N++;
-    // 2. add the key to the collection keys index by EXTERNAL indeces:
+    // 2. add the new item to the array of keys:
     items[index]=key;
-
-    // 3. find out index of the new item in MinPQ binary heap [1  N] (update the pq array)
-    swim(index); // restore heap order condition
-
-    // 4. update the qp array by putting the EXTERNAL index in the qp array associate with the pq indeces:
-    qp[pq[index]]=index;
+    // 3. initially add the new item to the tail of heap
+    qp[index]=N;
+    pq[N]=index;
+    // 4. swim it up to it rightful level of competence it the heap:
+    swim(N);
   }
 
   // change the key at external index i:
   public void change(int index, Key key){
     // check if IndexMinPQ is not empty() or any element at the given index exist in the MinPQ using contains method
     if(isEmpty()) throw new NoSuchElementException("Failed to perform change(index,key) because the MinPQ instance is empty!");
+    // check if the given index is within [0 MAX-1] range:
+    if(index<0 || index>=MAX) throw new IndexOutOfBoundsException();
+    // check if there exist any key associated with the given index
     if(!contains(index)) throw new NoSuchElementException("Failed to perform change(index,key) because there is no key in MinPQ instance associated with "+index+" index!");
-    // Otherwise:
+
+    /*
     // 1. delete old key associated with the index from MinPQ:
     delete(index); // logN
     // 2. add the new key to the MinPQ
     insert(index, key); // logN
+    */
+
+    // Otherwise:
+    // 1. update the key priority:
+    items[index]=key;
+    // 2. retrieve heap position associated with the given index:
+    int i=qp[index];
+    // 3. restore the heap-ordered condition:
+    swim(i); // swim up the node i (with its new value) if possible (compare with its corresponding parent)
+    sink(i); // sink down the node i (with its new value) if possible (compare with both its children if avaiable)
+    // heap ordered condition restored
+
   } 
 
   // delete an item at external index i from the MinPQ (maintain the DS invariance -> min item always is at the head of queue)
@@ -164,7 +179,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   }
 
   // generic comparison: base on heap positions
-  private boolean greater(int i, int j){return items[pq[i]].compareTo(items[pq[i]])>0;}
+  private boolean greater(int i, int j){return items[pq[i]].compareTo(items[pq[j]])>0;}
   // exchange method: based on heap positions
   private void exch(int i, int j) {
     // exchange indeces:
@@ -179,17 +194,36 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
   // iterator:
   @Override
-  public Iterator<Key> iterator(){return null;}
-
+  public Iterator<Key> iterator(){return new HeapIterator();}
+  private class HeapIterator implements Iterator<Key>{
+    // instance variable:
+    private IndexMinPQ<Key> copy;
+    // Constructor:
+    public HeapIterator() {
+      // instantiate from IndexMinPQ class:
+      copy=new IndexMinPQ<Key>(IndexMinPQ.this.MAX);
+      for(int i=1; i<=N; i++)  copy.insert(pq[i], items[pq[i]]);
+    }
+    @Override
+    public boolean hasNext(){return !copy.isEmpty();}
+    @Override
+    public Key next() {
+      if(!hasNext()) throw new NoSuchElementException("Failed to iterate over IndexMinPQ instance!");
+      return copy.delMin(); // iterate over items in the IndexMinPQ in a sorted order
+    }
+    
+  }
   // test client fot IndexMinPQ
   public static void main(String[] args) {
     IndexMinPQ<String> impq=new IndexMinPQ<String>(5);
     impq.insert(1, "abcd");
     impq.insert(0, "dfed");
     impq.insert(3, "fasdfed");
+    impq.insert(2, "asd");
+   
     System.out.println("Min is: "+impq.min());
     System.out.println("Size is: "+ impq.size());
-    System.out.println("isEmpt()? "+ impq.isEmpty());
+    System.out.println("isEmpty()? "+ impq.isEmpty());
 
     System.out.println();
     System.out.println();
@@ -197,7 +231,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     impq.change(1, "zaszz");
     System.out.println("Min is: "+impq.min());
     System.out.println("Size is: "+ impq.size());
-    System.out.println("isEmpt()? "+ impq.isEmpty());
+    System.out.println("isEmpty()? "+ impq.isEmpty());
 
     System.out.println();
     System.out.println();
@@ -205,7 +239,21 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     impq.delete(2);
     System.out.println("Min is: "+impq.min());
     System.out.println("Size is: "+ impq.size());
-    System.out.println("isEmpt()? "+ impq.isEmpty());
+    System.out.println("isEmpty()? "+ impq.isEmpty());
 
+    System.out.println();
+    System.out.println();
+
+    for(String item:impq) System.out.println(item);
+    System.out.println();
+
+    System.out.println();
+    System.out.println();
+
+    System.out.println("Min is: "+impq.min());
+    System.out.println("delMin: "+impq.delMin());
+    System.out.println("Min is: "+impq.min());
+    System.out.println("Size is: "+ impq.size());
+    System.out.println("isEmpty()? "+ impq.isEmpty());
   }
 }

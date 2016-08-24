@@ -237,7 +237,7 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
    
     System.out.println("Max is: "+impq.max());
     System.out.println("Size is: "+ impq.size());
-    System.out.println("isEmpt()? "+ impq.isEmpty());
+    System.out.println("isEmpty()? "+ impq.isEmpty());
 
     System.out.println();
     System.out.println();
@@ -245,7 +245,7 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     impq.change(1, "zaszz");
     System.out.println("Max is: "+impq.max());
     System.out.println("Size is: "+ impq.size());
-    System.out.println("isEmpt()? "+ impq.isEmpty());
+    System.out.println("isEmpty()? "+ impq.isEmpty());
 
     System.out.println();
     System.out.println();
@@ -266,7 +266,7 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
 
     System.out.println("Max is: "+impq.max());
-    System.out.println("deMax: "+impq.delMax());
+    System.out.println("delMax: "+impq.delMax());
     System.out.println("Max is: "+impq.max());
     System.out.println("Size is: "+ impq.size());
     System.out.println("isEmpty()? "+ impq.isEmpty());
