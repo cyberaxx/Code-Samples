@@ -25,7 +25,22 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
 
   // NEW functionalities added to MinPQ:
   // insertion by external index:
-  public void insert(int index, Key key){}
+  public void insert(int index, Key key){
+    // OVERFLOW: indexe must be within [0 MAX-1] range:
+    if(index<0 || index>=MAX) throw new IndexOutOfBoundsException("Failed to perform insert(index, key) because the given index was out of bounds.");
+
+    // if the index is valid:
+    // 1. increase the number of elements in the MinPQ:
+    N++;
+    // 2. add the key to the collection keys index by EXTERNAL indeces:
+    items[index]=key;
+    // find out index of the new item in MinPQ binary heap [1  N]
+    pq[index]=swim(index);
+    // put the EXTERNAL index in the qp array associate with the pq indeces:
+    qp[pq[index]]=index;
+
+  }
+
   // change the key at external index i:
   public void change(int index, Key key){} 
   // check if index i is associated with any key in MinPQ
@@ -43,9 +58,9 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
 
   // Helper methods:
   // swim up newly added item to the tail of the MinPQ (during insertion) to its rightful level of competence: logN operation
-  private void swim(int i){}
+  private int swim(int i){return 0;}
   // sink down newly placed item as a HEAD of the MinPQ (during deletion) to its rightful level of competence: logN operation
-  private void sink(int i){}
+  private int sink(int i){return 0;}
 
   // generic comparison:
   private boolean greater(int i, int j){return false;}
