@@ -22,9 +22,9 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     // Otherwise: initialize instance variables:
     this.maxN=max;
     N=0;
-    keys=(Key[]) new Comparable[maxN+1];// UGLY CASTING: java does not allow GENERIC array creation
+    keys=(Key[]) new Comparable[maxN];// UGLY CASTING: java does not allow GENERIC array creation
     pq=new int[maxN+1]; // pq[i]: i can be within [1 maxN] => pq.length must be maxN+1
-    qp=new int[maxN+1]; // qp[i]: i can be any within [0 maxN-1]
+    qp=new int[maxN]; // qp[i]: i can be any within [0 maxN-1]
     // initialize heap indeces for all external indeces to be -1:
     for(int i=0; i<maxN; i++)
       qp[i]=-1; 
