@@ -32,9 +32,6 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
   // insert an item with external index "index" to a Max oriented priority queue instance
   public void insert(int index, Key key){}
 
-  // change the key that has been associated with the given external index "index" (preserve Max oriented priority queue HEAP-ORDERED condition)
-  public void change(int index, Key key){}
-
   // delete the key associate with the given index from the Max oriented priority queue instance (preserve Max oriented priority queue HEAP-ORDERED condition)
   public void delete(int index){}
 
@@ -47,6 +44,7 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
     // a. take a copy of the maximum item:
     Key max=max();
     int maxIndex=maxIndex();
+    int heapTailIndex=pq[N];
 
     /* b. remove the current max from max oriented priority:
        1. exchange it with the last node in the heap:
@@ -55,11 +53,36 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
        4. if not, sink down the new root to its rightful level of comptence
     */
     
+    // 1. exchange it with the last node in the heap: exchange heap positions for a given pair of indeces
+    exch(maxIndex, heapTailIndex);
+
+    // 2. decrease heap size N by one: 
+    N--;
+
+    // sink down the new root to its rightful level of comptence
+    sink(heapTailIndex);
+
     // c. update all 3-parallel arrays
     keys[maxIndex]=null; // prevent loitering 
+    // pq[N+1]=null;
     qp[maxIndex]=-1; // the heap position associate with the max external index to -1;
 
     return max;
+  }
+
+  // change the key that has been associated with the given external index "index" (preserve Max oriented priority queue HEAP-ORDERED condition)
+  public void change(int index, Key key) {
+    // UNDERFLOW? 
+    // check if the IndexMaxPQ instance is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Failed to delete maximum item in the IndexMaxPQ instance because it was empty!");
+    // Contains? 
+    // check if the IndexMaxPQ instance has any key associate with the given index:
+    if(!contains(index)) throw new NoSuchElementException("Failed to perform change(index,key) because IndexMaxPQ instance does not contain such a key!");
+
+    // 1. delete the intem at the given index from the IndexMaxPQ instace:
+    delete(index);
+    // 2. insert the new key asociated with the given index to the IndexMaxPQ instance:
+    insert(index,key);
   }
 
   // sneek peek at the Max element in the Max oriented priority queue instance (if exists such a element)
@@ -86,11 +109,25 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
   public int size(){return N;}
 
   // Helper methods: sink, swim, generic comparison, exchange
+  private void sink(int index){}
+  private void swim(int index){}
 
   // generic comparison:
   private boolean less(int indexFirst, int indexSecond) {return keys[indexFirst].compareTo(keys[indexSecond])<0;}
-  // exchange method:
-  private void exch(){}
+
+  // exchange method: exchange heap positions for the given pair of indeces:
+  private void exch(int indexFirst, int indexSecond) {
+    int heapIndexFirst=qp[indexFirst];
+    int heapIndexSecond=qp[indexSecond];
+
+    int temp=qp[indexFirst];
+    qp[indexFirst]=qp[indexSecond];
+    qp[indexSecond]=temp;
+
+    temp=pq[heapIndexFirst];
+    pq[heapIndexFirst]=pq[heapIndexSecond];
+    temp=pq[heapIndexSecond];
+  }
 
   // iterator:
 }
