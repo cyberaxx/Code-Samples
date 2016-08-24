@@ -48,7 +48,7 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
     pq[N]=index;
 
     // swim up the new item to its level of competence:
-    swim(index); // logN
+    swim(N); // logN
   }
 
   // delete the key associate with the given index from the Max oriented priority queue instance (preserve Max oriented priority queue HEAP-ORDERED condition)
@@ -65,18 +65,19 @@ public class IndexMaxPQ<Key extends Comparable<Key>> {
     // check if the given index is not associated with any key:
     if(!contains(index)) throw new NoSuchElementException("Failed to perform delete(index) because there is no key assoicated with given index "+index+" index!");
 
-    // retreve the Index of the last node in the heap:
-    int heapTailIndex=pq[N];
     // exchange the tail of the heap with the key with the given index:
-    exch(index, heapTailIndex);
+    int i=qp[index];
+    exch(i, N);
     // decrease the number of elements in the priority queue instance:
     N--;
-    // sink:
-    sink(heapTailIndex);
+    // swim: promote it if possible
+    swim(i);
+    // sink: demote it if applicabe
+    sink(i);
     
     // prevent loitering:
     keys[index]=null;
-    // pq[N+1]=null;
+    // pq[N+1]=-1;
     qp[index]=-1;
   }
 
