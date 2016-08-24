@@ -1,7 +1,8 @@
 import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.Iterator;
 
-public class IndexMinPQ<Key extends Comparable<Key>> {
+public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   // instance variables:
   private Key[] items; // maintains a collection of comparable keys indexed by external index [0 MAX-1]
   private int[] pq; // maintains external index for each heap position [1...N]->[0 MAX-1]
@@ -59,29 +60,34 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
   public void delete(int index) {
     // check if IndexMinPQ is not empty() or any element at the given index exist in the MinPQ using contains method:
     if(isEmpty()) throw new NoSuchElementException("Failed to perform delete(index) because the MinPQ instance is empty!");
+    // check if the given index is within [0 MAX-1] range:
+    if(index<0 || index>=MAX) throw new IndexOutOfBoundsException();
+    // check if there exist any key associated with the given index
     if(!contains(index)) throw new NoSuchElementException("Failed to perform delete(index) because there is no key in MinPQ instance associated with "+index+" index!");
 
-    // remove the item at the given index from MinPQ
-    int i=qp[N]; // i is the external index of the last item in MinPQ
-    exch(index, i); // swap the item at the given index with the last item in MinPQ
-    // reduce the number of elements in MinPQ:
+    // remove the item at the given index from MinPQ:
+    // 1. find its corresponding heap position:
+    int i=qp[index];
+    // 2. exchange its heap position with the last node in the heap (tail node):
+    exch(i, N); 
+    // 3. decrease the size of min heap:
     N--;
 
-    // sink the new item to its rightful level of competence in the MinPQ instance:
-    sink(i); // restore heap order condition
+    // put node currently at heap position i at its rightful position: restore heap order condition
+    swim(i); // swim it up if possible
+    sink(i); // sink it down if applicable
+    // heap ordered restored!
 
     // loitering prevention:
     items[index]=null;
     // remove it from binary heap indeces:
-    pq[index]=-1;
-    // update the qp for the i
-    qp[pq[i]]=i;
+    qp[index]=-1;
   }
 
   // check if index i is associated with any key in MinPQ
   public boolean contains(int index){
     if(index<0 || index>=MAX) throw new IndexOutOfBoundsException();
-    return qp[index]!=-1;
+    return qp[index]>0;
   }
 
   // return the external index of the min item:
@@ -96,31 +102,29 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     if(isEmpty()) throw new NoSuchElementException("Failed to perform min() operation because the MinPQ instance is empty!");
     return items[minIndex()];
   }
-
   
   // delete the Min element in the MinPQ instance and return its external index
-  public int delMin() {
+  public Key delMin() {
     // check if MinPQ instance is not empty:
     if(isEmpty()) throw new NoSuchElementException("Failed to perform min() operation because the MinPQ instance is empty!");
     
+    // 0. copy the min value:
+    Key min=min();
     // 1. extract the index of the MinPQ head:
-    int index=qp[1]; // index of the head of the MinPQ instance
-    
-    // 2. exchange the MinPQ head with its tails:
-    int head=qp[N];
-    exch(index, head);
-    // 3. reduce the number of element is MinPQ
+    int index=minIndex();
+    // 2. exchange the head of MinPQ with its tails:
+    exch(1, N);
+    // 3. reduce the number of elements in MinPQ
     N--;
-
     // 4. sink the new head to its proper level of comptence:
-    sink(head);
+    sink(1);
 
     // 5. loitering prevention:
     items[index]=null;
-    pq[index]=-1;
-    qp[pq[head]]=head; // update the qp array
+    // pq[index]=-1;
+    qp[index]=-1;
 
-    return index;
+    return min;
   }
 
   // MinPQ functionalies:
@@ -172,6 +176,10 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     qp[pq[i]]=i;
     qp[pq[j]]=j;
   }
+
+  // iterator:
+  @Override
+  public Iterator<Key> iterator(){return null;}
 
   // test client fot IndexMinPQ
   public static void main(String[] args) {
