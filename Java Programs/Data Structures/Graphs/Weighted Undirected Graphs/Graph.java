@@ -16,14 +16,14 @@ public class Graph {
     this.V=v;
     E=0;
     // intialize adj list of the Graph instance:
-    adj=(List<Edge>[]) new Object[V]; // UGLY CASTING: Java does not allow generic array creation
+    adj=(List<Edge>[]) new List[V]; // UGLY CASTING: Java does not allow generic array creation
     for(int i=0; i<V; i++)  adj[v]=new LinkedList<Edge>();
   }
 
   public Graph(Graph G){
     this.V=G.V();
     this.E=G.E();
-    adj=(List<Edge>[])new Object[V];
+    adj=(List<Edge>[])new List[V];
     for(int v=0; v<V; v++)
       adj[v]=new LinkedList<Edge>(G.adj(v));
   }
