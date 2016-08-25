@@ -21,6 +21,14 @@ public class Digraph {
       adj[i]=new LinkedList<Integer>(); // list of vertices connected to the vertex v by an edge from v to them
   }
 
+  public Digraph(Digraph G) {
+    this.V=G.V();
+    this.E=G.E();
+    adj=(List<Integer>[])new Object[V];
+    for(int v=0; v<V; v++)
+      adj[v]=new LinkedList<Integer>(G.adj(v));
+  }
+
   // instance methods:
   public int V(){return V;} // return number of vertices in a Digraph instance
   public int E(){return E;} // return number of directed edges in a Digraph instance
