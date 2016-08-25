@@ -39,7 +39,7 @@ public class Edge implements Comparable<Edge>{
   public int other(int v){
     if(this.v==v)  return w;
     else if(this.w==v)  return v;
-    return throw new IllegalArgumentException("no such an end point exists!");
+    else throw new IllegalArgumentException("no such an end point exists!");
   }
 
 /*
