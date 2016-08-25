@@ -11,11 +11,11 @@ public class Graph {
   // Constructor:
   public Graph(int v) {
     // number of vertices can not be negative
-    if(v<0) throw new IllegalArgumentException();
+    if(v<0) throw new IllegalArgumentException("Number of vertices can not be negative!");
 
+    // initialize instance fields:
     this.V=v;
     this.E=0;
-
     // instantiate the adjacency list:
     adj=(List<Integer>[]) new Object[V]; // UGLY CASTIN: no generic array creation
     for(int i=0; i<V; i++) {
@@ -24,7 +24,6 @@ public class Graph {
   }
 
   public Graph(Graph G) {
-
     // initialize number of vertices and edges
     this.V=G.V();
     this.E=G.E();
@@ -53,7 +52,12 @@ public class Graph {
 
   // returns an Iterable data type that represents all vertices adjacent to vertex v
   public List<Integer> adj(int v){return adj[v];}
-
+  
+  // compute the degree of vertex v in an instance of a Graph type:
+  public int degree(int v) {
+    validateVertex(v);  
+    return adj(v).size();
+  }
 
   // Helper methods:
   private void validateVertex(int v){
@@ -61,26 +65,19 @@ public class Graph {
   }
 
   // static methods:
-  public static int degree(Graph G, int v) {
-    // compute the degree of vertex v in graph G:
-    int degree=0;
-    for(Integer vertex:G.adj(v))  degree++;
-    return degree;
-  }
-
   // find the max degree among vertice of a given instance of Graph type
   public static int maxDegree(Graph G) {
-    int maxDegree=degree(G, 0);
+    int maxDegree=G.adj(0).size();
     for(int v=1; v<G.V(); v++)
-      if (maxDegree<degree(G, v))  maxDegree=degree(G, v);
+      if (maxDegree<G.adj(v).size())  maxDegree=G.adj(v).size();
     return maxDegree;
   }
 
   // find the min degree among vertice of a given instance of Graph type
   public static int minDegree(Graph G) {
-    int minDegree=degree(G, 0);
+    int minDegree=G.adj(0).size();
     for(int v=1; v<G.V(); v++)
-      if (minDegree>degree(G, v))  minDegree=degree(G, v);
+      if (minDegree>G.adj(v).size())  minDegree=G.adj(v).size();
     return minDegree;
   }
 
