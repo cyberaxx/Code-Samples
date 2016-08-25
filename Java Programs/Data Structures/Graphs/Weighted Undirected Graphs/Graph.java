@@ -55,19 +55,36 @@ public class Graph {
     public double wieght(){return this.weight;}
   }
 
-  public int V(){return V;}
-  public int E(){return E.size();}
+  // Graph API: 
+  // instace methods
+  public int V(){return V;} // number of vertices of a Graph instance
+  public int E(){return E.size()/2;} // each has been counted twice (once from each endpoints)
   public List<Edge> adj(int v) {
     validateVertex(v);
     return adj[v];
   }
+  public void addEdge(int v, int w, double weight) {
+    validateVertex(v);
+    validateVertex(w);
+    if(Double.isNaN(weight)) throw new IllegalArgumentException();
 
+    // instantiate form the Edge data type:
+    Edge edge=new Edge(v, w, weight);
+
+    // add the new edge to the list of edges:
+    E.add(edge);
+    // add the edge to the adjacency list of v and w
+    adj[v].add(edge);
+    adj[w].add(edge);
+  }
+  public int degree(int v) {
+    validateVertex(v);
+    return(adj[v].size());
+  }
 
   // Helper methods:
   private void validateVertex(int v) {
     if(v<0 || v>=this.V) throw new IndexOutOfBoundsException("The given vertex index is out of legal bounds!");
   }
-  
-
 }
 
