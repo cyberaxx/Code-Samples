@@ -8,6 +8,7 @@ public class Digraph {
   private final int V; // number of vertices of a directed graph instance
   private int E; // number of edges of a directed graph instance
   private List<Integer>[] adj; // adjacency list of a directed graph instance
+  private int[] inDegree; // keep track of inDegrees' in constant time
 
   // Constructor:
   public Digraph(int v){
@@ -17,6 +18,7 @@ public class Digraph {
     E=0; // no edge
     // initialize the adjacency list of a Digraph instance:
     adj=(List<Integer>[])new Object[V];// UGLY CASTING: java does not allow generic array creation
+    inDegree=new int[V]; // initialize the array of inDegrees' for all vertices
     for(int i=0; i<V; i++)
       adj[i]=new LinkedList<Integer>(); // list of vertices connected to the vertex v by an edge from v to them
   }
@@ -24,6 +26,7 @@ public class Digraph {
   public Digraph(Digraph G) {
     this.V=G.V();
     this.E=G.E();
+    this.inDegree=G.inDegree();
     adj=(List<Integer>[])new Object[V];
     for(int v=0; v<V; v++)
       adj[v]=new LinkedList<Integer>(G.adj(v));
@@ -32,12 +35,15 @@ public class Digraph {
   // instance methods:
   public int V(){return V;} // return number of vertices in a Digraph instance
   public int E(){return E;} // return number of directed edges in a Digraph instance
+  public int[] inDegree(){return inDegree;} // return the inDegree array of all vertices on a Digraph
 
   // add an edge from vertex "from" to vertex "to"
   public void addEdge(int from, int to){
     validateVertex(from);
     validateVertex(to);
+
     adj[from].add(to);
+    inDegree[to]++; 
     E++;
   }
 
@@ -55,6 +61,13 @@ public class Digraph {
     return adj[v].size();
   }
 
+  public int inDegree(int v){
+    // validate the given vertex v:
+    validateVertex(v);
+    return inDegree[v];
+  }
+
+  /*
   // returns the number of edges going into vertex v
   public int inDegree(int w){
     // validate the given vertex w:
@@ -65,6 +78,7 @@ public class Digraph {
         inDegree++;
     return inDegree;
   }
+  */
 
   // helper methods:
   // vertices must be integer within [0 V-1] range:
