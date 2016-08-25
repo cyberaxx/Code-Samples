@@ -11,14 +11,14 @@ Note that the maximum value is stored at the root and the minimum value is store
 */
 import java.util.NoSuchElementException;
 
-public class MinMaxPQ<Key extends Comparable> {
+public class MinMaxPQ<Key extends Comparable<Key>> {
 
   // instance variables:
   private Key[] keys; // maintain a collection of comparable type keys
   private int N; // denotes the number of element in MinMaxPQ collection instance
 
   // constructor
-  public MinMax(){
+  public MinMaxPQ(){
     // initialize instance variables:
     N=0;
     // keys is a resizable array of keys of generic type Key
@@ -42,7 +42,7 @@ public class MinMaxPQ<Key extends Comparable> {
 
   // generic comparison: given their heap position
   private boolean less(int i, int j){return keys[i].compareTo(keys[j])<0;}
-  private boolean greater(){return keys[i].compareTo(keys[j])>0;}
+  private boolean greater(int i, int j){return keys[i].compareTo(keys[j])>0;}
 
   // exchange items in the heap given their heap position:
   private void exch(int i, int j){
