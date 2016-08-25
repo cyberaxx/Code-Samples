@@ -71,9 +71,6 @@ public class Graph {
 
     // instantiate form the Edge data type:
     Edge e=new Edge(v, w, weight);
-
-    // add the new edge to the list of edges:
-    E.add(e);
     // add the edge to the adjacency list of v and w
     adj[v].add(e);
     adj[w].add(e);
