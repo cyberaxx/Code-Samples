@@ -57,20 +57,20 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
   public Key delMin(){
     // UNDERFLOW:
-    if(isEmpty()) throw new NoSuchElementException("Failed to perform delMax()");
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform delMin()");
     return null;
   }
 
   public Key min(){
     // UNDERFLOW:
-    if(isEmpty()) throw new NoSuchElementException("Failed to perform delMax()");
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform min()");
     return null;
   }
 
   // sneek peek at the head of MinMaxPQ instance:
   public Key max(){
     // UNDERFLOW:
-    if(isEmpty()) throw new NoSuchElementException("Failed to perform delMax()");
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform max()");
     return keys[1]; // return the head of MinMaxPQ instance at heap position 1
   }
 
