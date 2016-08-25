@@ -38,7 +38,13 @@ public class MinMaxPQ<Key extends Comparable<Key>> {
   private void resize(int capacity){}
   private void swim(int k){}
   private void sink(int k){}
-  private int level(int i){return -1;}
+
+  // for a given position k in the binary heap find out it corresponding level:
+  private int level(int k){
+    // we need to take a log base 2 of k:
+    double level=Math.log10(k)/Math.log10(2);
+    return (int) level; // UGLY CASTING
+  }
 
   // generic comparison: given their heap position
   private boolean less(int i, int j){return keys[i].compareTo(keys[j])<0;}
