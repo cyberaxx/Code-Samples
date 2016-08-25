@@ -6,7 +6,7 @@ public class Graph {
 
   // instance variables:
   private final int V; // number of vertices
-  private final int E; // number of Edges
+  private int E; // number of Edges
   private List<Edge>[] adj; // adjacency list of the Graph instance
 
   // Constructor:
@@ -74,16 +74,19 @@ public class Graph {
     // add the edge to the adjacency list of v and w
     adj[v].add(e);
     adj[w].add(e);
+    E++;
   }
 
   public void addEdge(Edge e) {
     // retrieve its endpoints:
     int v=e.either();
     int w=e.other(v);
-
+    validateVertex(v);
+    validateVertex(w);
     // add the edge to the adjacency list of v and w
     adj[v].add(e);
     adj[w].add(e);
+    E++;
   }
 
   public int degree(int v) {
