@@ -11,6 +11,9 @@ Note that the maximum value is stored at the root and the minimum value is store
 */
 import java.util.NoSuchElementException;
 import java.util.Iterator;
+
+import java.util.Arrays;
+
 public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
   // instance variables:
@@ -209,5 +212,39 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
       if(!hasNext()) throw new NoSuchElementException("Failed to iterate over MinMaxPQ instance!");
       return keys[current--];
     } 
+  }
+
+  // MinMaxPQ test client:
+  public static void main(String[] args) {
+    MinMaxPQ<Integer> keys=new MinMaxPQ<Integer>();
+    keys.insert(10);
+    keys.insert(5);
+    keys.insert(6);
+    keys.insert(7);
+    keys.insert(8);
+    keys.insert(9);
+    keys.insert(10);
+
+    for(Integer item:keys) System.out.println(item);
+    System.out.println();
+
+
+    System.out.println();
+
+    System.out.println("Min: "+keys.max());
+    System.out.println("Max: "+keys.min());
+    for(Integer item:keys) System.out.println(item);
+    System.out.println();
+
+    System.out.println();
+
+    System.out.println("delete Min: "+keys.delMin());
+    System.out.println("delete Max: "+keys.delMax());
+    System.out.println("Max: "+keys.min());
+    System.out.println("Min: "+keys.max());
+    System.out.println("Max: "+keys.min());
+    for(Integer item:keys) System.out.println(item);
+    System.out.println();
+
   }
 }
