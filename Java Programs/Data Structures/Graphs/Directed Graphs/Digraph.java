@@ -59,10 +59,10 @@ public class Digraph {
   public int inDegree(int w){
     // validate the given vertex w:
     validateVertex(w);
-    int inDgree=0;
+    int inDegree=0;
     for(int v=0; v<V; v++)
       if(adj[v].contains(w))
-        inDgree++;
+        inDegree++;
     return inDegree;
   }
 
