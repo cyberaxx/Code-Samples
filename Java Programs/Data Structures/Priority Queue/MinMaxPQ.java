@@ -58,7 +58,26 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   public Key delMin(){
     // UNDERFLOW:
     if(isEmpty()) throw new NoSuchElementException("Failed to perform delMin()");
-    return null;
+    
+    // 1. retrieve the min element and heap position of the min element in MinMaxPQ instance:
+    Key min=min();
+    int index=minIndex();
+
+    // 2. Exchange the min element with the tail of the heap:
+    exch(index, N);
+
+    // 3. decrease the size of binary MinMax heap:
+    N--;
+
+    // 4. restore MinMax heap order condition:
+    swim(index);
+    sink(index);
+    // heap order condition restored
+
+    // check if it is required to shrink the resizable array:
+    if(N>0 && N==(keys.length-1)/4)  resize(keys.length/2); // shrink the array to half of its original size
+
+    return min;
   }
 
   public Key min(){
