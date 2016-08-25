@@ -111,9 +111,19 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     while(k>1) {
       // even levels: Min heap order condition must be restored:
       if(evenLevel(k)){
+        // its parent is at the odd level: must be Max heap ordered:
+        if(!less(k/2, k)) break; // if node k's parent is no less than node k in the binary heap do nothing
+        // exchange the node with its parent in the binary heap:
+        exch(k, k/2);
+        k=k/2;
       }
       // odd levels: Max heap order condition must be restored:
       else{
+        // its parent must be reside on the even level (must statisfy the min heap order condition:
+        if(!greater(k/2, k)) break; // if node k's parent is no greater than node k in the binary heap do nothing
+        // exchange it with its parent:
+        exch(k/2, k);
+        k=k/2;
       }
     } 
   }
