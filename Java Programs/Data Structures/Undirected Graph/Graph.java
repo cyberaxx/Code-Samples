@@ -19,7 +19,7 @@ public class Graph {
     // instantiate the adjacency list:
     adj=(List<Integer>[]) new Object[V]; // UGLY CASTIN: no generic array creation
     for(int i=0; i<V; i++) {
-      adj[v]=new LinkedList<Integer>();
+      adj[i]=new LinkedList<Integer>();
     } 
   }
 
@@ -31,7 +31,7 @@ public class Graph {
 
     // instantiate the adjacency list:
     adj=(List<Integer>[]) new Object[V]; // UGLY CASTIN: no generic array creation
-    for(int i=0; i<V; i++) {
+    for(int v=0; v<V; v++) {
       adj[v]=new LinkedList<Integer>(G.adj(v));
     } 
   }
@@ -42,8 +42,8 @@ public class Graph {
   public int E(){return E;}
   public void addEdge(int v, int w) {
     // validate vertices:
-    validateVertec(v);
-    validateVertec(w);
+    validateVertex(v);
+    validateVertex(w);
     // undirected graph: add v to the adj[w] and add w to adj[v]:
     adj[v].add(w); // adds w to the tail of DList adj[v] in constant time
     adj[w].add(v); // adds v to the tail of DList adj[w] in constant time
