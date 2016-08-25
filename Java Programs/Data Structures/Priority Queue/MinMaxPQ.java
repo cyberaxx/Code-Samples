@@ -64,7 +64,7 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   public Key min(){
     // UNDERFLOW:
     if(isEmpty()) throw new NoSuchElementException("Failed to perform min()");
-    return null;
+    return keys[minIndex()];
   }
 
   // sneek peek at the head of MinMaxPQ instance:
@@ -87,10 +87,21 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   private void swim(int k){}
   private void sink(int k){}
 
+  // retrieve the heap position of the min item
+  private int minIndex() {
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform minIndex()");
+
+    // if the MinMaxPQ instance has only one item in it: min and max are the same:
+    if(N==1)  return 1;
+    // otherwise:
+    if(less(2,3))  return 2;
+    return 3;
+  }
+
   // for a given position k in the binary heap find out it corresponding level:
   private int level(int k){
     // we need to take a log base 2 of k:
-    double level=Math.log10(k)/Math.log10(2);
+    double level=(Math.log10(k)/Math.log10(2))+1;
     return (int) level; // UGLY CASTING
   }
 
