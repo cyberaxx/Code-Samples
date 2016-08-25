@@ -6,7 +6,7 @@ public class Graph {
 
   // instance variables:
   private final int V; // number of vertices
-  private List<Edge> E; // List of Edges
+  private final int E; // number of Edges
   private List<Edge>[] adj; // adjacency list of the Graph instance
 
   // Constructor:
@@ -14,7 +14,7 @@ public class Graph {
     if(v<0) throw new IllegalArgumentException("Number of vertices of a Graph instance must be non-negative!");
     // initialize instance variables:
     this.V=v;
-    E=new LinkedList<Edge>();
+    E=0;
     // intialize adj list of the Graph instance:
     adj=(List<Edge>[]) new Object[V]; // UGLY CASTING: Java does not allow generic array creation
     for(int i=0; i<V; i++)  adj[v]=new LinkedList<Edge>();
@@ -58,28 +58,40 @@ public class Graph {
   // Graph API: 
   // instace methods
   public int V(){return V;} // number of vertices of a Graph instance
-  public int E(){return E.size()/2;} // each has been counted twice (once from each endpoints)
+  public int E(){return E;} // each has been counted twice (once from each endpoints)
   public List<Edge> adj(int v) {
     validateVertex(v);
     return adj[v];
   }
+
   public void addEdge(int v, int w, double weight) {
     validateVertex(v);
     validateVertex(w);
     if(Double.isNaN(weight)) throw new IllegalArgumentException();
 
     // instantiate form the Edge data type:
-    Edge edge=new Edge(v, w, weight);
+    Edge e=new Edge(v, w, weight);
 
     // add the new edge to the list of edges:
-    E.add(edge);
+    E.add(e);
     // add the edge to the adjacency list of v and w
-    adj[v].add(edge);
-    adj[w].add(edge);
+    adj[v].add(e);
+    adj[w].add(e);
   }
+
+  public void addEdge(Edge e) {
+    // retrieve its endpoints:
+    int v=e.either();
+    int w=e.other(v);
+
+    // add the edge to the adjacency list of v and w
+    adj[v].add(e);
+    adj[w].add(e);
+  }
+
   public int degree(int v) {
     validateVertex(v);
-    return(adj[v].size());
+    return adj[v].size();
   }
 
   // Helper methods:
