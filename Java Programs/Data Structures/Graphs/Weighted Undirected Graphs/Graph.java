@@ -20,6 +20,14 @@ public class Graph {
     for(int i=0; i<V; i++)  adj[v]=new LinkedList<Edge>();
   }
 
+  public Graph(Graph G){
+    this.V=G.V();
+    this.E=G.E();
+    adj=(List<Edge>[])new Object[V];
+    for(int v=0; v<V; v++)
+      adj[v]=new LinkedList<Edge>(G.adj(v));
+  }
+
   // Define Edge as a inner class of Graph for packaging convenience (both classes are top-level classes)
   private class Edge implements Comparable<Edge> {
     // instance variables:
