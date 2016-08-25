@@ -110,55 +110,91 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   private void swim(int k) {
     /* The key in a node at an even level is less than (or equal to) the keys in its subtree; 
        the key in a node at an odd level is greater than (or equal to) the keys in its subtree.*/
-
-    while(k>1) {
-      // even levels: Min heap order condition must be restored:
-      if(evenLevel(k)){
-        // its parent is at the odd level: must be Max heap ordered:
-        if(!less(k/2, k)) break; // if node k's parent is no less than node k in the binary heap do nothing
-        // exchange the node with its parent in the binary heap:
-        exch(k, k/2);
-        k=k/2;
-      }
-      // odd levels: Max heap order condition must be restored:
-      else{
-        // its parent must be reside on the even level (must statisfy the min heap order condition:
-        if(!greater(k/2, k)) break; // if node k's parent is no greater than node k in the binary heap do nothing
-        // exchange it with its parent:
+    // even levels: Min heap order condition must be restored:
+    if(evenLevel(k)) {
+      // if node k has a parent: the parent must on a MaxHeap
+      if(k/2>=1 && less(k/2, k)) {
+        // restore heap order condition at the parent level:
         exch(k/2, k);
-        k=k/2;
+	maxSwim(k/2);
       }
-    } 
+      else minSwim(k); // if heap order condition at the higher level was not violated, then do swim up on MinHeap by calling minSwim
+    }
+    // odd levels: Max heap order condition must be restored:
+    else {
+      // if node k has a parent: its parent must be at the MinHeap portion of the array
+      // so check if MinHeap order condition is satisfied:
+      if(k/2>=1 && greater(k/2, k)) {
+        // restore min heap order condition:
+        exch(k/2, k);
+        minSwim(k/2);
+      }
+      else maxSwim(k); // if heap order condition is resolved at the higher level, swim up the node k at the MaxHeap portion of the array
+    }
+  }
+
+  // swim operation on MinHeap: even levels
+  private void minSwim(int k){
+    // while node k has a grandparent:
+    while(k/4>=1){
+      // k and its grandparent belong to a min-oriented priority queue:
+      // compare node k wit its grandparent and see if heap order condition is violated
+      if(!greater(k/4, k)) break; // if heap order is restored do nothing.
+      // exchange the node with its grandparent in the binary heap:
+      exch(k, k/4);
+      k=k/4;
+    }
+  }
+
+  // swim operation on MaxHeap: odd levels
+  private void maxSwim(int k){
+    // while node k has a grandparent:
+    while(k/4>=1){
+      if(!less(k/4, k)) break; // if node k's grandparent is no less than node k in the binary heap do nothing
+      // exchange the node with its grandparent in the binary heap:
+      exch(k, k/4);
+      k=k/4;
+    }
   }
 
   // sink the node k to its rightful level of comptence:
   private void sink(int k) {
     /* The key in a node at an even level is less than (or equal to) the keys in its subtree; 
        the key in a node at an odd level is greater than (or equal to) the keys in its subtree.*/
+    // even levels: Min heap order condition must be restored:
+    if(evenLevel(k)) minSink(k);
+    // odd levels: Max heap order condition must be restored:
+    else maxSink(k);
+  }
 
+  private void minSink(int k){
+    // Min heap order condition must be restored:
     while(2*k<=N) {
       int j=2*k; // left child
-      // even levels: Min heap order condition must be restored:
-      if(evenLevel(k)){
-	// pick the best subordinate between nodes childern:
-        if(j+1<=N && greater(j, j+1)) j++;
-	// compare the node with its best candidate child:
-        if(!greater(k, j)) break; // if parent node is no less than its largest child BREAK
-        // exchange the node with its child node:
-        exch(k, j);
-        k=j;
-      }
-      // odd levels: Max heap order condition must be restored:
-      else{
-	// pick the best subordinate between nodes childern:
-        if(j+1<=N && less(j, j+1)) j++;
-	// compare the node with its best candidate child:
-        if(!less(k, j)) break; // if parent node is no less than its largest child BREAK
-        // exchange the node with its child node:
-        exch(k, j);
-        k=j;
-      }
-    } 
+      // pick the best subordinate between nodes childern:
+      if(j+1<=N && greater(j, j+1)) j++;
+      // compare the node with its best candidate child:
+      if(!greater(k, j)) break; // if parent node is no less than its largest child BREAK
+      // exchange the node with its child node:
+      exch(k, j);
+      k=j;
+      if(!evenLevel(k)) maxSink(k);
+    }
+  }
+
+  private void maxSink(int k){
+    // odd levels: Max heap order condition must be restored:
+    while(2*k<=N) {
+      int j=2*k; // left child
+      // pick the best subordinate between nodes childern:
+      if(j+1<=N && less(j, j+1)) j++;
+      // compare the node with its best candidate child:
+      if(!less(k, j)) break; // if parent node is no less than its largest child BREAK
+      // exchange the node with its child node:
+      exch(k, j);
+      k=j;
+      if(evenLevel(k)) minSink(k);
+    }
   }
 
   // retrieve the heap position of the min item
@@ -238,11 +274,16 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
     System.out.println();
 
-    System.out.println("delete Min: "+keys.delMin());
     System.out.println("delete Max: "+keys.delMax());
-    System.out.println("Max: "+keys.min());
-    System.out.println("Min: "+keys.max());
-    System.out.println("Max: "+keys.min());
+    System.out.println("delete Min: "+keys.delMin());
+    System.out.println("Max: "+keys.max());
+    System.out.println("Min: "+keys.min());
+
+    System.out.println("delete Max: "+keys.delMax());
+    System.out.println("delete Min: "+keys.delMin());
+    System.out.println("Max: "+keys.max());
+    System.out.println("Min: "+keys.min());
+
     for(Integer item:keys) System.out.println(item);
     System.out.println();
 
