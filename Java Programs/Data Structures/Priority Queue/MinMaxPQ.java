@@ -284,6 +284,9 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     System.out.println("Max: "+keys.max());
     System.out.println("Min: "+keys.min());
 
+    System.out.println("size: "+keys.size());
+    System.out.println("isEmpty?: "+keys.isEmpty());
+
     for(Integer item:keys) System.out.println(item);
     System.out.println();
 
