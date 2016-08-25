@@ -24,9 +24,39 @@ public class Digraph {
   // instance methods:
   public int V(){return V;} // return number of vertices in a Digraph instance
   public int E(){return E;} // return number of directed edges in a Digraph instance
-  public int inDegree(int v){return -1;}
-  public int outDegree(int v){return -1;}
-  public void addEdge(){return ;}
+
+  // add an edge from vertex "from" to vertex "to"
+  public void addEdge(int from, int to){
+    validateVertex(from);
+    validateVertex(to);
+    adj[from].add(to);
+    E++;
+  }
+
+  // return a list of vertices that are directly reachable from v
+  public List<Integer> adj(int v) {
+    // validate the given vertex v:
+    validateVertex(v);
+    return adj[v];
+  }
+
+  // returns the number of edges coming out of vertex v
+  public int outDegree(int v){
+    // validate the given vertex v:
+    validateVertex(v);
+    return adj[v].size();
+  }
+
+  // returns the number of edges going into vertex v
+  public int inDegree(int w){
+    // validate the given vertex w:
+    validateVertex(w);
+    int inDgree=0;
+    for(int v=0; v<V; v++)
+      if(adj[v].contains(w))
+        inDgree++;
+    return inDegree;
+  }
 
   // helper methods:
   // vertices must be integer within [0 V-1] range:
