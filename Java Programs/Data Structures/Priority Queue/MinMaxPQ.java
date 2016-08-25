@@ -10,8 +10,8 @@ the key in a node at an odd level is greater than (or equal to) the keys in its 
 Note that the maximum value is stored at the root and the minimum value is stored at one of the root's children.
 */
 import java.util.NoSuchElementException;
-
-public class MinMaxPQ<Key extends Comparable<Key>> {
+import java.util.Iterator;
+public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
 
   // instance variables:
   private Key[] keys; // maintain a collection of comparable type keys
@@ -26,16 +26,64 @@ public class MinMaxPQ<Key extends Comparable<Key>> {
   }
 
   // API: insert(key), delMin(), delMax(), min(), max(), isEmpty(), size()
-  public void insert(Key key) {} // preserve heap ordered condition (DS invariance)
-  public Key delMin(){return null;}
-  public Key delMax(){return null;}
-  public Key min(){return null;}
-  public Key max(){return null;}
+  public void insert(Key key) {
+    // OVERFLOW: double the size of the array that represents heap
+    if(N==keys.length-1)  resize(2*keys.length);
+    // 1. add the newly inserted item to the tail of the MinMax heap
+    keys[++N]=key;
+    // 2. Restore the MinMax heap order condition by swim up the newly added node to its rightful level of comptenece:
+    swim(N);
+  } // preserve heap ordered condition (DS invariance)
+
+  // Query methods:
+  public Key delMax(){
+    // UNDERFLOW:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform delMax()");
+    
+    // 1. copy over the max value:
+    Key max=max();
+    // 2. exchange the heap position of the head (max item) with the heap last node (tail node at position N)
+    exch(1, N);
+    // 3. decrease the size of the binary heap by 1:
+    N--;
+    // 4. sink the new root to its level of competence: restore MinMax heap order condition
+    sink(1);
+
+    // SHRINK the array if necessary: if array was only quarter full shrink it to its half size
+    if(N>0 && N==(keys.length-1)/4) resize(keys.length/2);
+
+    return max;
+  }
+
+  public Key delMin(){
+    // UNDERFLOW:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform delMax()");
+    return null;
+  }
+
+  public Key min(){
+    // UNDERFLOW:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform delMax()");
+    return null;
+  }
+
+  // sneek peek at the head of MinMaxPQ instance:
+  public Key max(){
+    // UNDERFLOW:
+    if(isEmpty()) throw new NoSuchElementException("Failed to perform delMax()");
+    return keys[1]; // return the head of MinMaxPQ instance at heap position 1
+  }
+
   public int size(){return N;}
   public boolean isEmpty(){return N==0;}
 
   // Helper methods:
-  private void resize(int capacity){}
+  private void resize(int capacity){
+    Key[] temp=(Key[]) new Comparable[capacity]; // UGLY CASTING: java does not allow GENERIC array creation
+    for(int i=1; i<=N; i++)  temp[i]=keys[i];
+    keys=temp;
+  }
+
   private void swim(int k){}
   private void sink(int k){}
 
@@ -55,5 +103,26 @@ public class MinMaxPQ<Key extends Comparable<Key>> {
     Key temp=keys[i];
     keys[i]=keys[j];
     keys[j]=temp;
+  }
+
+  /* MinMaxPQ class implements java Iterable interface by
+     overriding its abstract iterator() method:
+  */
+  @Override
+  // iterate over items in MinMaxPQ instance in no particular order:
+  public Iterator<Key> iterator(){return new ListIterator();}
+
+  /* ListIterator class implements java Iterator interface by
+     overriding its abstract hasNext() and next() methods:
+  */
+  private class ListIterator implements Iterator<Key>{
+    private int current;
+    public ListIterator(){current=N;}// initialize the current pointer
+    @Override
+    public boolean hasNext(){return current>0;}
+    public Key next(){
+      if(!hasNext()) throw new NoSuchElementException("Failed to iterate over MinMaxPQ instance!");
+      return keys[current--];
+    } 
   }
 }
