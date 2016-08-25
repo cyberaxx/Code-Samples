@@ -17,7 +17,7 @@ public class Graph {
     this.V=v;
     this.E=0;
     // instantiate the adjacency list:
-    adj=(List<Integer>[]) new Object[V]; // UGLY CASTIN: no generic array creation
+    adj=(List<Integer>[]) new List[V]; // UGLY CASTIN: no generic array creation
     for(int i=0; i<V; i++) {
       adj[i]=new LinkedList<Integer>();
     } 
@@ -29,7 +29,7 @@ public class Graph {
     this.E=G.E();
 
     // instantiate the adjacency list:
-    adj=(List<Integer>[]) new Object[V]; // UGLY CASTIN: no generic array creation
+    adj=(List<Integer>[]) new List[V]; // UGLY CASTIN: no generic array creation
     for(int v=0; v<V; v++) {
       adj[v]=new LinkedList<Integer>(G.adj(v));
     } 

@@ -17,7 +17,7 @@ public class Digraph {
     this.V=v;
     E=0; // no edge
     // initialize the adjacency list of a Digraph instance:
-    adj=(List<Integer>[])new Object[V];// UGLY CASTING: java does not allow generic array creation
+    adj=(List<Integer>[])new List[V];// UGLY CASTING: java does not allow generic array creation
     inDegree=new int[V]; // initialize the array of inDegrees' for all vertices
     for(int i=0; i<V; i++)
       adj[i]=new LinkedList<Integer>(); // list of vertices connected to the vertex v by an edge from v to them
@@ -27,7 +27,7 @@ public class Digraph {
     this.V=G.V();
     this.E=G.E();
     this.inDegree=new int[V];
-    adj=(List<Integer>[])new Object[V];
+    adj=(List<Integer>[])new List[V];
     for(int v=0; v<V; v++) {
       adj[v]=new LinkedList<Integer>(G.adj(v));
       inDegree[v]=G.inDegree(v);
