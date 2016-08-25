@@ -16,7 +16,7 @@ public class Digraph{
     this.V=v;
     this.E=0;
     inDegree=new int[V];
-    adj=(List<Edge>)new List[V]; // UGLY CASTING
+    adj=(List<Edge>[])new List[V]; // UGLY CASTING
     for(int i=0; i<V; i++)
       adj[i]=new LinkedList<Edge>(); // instantiate a LinkedList collection of generic type Edge
   }
@@ -25,7 +25,7 @@ public class Digraph{
     this.V=G.V;
     this.E=G.E;
     this.inDegree=new int[V];
-    this.adj=(List<Edge>)new List[V]; // UGLY CASTING
+    this.adj=(List<Edge>[])new List[V]; // UGLY CASTING
     for(int v=0; v<V; v++) {
       this.inDegree[v]=G.inDegree(v);
       this.adj[v]=new LinkedList<Edge>(G.adj(v));
@@ -57,11 +57,17 @@ public class Digraph{
     adj[from].add(edge);
     inDegree[to]++;
     E++;
-
   }
   public void addEdge(Edge e){
+    int from=e.from();
+    int to=e.to();
+    validateVertex(from);
+    validateVertex(to);
+    if(Double.isNaN(e.weight)) throw new IllegalArgumentException();
+    adj[from].add(e);
+    inDegree[to]++;
+    E++;
   }
-
 
   // helper methods:
   // vertices must be integer within [0 V-1] range:
@@ -69,4 +75,26 @@ public class Digraph{
     if(v<0 || v>=V-1) throw new IndexOutOfBoundsException("The vertex index is out of legal bounds!");
   }
 
+  /* define the edge abstraction as an inner class:*/
+  private class Edge implements Comparable<Edge>{
+    private final int from;
+    private final int to;
+    private final double weight;
+
+    public Edge(int from, int to, double weight) {
+      validateVertex(from);
+      validateVertex(to);
+      if(Double.isNaN(weight)) throw new IllegalArgumentException();
+      this.from=from;
+      this.to=to;
+      this.weight=weight;
+    }
+
+    public int from(){return this.from;}
+    public int to(){return this.to;}
+    public double weight(){return this.weight;}
+
+    @Override
+    public int compareTo(Edge e){return Double.compare(this.weight, e.weight);}
+  }
 }
