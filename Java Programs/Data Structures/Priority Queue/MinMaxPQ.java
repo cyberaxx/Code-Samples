@@ -103,8 +103,12 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     keys=temp;
   }
 
-  private void swim(int k){}
-  private void sink(int k){}
+  private void swim(int k) {
+    
+  }
+
+  private void sink(int k) { 
+  }
 
   // retrieve the heap position of the min item
   private int minIndex() {
@@ -123,6 +127,9 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     double level=(Math.log10(k)/Math.log10(2))+1;
     return (int) level; // UGLY CASTING
   }
+  
+  // check if the node reside on the odd level in binary heap
+  private boolean oddLevel(int k){return level(k)%2==1;}
 
   // generic comparison: given their heap position
   private boolean less(int i, int j){return keys[i].compareTo(keys[j])<0;}
