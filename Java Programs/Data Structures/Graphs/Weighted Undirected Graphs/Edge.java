@@ -21,5 +21,11 @@ public class Edge implements Comparable<Edge>{
   
   // return the weight associated with a given Edge instance:
   public Comparable weight(){return this.weight;}
-
+  // return either end points of an Edge instance: 
+  public int either(){return v;}
+  // return other end points of an Edge instance: 
+  public int other(int v){
+    if(this.v==v)  return w;
+    return this.v;
+  }
 }
