@@ -26,16 +26,17 @@ public class Digraph {
   public Digraph(Digraph G) {
     this.V=G.V();
     this.E=G.E();
-    this.inDegree=G.inDegree();
+    this.inDegree=new int[V];
     adj=(List<Integer>[])new Object[V];
-    for(int v=0; v<V; v++)
+    for(int v=0; v<V; v++) {
       adj[v]=new LinkedList<Integer>(G.adj(v));
+      inDegree[v]=G.inDegree(v);
+    }
   }
 
   // instance methods:
   public int V(){return V;} // return number of vertices in a Digraph instance
   public int E(){return E;} // return number of directed edges in a Digraph instance
-  public int[] inDegree(){return inDegree;} // return the inDegree array of all vertices on a Digraph
 
   // add an edge from vertex "from" to vertex "to"
   public void addEdge(int from, int to){
