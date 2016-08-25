@@ -103,11 +103,49 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     keys=temp;
   }
 
+  // swim up the node k to its rightful level of comptence:
   private void swim(int k) {
-    
+    /* The key in a node at an even level is less than (or equal to) the keys in its subtree; 
+       the key in a node at an odd level is greater than (or equal to) the keys in its subtree.*/
+
+    while(k>1) {
+      // even levels: Min heap order condition must be restored:
+      if(evenLevel(k)){
+      }
+      // odd levels: Max heap order condition must be restored:
+      else{
+      }
+    } 
   }
 
-  private void sink(int k) { 
+  // sink the node k to its rightful level of comptence:
+  private void sink(int k) {
+    /* The key in a node at an even level is less than (or equal to) the keys in its subtree; 
+       the key in a node at an odd level is greater than (or equal to) the keys in its subtree.*/
+
+    while(2*k<=N) {
+      int j=2*k; // left child
+      // even levels: Min heap order condition must be restored:
+      if(evenLevel(k)){
+	// pick the best subordinate between nodes childern:
+        if(j+1<=N && greater(j, j+1)) j++;
+	// compare the node with its best candidate child:
+        if(!greater(k, j)) break; // if parent node is no less than its largest child BREAK
+        // exchange the node with its child node:
+        exch(k, j);
+        k=j;
+      }
+      // odd levels: Max heap order condition must be restored:
+      else{
+	// pick the best subordinate between nodes childern:
+        if(j+1<=N && less(j, j+1)) j++;
+	// compare the node with its best candidate child:
+        if(!less(k, j)) break; // if parent node is no less than its largest child BREAK
+        // exchange the node with its child node:
+        exch(k, j);
+        k=j;
+      }
+    } 
   }
 
   // retrieve the heap position of the min item
@@ -129,7 +167,7 @@ public class MinMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   }
   
   // check if the node reside on the odd level in binary heap
-  private boolean oddLevel(int k){return level(k)%2==1;}
+  private boolean evenLevel(int k){return level(k)%2==0;}
 
   // generic comparison: given their heap position
   private boolean less(int i, int j){return keys[i].compareTo(keys[j])<0;}
