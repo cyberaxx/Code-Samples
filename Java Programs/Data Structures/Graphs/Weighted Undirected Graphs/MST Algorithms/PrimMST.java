@@ -32,7 +32,7 @@ public class PrimMST{
       for(int i=0; i<V; i++)  adj[i]=new LinkedList<Edge>(); // initialize an empty LinkedList for each vertex of the graph  
     }
 
-    public Graph(Graph G)}{}
+//    public Graph(Graph G){}
 
     // helper methods:
     // Vertex index validation:
