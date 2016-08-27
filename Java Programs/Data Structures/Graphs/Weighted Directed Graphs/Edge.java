@@ -24,5 +24,6 @@ public class Edge implements Comparable<Edge> {
     for its instances:
   */
    // <> are not total order relations for Double instances (because NaN, Totality condition is violated. 
+   @Override
    public int compareTo(Edge e){return Double.compare(this.weight, e.weight);} 
 }

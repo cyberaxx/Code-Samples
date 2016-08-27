@@ -22,8 +22,8 @@ public class Digraph{
   }
 
   public Digraph(Digraph G) {
-    this.V=G.V;
-    this.E=G.E;
+    this.V=G.V();
+    this.E=G.E();
     this.inDegree=new int[V];
     this.adj=(List<Edge>[])new List[V]; // UGLY CASTING
     for(int v=0; v<V; v++) {

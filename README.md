@@ -1,3 +1,2 @@
-NOTE:
-Basic implementations for primitive data structures, search, and sort routines are highly influenced by http://algs4.cs.princeton.edu/code/ and its corresponding course: Computer Science 226 (Algorithms and Data Structures)
-http://www.cs.princeton.edu/courses/archive/spring16/cos226/. 
+<b>Disclaimer:</b>
+Programs implemented in this directory are highly inspired by <strong>Computer Science 226</strong> <i>(Algorithms and Data Structures)</i> course materials (http://www.cs.princeton.edu/courses/archive/spring16/cos226/) and implementations available on its corresponding book site (http://algs4.cs.princeton.edu/code/)
