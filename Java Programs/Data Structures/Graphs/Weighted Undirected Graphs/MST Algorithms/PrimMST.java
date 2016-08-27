@@ -44,7 +44,7 @@ public class PrimMST{
       else if(this.w==v) return v;
 
       // if the given vertex is not equal to the either end points of the an edge instance:
-      else throw new IllegalArgumentExceltion();
+      else throw new IllegalArgumentException();
     }
     
     // Edge Weight:
