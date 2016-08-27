@@ -26,8 +26,13 @@ public class PrimMST{
       // initialize instance fields:
       this.V=v; // v vertices
       this.E=0; // 0 edges
-      
+
+      // Initialize the adjacency list (index array of list of incident edges instances)
+      adj=(List<Edge>[])new List[V]; // UGLY CASTING: java does not allow generic array creation (array of Lists with generic type Edge as its type parameter)
+      for(int i=0; i<V; i++)  adj[i]=new LinkedList<Edge>(); // initialize an empty LinkedList for each vertex of the graph  
     }
+
+    public Graph(Graph G)}{}
 
     // helper methods:
     // Vertex index validation:
