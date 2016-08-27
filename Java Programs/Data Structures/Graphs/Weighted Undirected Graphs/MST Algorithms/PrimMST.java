@@ -2,11 +2,16 @@ import edu.princeton.cs.algs4.IndexMinPQ;
 
 public class PrimMST{
 
-  // define two other top-level classes (Graph, Edge) here as a static nested classes (For packaging convenience)
-  private static class Graph{}
+  // define two other top-level classes (Graph, Edge) here as a static nested classes (For packaging convenience):
+
   /*
-    Define explict representation of undirected weigthed edges.
-    weigthed Edge abstraction is java Comparable type (Edge instances have total order).
+    Undirected weighted graph abstraction
+  */
+  private static class Graph{}
+
+  /*
+    Define explict representation of undirected weighted edges.
+    weighted Edge abstraction is java Comparable type (Edge instances have total order).
     It should override compareTo method by providing implementation for how to compare
     two instances of Edge data type.
   */
@@ -15,19 +20,19 @@ public class PrimMST{
     // 1. Edge end points (integer vertex indeces:
     private final int v; // immutable
     private final int w; // immutable
-    private final double weigth; // weigths can be real numbers
+    private final double weight; // weights can be real numbers
 
     // Constructor: initialize instance field of the Edge class
-    public Edge(int v, int w, double weigth) {
-      // sanity check arguments passed to the Edge constructor: End points cannot be negative integers, and weigth cannot be NaN
+    public Edge(int v, int w, double weight) {
+      // sanity check arguments passed to the Edge constructor: End points cannot be negative integers, and weight cannot be NaN
       if(v<0) throw new IllegalArgumentException("Vertex index must be non-negative!");
       if(w<0) throw new IllegalArgumentException("Vertex index must be non-negative!");
-      if(Double.isNaN(weigth)) throw new IllegalArgumentException("Edge weigth can not be NaN!");
+      if(Double.isNaN(weight)) throw new IllegalArgumentException("Edge weight can not be NaN!");
 
       // initialize Edge instance fields:
       this.v=v;
       this.w=w;
-      this.weigth=weigth;
+      this.weight=weight;
     }
 
     // API:
@@ -46,10 +51,10 @@ public class PrimMST{
       // if the given vertex is not equal to the either end points of the an edge instance:
       else throw new IllegalArgumentException("There is no vertex with given index incident to this edge!");
     }
-    // Edge weigth:
-    public double weigth(){return this.weigth;}
+    // Edge weight:
+    public double weight(){return this.weight;}
 
     @Override 
-    public int compareTo(Edge e){return Double.compare(this.weigth, e.weigth);} // compare edges based on their corresponding weigth  
+    public int compareTo(Edge e){return Double.compare(this.weight, e.weight);} // compare edges based on their corresponding weight  
     }
 }
