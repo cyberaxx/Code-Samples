@@ -4,9 +4,65 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.ArrayList;
 
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+/* Graph and Edge classes (both top-level classes) has been defined as
+ static nested classes of PrimMST class (For packaging convenience) */
+
+/*
+  Simplifying assumptions:
+  1. Edge weights are distinct => MST is UNIQUE
+  2. Graph is Connected => MST exist
+
+  MST: G'=(V,T) is a subgraph of graph G=(V,E) such that:
+  1. Spanning over all vertices of the Graph G
+  2. Tree: Connected, with No cycle
+  3. Optimal: sum of edge weights is minimum
+*/
+
+
 public class PrimMST{
 
-  // define two other top-level classes (Graph, Edge) here as a static nested classes (For packaging convenience):
+  // Instance variables:
+  // vertex index array of booleans to keep track of which vertices are in MST so far:
+  boolean[] marked;
+  // vertex index array of doubles to keep track of min distance of each vertex to the MST:
+  double[] distTo; // this is going to be priority associated with each vertex of a instance of a Graph data type
+  // vertex index Min oriented priority queue to maintain vertices as index and their distance (of type double) to the MST as the priority:
+  IndexMinPQ<Double> pq;
+  // an Iterable data type to maintain the MST edges: we use queue to do so
+  Deque<Edge> mst;
+
+  // Construcor:
+  public PrimMST(Graph G, int s) {
+    // 1. initialize instance variables:
+    marked=new boolean[G.V()];
+    distTo=new double[G.V()];
+    pq=new IndexMinPQ<Double>(G.V()); // V extra space required for MinPQ
+    mst=new ArrayDeque<Edge>(); // empty MST tree represented by a Queue collection
+
+    // 2. implement Prim's algorithm to find MST (by augmenting vertices by their min distance to the tree) - EAGER approach
+
+  }
+
+
+
+  // API:
+  // Query methods:
+  // MST: edges in the MST:
+  public Iterable<Edge> mst() {return mst;}
+  // MST: weight of the MST: sum of edge weights
+  public double weight() {
+    double weight=0;
+    for(Edge e:mst)
+      weight+=e.weight;
+    return weight;
+  }
+
+  // helper methods:
+  
+ 
 
   /*
     Undirected weighted graph abstraction
@@ -15,7 +71,6 @@ public class PrimMST{
     // instance variables:
     private final int V; // number of vertices of an instance of Graph data type
     private int E; // number of Edges of an instance of Graph data type
-    private int selfLoop; // number of self loops in an instance of Graph data type
     private List<Edge>[] adj; // adjacency list: a vertex index array of edge lists incident to each vertex
 
     // Constructor:
@@ -26,7 +81,6 @@ public class PrimMST{
       // initialize instance fields:
       this.V=v; // v vertices
       this.E=0; // 0 edges
-      this.selfLoop=0;
 
       // Initialize the adjacency list (index array of list of incident edges instances)
       adj=(List<Edge>[])new List[V]; // UGLY CASTING: java does not allow generic array creation (array of Lists with generic type Edge as its type parameter)
@@ -36,7 +90,7 @@ public class PrimMST{
     public Graph(Graph G){
       this.V=G.V();
       this.E=G.E();
-      this.selfLoop=G.selfLoop();
+
       adj=(List<Edge>[])new List[V]; // UGLY CASTING
       for(int i=0; i<V; i++)
         adj[i]=new LinkedList<Edge>(G.adj(i));
@@ -48,8 +102,6 @@ public class PrimMST{
     public int V(){return this.V;}
     // Edge counter:
     public int E(){return this.E;}
-    // Self Loop counter:
-    public int selfLoop(){return this.selfLoop;}
     // Vertex adj List
     public List<Edge> adj(int v){
       // validate the given vertex index:
@@ -72,8 +124,6 @@ public class PrimMST{
       adj[v].add(e); // add the new edge to tail of LinkedList of incident edges
       adj[w].add(e); // add the new edge to tail of LinkedList of incident edges
       
-      // check if an edge is a self loop:
-      if(v==w)  selfLoop++;
       // increament the number of Edges of the graph:
       E++;
     }
