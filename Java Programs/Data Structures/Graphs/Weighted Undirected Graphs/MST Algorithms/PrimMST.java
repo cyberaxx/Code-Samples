@@ -34,6 +34,44 @@ public class PrimMST{
 
 //    public Graph(Graph G){}
 
+
+    // instance method:
+    // 1. Getter methods:
+    // Vertex counter:
+    public int V(){return this.V;}
+    // Edge counter:
+    public int E(){return this.E;}
+    // Vertex adj List
+    public List<Edge> adj(int v){
+      // validate the given vertex index:
+      validateVertex(v);
+      return this.adj[v]; // list of Edges incident to the vertex v (in an instance of Graph data type)
+    }
+
+    // 2. Query methods:
+    // Edge addition: add an edge to an instance of Graph data type
+    public void addEdge(Edge e) {
+      // validate edge end points and edge weight:
+      int v=e.either();
+      int w=e.other(v);
+      double weight=e.weight();
+      validateVertex(v);
+      validateVertex(w);
+      validateWeight(weight);
+
+      // add the undirected weighted edge to incident list of its both end points:
+      adj[v].add(e); // add the new edge to tail of LinkedList of incident edges
+      adj[w].add(e); // add the new edge to tail of LinkedList of incident edges
+      
+      // increament the number of Edges of the graph:
+      E++;
+    }
+    // Edge addition: add an edge to an instance of Graph data type
+    public void addEdge(int v, int w, double weight) {
+      Edge e=new Edge(v, w, weight);
+      addEdge(e);
+    }
+
     // helper methods:
     // Vertex index validation:
     private void validateVertex(int v){if(v<0||v>=V) throw new IndexOutOfBoundsException("The given vertex index is out of legal bounds!");}
