@@ -43,7 +43,9 @@ public class PrimMST{
     mst=new ArrayDeque<Edge>(); // empty MST tree represented by a Queue collection
 
     // 2. implement Prim's algorithm to find MST (by augmenting vertices by their min distance to the tree) - EAGER approach
-
+    // a. Start from the s vertex, add it to the tree and add its adjacent vertices with on end point outside the tree (crossing edges)
+    //    associated with their corresponding edge weight to the IndexMinPQ instance:
+    scan(G, s);
   }
 
 
@@ -61,7 +63,33 @@ public class PrimMST{
   }
 
   // helper methods:
-  
+  private void scan(Graph G, int s) {
+    // sanity check the vertex index s:
+    if(s<0 || s>=G.V()) throw new IndexOutOfBoundsException("The vertex index is outside the legal bounds!");
+    
+    // 1. add vertex s to the MST:
+    marked[s]=true;
+    // 2. add all vertices adjacent to s with one end point ouside the MST to the IndexMinPQ:
+    for(Edge e:G.adj(s)) {
+      // for all weighted edges incident to s vertex:
+      // a. check if their other end is not in the MST
+      int v=e.other(s);
+      if(marked[v]!=true) {
+        // b. check if IndexMinPQ (indexed by vertex) does not already contain the vertex v (possibly get reached from other vertices of MST)
+        if(pq.contains(v)) {
+          // b1. if so, compare the previous priority associate with the vertex (index) with the new value (edge weight)
+          if(e.weight()<distTo[v])
+	    // if so decrease the index key:
+            pq.decreaseKey(v, e.weight()); // logV
+	}
+	// b2. if vertex is not in MinIndexPQ pq: add it to it and update distTo array
+        else {
+	  distTo[v]=e.weight();
+          pq.insert(v,distTo[v]); 
+	} 
+      }
+    }
+  }
  
 
   /*
