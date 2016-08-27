@@ -1,5 +1,9 @@
 import edu.princeton.cs.algs4.IndexMinPQ;
 
+import java.util.List;
+import java.util.LinkedList;
+import java.util.ArrayList;
+
 public class PrimMST{
 
   // define two other top-level classes (Graph, Edge) here as a static nested classes (For packaging convenience):
@@ -7,7 +11,30 @@ public class PrimMST{
   /*
     Undirected weighted graph abstraction
   */
-  private static class Graph{}
+  private static class Graph {
+    // instance variables:
+    private final int V; // number of vertices of the graph
+    private int E; // number of Edges of the graph
+    private List<Edge>[] adj; // adjacency list: a vertex index array of edge lists incident to each vertex
+
+
+    // Constructor:
+    public Graph(int v){
+      // sanity check the number of vertices:
+      if(v<0) throw new IllegalArgumentException("Number of vertices must be non-negative!");
+      
+      // initialize instance fields:
+      this.V=v; // v vertices
+      this.E=0; // 0 edges
+      
+    }
+
+    // helper methods:
+    // Vertex index validation:
+    private void validateVertex(int v){if(v<0||v>=V) throw new IndexOutOfBoundsException("The given vertex index is out of legal bounds!");}
+    // Edge Weight validation:
+    private void validateWeight(double weight){if(Double.isNaN(weight)) throw new IllegalArgumentException("Edge weight cannot be NaN!");}
+  }
 
   /*
     Define explict representation of undirected weighted edges.
