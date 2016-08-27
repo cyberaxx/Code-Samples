@@ -13,8 +13,9 @@ public class PrimMST{
   */
   private static class Graph {
     // instance variables:
-    private final int V; // number of vertices of the graph
-    private int E; // number of Edges of the graph
+    private final int V; // number of vertices of an instance of Graph data type
+    private int E; // number of Edges of an instance of Graph data type
+    private int selfLoops; // number of self loops in an instance of Graph data type
     private List<Edge>[] adj; // adjacency list: a vertex index array of edge lists incident to each vertex
 
 
@@ -26,6 +27,8 @@ public class PrimMST{
       // initialize instance fields:
       this.V=v; // v vertices
       this.E=0; // 0 edges
+      this.selfLoops=0;
+
 
       // Initialize the adjacency list (index array of list of incident edges instances)
       adj=(List<Edge>[])new List[V]; // UGLY CASTING: java does not allow generic array creation (array of Lists with generic type Edge as its type parameter)
@@ -63,6 +66,8 @@ public class PrimMST{
       adj[v].add(e); // add the new edge to tail of LinkedList of incident edges
       adj[w].add(e); // add the new edge to tail of LinkedList of incident edges
       
+      // check if an edge is a self loop:
+      if(v==w)  selfLoops++;
       // increament the number of Edges of the graph:
       E++;
     }
@@ -70,6 +75,22 @@ public class PrimMST{
     public void addEdge(int v, int w, double weight) {
       Edge e=new Edge(v, w, weight);
       addEdge(e);
+    }
+    // Vertex Degree:
+    public int degree(int v) {
+      // validate vertex index:
+      validateVertex(v);
+      return adj[v].size(); // size of the incident list to vertex v (number of edges incident to the vertex v)
+    }
+    // List of all edges of an instance of Graph data type:
+    public List<Edge> edges() {
+      ArrayList<Edge> edges=new ArrayList<Edge>(); // instantiate an AList collection that can contain Edge instances
+      for(int v=0; v<V; v++)
+        for(Edge e:adj[v])
+          edges.add(e);
+
+      // an ArrayList<Edge> of edges of an instance of a Graph data type
+      return edges;
     }
 
     // helper methods:
