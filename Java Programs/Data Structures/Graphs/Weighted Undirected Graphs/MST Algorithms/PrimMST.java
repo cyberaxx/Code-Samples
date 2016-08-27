@@ -15,9 +15,8 @@ public class PrimMST{
     // instance variables:
     private final int V; // number of vertices of an instance of Graph data type
     private int E; // number of Edges of an instance of Graph data type
-    private int selfLoops; // number of self loops in an instance of Graph data type
+    private int selfLoop; // number of self loops in an instance of Graph data type
     private List<Edge>[] adj; // adjacency list: a vertex index array of edge lists incident to each vertex
-
 
     // Constructor:
     public Graph(int v){
@@ -27,16 +26,21 @@ public class PrimMST{
       // initialize instance fields:
       this.V=v; // v vertices
       this.E=0; // 0 edges
-      this.selfLoops=0;
-
+      this.selfLoop=0;
 
       // Initialize the adjacency list (index array of list of incident edges instances)
       adj=(List<Edge>[])new List[V]; // UGLY CASTING: java does not allow generic array creation (array of Lists with generic type Edge as its type parameter)
       for(int i=0; i<V; i++)  adj[i]=new LinkedList<Edge>(); // initialize an empty LinkedList for each vertex of the graph  
     }
 
-//    public Graph(Graph G){}
-
+    public Graph(Graph G){
+      this.V=G.V();
+      this.E=G.E();
+      this.selfLoop=G.selfLoop();
+      adj=(List<Edge>[])new List[V]; // UGLY CASTING
+      for(int i=0; i<V; i++)
+        adj[i]=new LinkedList<Edge>(G.adj(i));
+    }
 
     // instance method:
     // 1. Getter methods:
@@ -44,6 +48,8 @@ public class PrimMST{
     public int V(){return this.V;}
     // Edge counter:
     public int E(){return this.E;}
+    // Self Loop counter:
+    public int selfLoop(){return this.selfLoop;}
     // Vertex adj List
     public List<Edge> adj(int v){
       // validate the given vertex index:
@@ -67,7 +73,7 @@ public class PrimMST{
       adj[w].add(e); // add the new edge to tail of LinkedList of incident edges
       
       // check if an edge is a self loop:
-      if(v==w)  selfLoops++;
+      if(v==w)  selfLoop++;
       // increament the number of Edges of the graph:
       E++;
     }
