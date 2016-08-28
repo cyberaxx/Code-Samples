@@ -22,12 +22,31 @@ import java.util.ArrayDeque;
 */
 
 public class PrimMST{
-  private double[] distTo; // Vertex indexed array of maintain weights
-  private Edge[] edgeTo; // Vertex index array of Edges
-  private IndexMinPQ<Double> pq; // Vertex index min oriented priority queue of edge weights
   /* Vertex index array of booleans to partition vertices of a graph to: 
   Tree vertices, and Not Tree vertices (disjoint sets) -> (Tree, Not Tree) is a CUT aslong as both sets are non-empty */
   private boolean[] marked;
+  private double[] distTo; // Vertex indexed array of maintain weights
+  private Edge[] edgeTo; // Vertex index array of Edges
+  private IndexMinPQ<Double> pq; // Vertex index min oriented priority queue of edge weights
+
+  // Constructor: Find a Minimum Spanning Tree in a Connected Undirected Graph with DISTINCT edge weights
+  public PrimMST(Graph G) {
+    // initialize instance fields:
+    int V=G.V();
+    if(V<=0) throw new IllegalArgumentException();
+
+    marked=new boolean[V];
+    distTo=new double[V];
+    edgeTo=new Edge[V];
+    pq=new IndexMinPQ(V);   
+
+    // initialize the distance array:
+    for(int v=0; v<V; v++) distTo[v]=Double.POSITIVE_INFINITY;
+
+    // Find MST:
+    // perform prim's algorithm starting from vertex 0
+    prim(G, 0);
+  }
 
   // API:
   // Query methods:
@@ -37,7 +56,21 @@ public class PrimMST{
   public double weight() {return -1;}
 
   // helper methods:
-  private void prim(Graph G, int s){}
+  private void prim(Graph G, int s){
+    // sanity check the vertex:
+    if(s<0 || s>=G.V()) throw new IndexOutOfBoundsException("The vertex index is out of legal bounds!");
+    // add vertex 0 to the tree
+    scan(G, s);
+    // set the distance of s:
+    distTo[s]=0;
+    // while the vertex index min order priority queue is not empty
+    while(!pq.isEmpty()) {
+      int v=pq.minIndex(); // the vertex associated with the min edge weight
+      pq.delMin(); // remove the vertex with min edge weight associated with it from thr pq
+      scan(G, v); // visit the vertex
+    }
+  }
+
   private void scan(Graph G, int v) {
     // sanity check the vertex:
     if(v<0 || v>=G.V()) throw new IndexOutOfBoundsException("The vertex index is out of legal bounds!");
@@ -77,7 +110,6 @@ public class PrimMST{
         pq.insert(w,distTo[w]);
       }
     }
-    
     /* vertex v has been visited! */
   }
  
