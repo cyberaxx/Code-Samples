@@ -63,14 +63,16 @@ public class PrimMST{
   // MST: edges in the MST:
   public Iterable<Edge> mst() {
     Deque<Edge> mst=new ArrayDeque<Edge>();
-    for(Edge e:edgeTo)  mst.offer(e);
+    for(Edge e:edgeTo)  
+      if(e!=null)
+        mst.offer(e);
     return mst;
   }
 
   // MST: weight of the MST: sum of edge weights
   public double weight() {
     double weight=0;
-    for(Edge e:edgeTo) weight+=e.weight();
+    for(Edge e:mst()) weight+=e.weight();
     return weight;
   }
 
