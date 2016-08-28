@@ -25,8 +25,8 @@ public class PrimMST{
   /* Vertex index array of booleans to partition vertices of a graph to: 
   Tree vertices, and Not Tree vertices (disjoint sets) -> (Tree, Not Tree) is a CUT aslong as both sets are non-empty */
   private boolean[] marked;
-  private double[] distTo; // Vertex indexed array of maintain weights
-  private Edge[] edgeTo; // Vertex index array of Edges
+  private double[] distTo; // Vertex indexed array of maintain weights (distance between Tree vertex to non-Tree vertex)
+  private Edge[] edgeTo; // Vertex index array of Edges (edge between Tree vertex to non-Tree vertex)
   private IndexMinPQ<Double> pq; // Vertex index min oriented priority queue of edge weights
 
   // Constructor: Find a Minimum Spanning Tree in a Connected Undirected Graph with DISTINCT edge weights
@@ -34,18 +34,28 @@ public class PrimMST{
     // initialize instance fields:
     int V=G.V();
     if(V<=0) throw new IllegalArgumentException();
-
     marked=new boolean[V];
     distTo=new double[V];
     edgeTo=new Edge[V];
-    pq=new IndexMinPQ(V);   
-
+    pq=new IndexMinPQ<Double>(V);   
     // initialize the distance array:
     for(int v=0; v<V; v++) distTo[v]=Double.POSITIVE_INFINITY;
 
     // Find MST:
     // perform prim's algorithm starting from vertex 0
-    prim(G, 0);
+    prim(G, 0); 
+    // ElogV for scan(G, v)
+    // VlogV min extraction in prim's while loop
+    // Total: O(ElogV)
+    // Extra space: V for IndexMinPQ
+
+    /* if G is not Connected => to Prim must find the Min Spanning Tree:
+    for(int v=0; v<V; v++) {
+      // if v has not been added to a tree
+      if(!marked[v])
+        prim(G, v);
+    }
+    */
   }
 
   // API:
@@ -68,14 +78,15 @@ public class PrimMST{
   private void prim(Graph G, int s){
     // sanity check the vertex:
     if(s<0 || s>=G.V()) throw new IndexOutOfBoundsException("The vertex index is out of legal bounds!");
-    // add vertex 0 to the tree
-    scan(G, s);
+
     // set the distance of s:
     distTo[s]=0;
+    // insert s vertex to the priority
+    pq.insert(s, distTo[s]);
+
     // while the vertex index min order priority queue is not empty
     while(!pq.isEmpty()) {
-      int v=pq.minIndex(); // the vertex associated with the min edge weight
-      pq.delMin(); // remove the vertex with min edge weight associated with it from thr pq
+      int v=pq.delMin(); // remove the vertex with min edge weight associated with it from pq and return the vertex associated with it
       scan(G, v); // visit the vertex
     }
   }
@@ -91,37 +102,34 @@ public class PrimMST{
     for(Edge e:G.adj(v)) {
       // for each edge incident to V check if its other end point is not in the tree partition
       int w=e.other(v);
+
       // if the other end point was in the tree partition do NOTHING (adding such an edge to the tree will creates a CYCLE)
       if(marked[w]==true) continue;
-      // otherwise: if w is not in tree partition
-      // check if IndexMinPQ instance contains a key associated with index w
-      if(pq.contains(w)) {
-        // if w was already an end point to one other vertex in the tree, distTo array must have the weight of the previous path to w
-        // check if this new edge shorten the distance from w to the MST
-        if(e.weight()<distTo[w]) {
-          // if the new edge to the vertex w shorten the distance from w to MST:
-          // 1. add this edge to the MST (so far)
-          edgeTo[w]=e;
-	  // 2. update the dinstance to w
-          distTo[w]=e.weight();
+
+      // otherwise: if w is not in tree partition:
+      // check if this edge to the vertex w shorten the distance from w to MST:
+      if(e.weight()<distTo[w]) {
+        // 1. add this edge to the MST (so far)
+        edgeTo[w]=e;
+	// 2. update the dinstance to w
+        distTo[w]=e.weight();
+
+        // check if IndexMinPQ instance contains a key associated with index vertex w
+        if(pq.contains(w)) {
           // 3. update the weight associate with vertex w in IndexMinPQ
           pq.decreaseKey(w, distTo[w]);
         }
+        // Vertex w is not in the IndexMinPQ (has not been discovered yet)
+        else {
+          // 3. add the index w and distance associated with it to the indexMinPQ
+          pq.insert(w,distTo[w]);
+        }
+
       } // otherwise: if the new edge is not shorter than the one already in the MinPQ, do nothing
 
-      // Vertex w is not in the IndexMinPQ (has not been discovered yet)
-      else {
-        // 1. add edge v-w to the the MST (so far)
-        edgeTo[w]=e;
-        // 2. update the shortest distance to w
-        distTo[w]=e.weight();
-        // 3. add the index w and distance associated with it to the indexMinPQ
-        pq.insert(w,distTo[w]);
-      }
     }
     /* vertex v has been visited! */
   }
- 
 
   /*
     Undirected weighted graph abstraction
