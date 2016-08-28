@@ -51,9 +51,18 @@ public class PrimMST{
   // API:
   // Query methods:
   // MST: edges in the MST:
-  public Iterable<Edge> mst() {return null;}
+  public Iterable<Edge> mst() {
+    Deque<Edge> mst=new ArrayDeque<Edge>();
+    for(Edge e:edgeTo)  mst.offer(e);
+    return mst;
+  }
+
   // MST: weight of the MST: sum of edge weights
-  public double weight() {return -1;}
+  public double weight() {
+    double weight=0;
+    for(Edge e:edgeTo) weight+=e.weight();
+    return weight;
+  }
 
   // helper methods:
   private void prim(Graph G, int s){
