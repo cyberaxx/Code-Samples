@@ -84,13 +84,12 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   }
 
   // exctract the max Key from the Max oriented priority queue instance (preserve Max oriented priority queue HEAP-ORDERED condition)
-  public Key delMax(){
+  public int delMax(){
     // UNDERFLOW: 
     // check if the IndexMaxPQ instance is not empty:
     if(isEmpty()) throw new NoSuchElementException("Failed to delete maximum item in the IndexMaxPQ instance because it was empty!");
     
     // a. take a copy of the maximum item:
-    Key max=max();
     int maxIndex=maxIndex();
 
     /* b. remove the current max from max oriented priority:
@@ -111,7 +110,7 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     // pq[N+1]=-1;
     qp[maxIndex]=-1; // the heap position associate with the max external index to -1;
 
-    return max;
+    return maxIndex;
   }
 
   // change the key that has been associated with the given external index "index" (preserve Max oriented priority queue HEAP-ORDERED condition)
@@ -223,7 +222,9 @@ public class IndexMaxPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     @Override
     public Key next(){
       if(!hasNext()) throw new NoSuchElementException("Failed to perform next() operation because there has been no next element in IndexMaxPQ instance!");
-      return copy.delMax();
+      Key item=copy.max();
+      copy.delMax();
+      return item;
     }
   }
 
