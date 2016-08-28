@@ -23,9 +23,10 @@ import java.util.ArrayDeque;
 
 public class LazyPrimMST{
   // instance variables:
-  boolean[] marked; // vertex index array that keeps track of tree and non-tree vertices
-  Deque<Edge> mst; // a collection of edges in a form of FIFO queue
-  PriorityQueue<Edge> pq; // min oriented priority queue of weighted edges
+  private boolean[] marked; // vertex index array that keeps track of tree and non-tree vertices
+  private Deque<Edge> mst; // a collection of edges in a form of FIFO queue
+  private double weight; // the weight of MST
+  private PriorityQueue<Edge> pq; // min oriented priority queue of weighted edges
 
   // Constructor: Find a Minimum Spanning Tree in a Connected Undirected Graph with DISTINCT edge weights
   public LazyPrimMST(Graph G) {
@@ -33,6 +34,7 @@ public class LazyPrimMST{
     int V=G.V(); // number of vertices of a graph G
     marked=new boolean[V];
     mst=new ArrayDeque<Edge>(); // create an empty queue for edges in MST
+    weight=0; // weight initialzed to 0
     pq=new PriorityQueue<Edge>(); // create an empty min oriented priority queue to process edges based on their corresponding weight
 
     // Find MST: For unconnected graph we have to find the Min Spanning Forest:
@@ -44,46 +46,47 @@ public class LazyPrimMST{
   // API:
   // Query methods:
   // MST: edges in the MST:
-  public Iterable<Edge> mst() {return null;}
+  public Iterable<Edge> mst() {return mst;}
 
   // MST: weight of the MST: sum of edge weights
-  public double weight() {return -1;}
+  public double weight() {return weight;}
 
   // helper methods:
   private void prim(Graph G, int s){
-    // 1. add vertex s to the tree
-    marked[s]=true; 
-    // 2. add all edges incident to s to the min oriented priority queue (growing the mole)
-    for(Edge e:G.adj(s))
-      pq.offer(e); // add edge e to MinPQ
+    // scan the vertex s (starting vertex): add s to the MST and add all its incident crossing edges to the min pp
+    scan(G,s);
 
     // while the pq is not empty or we have not V-1 edges added to the mst
     while(!pq.isEmpty() && mst.size()<G.V()-1) {
       // remove the head of the min oriented prioriy (the edge with min edge weight)
       Edge e=pq.poll();
+
       // find out end points of edge e:
       int v=e.either();
       int w=e.other(v);
+
       // check if v and w both are not in the Tree already:
       if(marked[v]==true && marked[w]==true)  continue; // Do nothing, because we are looking for crossing edges from tree vertices to non-tree vertices
-      if(marked[v]==true && marked[w]==false) {
-        // add the end point that has not been in the tree to the tree:
-        marked[w]=true;
-        // add edge v-w to the mst:
-        mst.offer(e);
-        // add all edges incident to it to the min oriented pq
-        for(Edge edge:G.adj(w))
-	  pq.offer(edge);
-      }
-      if(marked[w]==true && marked[v]==false) {
-        // add the end point that has not been in the tree to the tree:
-        marked[v]=true;
-        // add edge v-w to the mst:
-        mst.offer(e);
-        // add all edges incident to it to the min oriented pq
-        for(Edge edge:G.adj(v))
-	  pq.offer(edge);
-      }
+	
+      // otherwise: the edge is the min crossing edge and due to the cut property it blongs to the mst:
+      mst.offer(e);
+      weight+=e.weight;
+
+      // scan the other end point (that was not part of the tree)
+      if(!marked[v])  scan(G,v); // add vertex v to the tree partition of the cut(tree,non-tree) and add all its incident edges that are crossing the CUT to the minpq
+      if(!marked[w])  scan(G,w); // add vertex w to the tree partition of the cut(tree, non-tree) and add all its incident edges that are crossing the CUT to the minpq
+    }
+  }
+
+  private void scan(Graph G, int v) {
+    // 1. add vertex v to the tree
+    marked[v]=true; 
+    // 2. add all edges incident to v, that are crossing (tree, non-tree) CUT, to the min oriented priority queue (growing the mole)
+    for(Edge e:G.adj(v)) {
+      // check if the other end point of edge is not a tree vertex (meaning the edge e is a crossing edge):
+      int w=e.other(v);
+      if(!marked[w])
+        pq.offer(e); // add edge e to MinPQ
     }
   }
 
