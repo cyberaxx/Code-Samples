@@ -123,8 +123,6 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     // check if MinPQ instance is not empty:
     if(isEmpty()) throw new NoSuchElementException("Failed to perform min() operation because the MinPQ instance is empty!");
     
-    // 0. copy the min value:
-    Key min=min();
     // 1. extract the index of the MinPQ head:
     int index=minIndex();
     // 2. exchange the head of MinPQ with its tails:
