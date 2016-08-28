@@ -119,7 +119,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Key>{
   }
   
   // delete the Min element in the MinPQ instance and return its external index
-  public Key delMin() {
+  public int delMin() {
     // check if MinPQ instance is not empty:
     if(isEmpty()) throw new NoSuchElementException("Failed to perform min() operation because the MinPQ instance is empty!");
     
@@ -139,7 +139,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     // pq[index]=-1;
     qp[index]=-1;
 
-    return min;
+    return index;
   }
 
   // MinPQ functionalies:
@@ -209,7 +209,9 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Key>{
     @Override
     public Key next() {
       if(!hasNext()) throw new NoSuchElementException("Failed to iterate over IndexMinPQ instance!");
-      return copy.delMin(); // iterate over items in the IndexMinPQ in a sorted order
+      Key item=copy.min();
+      copy.delMin();// remove the min
+      return item; // iterate over items in the IndexMinPQ in a sorted order
     }
     
   }
