@@ -1,3 +1,5 @@
+import java.util.PriorityQueue;
+
 import java.util.List;
 import java.util.LinkedList;
 import java.util.ArrayList;
@@ -20,19 +22,46 @@ import java.util.ArrayDeque;
 */
 
 public class Kruskal{
+  private double weight;
+  private Deque<Edge> mst;
+  private PriorityQueue<Edge> pq; // min oriented priority queue that keeps track of min weighted edges as we progress
+  private UF uf; // a disjoint set data structure to keep track of cc dynamically
 
   // Constructor: Find a Minimum Spanning Tree in a Connected Undirected Graph with DISTINCT edge weights
   public Kruskal(Graph G) {
     // initialize instance fields:
+    int V=G.V(); // number of vertices
+    mst=new ArrayDeque<Edge>(); // an empty collection for Edge data type in a form of queue
+    pq=new PriorityQueue<Edge>();
+    uf=new UF(V);
+
+    // fill up min priority queue by adding edges of Graph G:
+    for(Edge e:G.edges()) pq.offer(e);
+
     // Find MST:
+    while(!pq.isEmpty() && mst.size()!=V-1) {
+      // remove an edge with min edge weight from the priority queue
+      Edge edge=pq.poll(); // remove the head of min oriented priority queue
+      // check if its end points are already connect => adding this edge would create a cycle:
+      int v=edge.either();
+      int w=edge.other(v);
+
+      if(uf.connected(v,w)) continue; // do nothing
+      // add v-w edge to mst:
+      mst.add(edge);
+      // add the edge weight to the totoal weight:
+      weight+=edge.weight();
+      // connect these two end point (both now belong to a same cc)
+      uf.union(v,w);
+    }
   }
 
   // API:
   // Query methods:
   // MST: edges in the MST:
-  public Iterable<Edge> mst() {return null;}
+  public Iterable<Edge> mst() {return mst;}
   // MST: weight of the MST: sum of edge weights
-  public double weight() {return -1;}
+  public double weight() {return weight;}
 
   // helper methods:
 
