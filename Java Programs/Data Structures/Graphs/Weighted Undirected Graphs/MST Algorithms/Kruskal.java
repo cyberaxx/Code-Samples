@@ -145,6 +145,9 @@ public class Kruskal{
       count--;
     }
 
+    // number of connected components:
+    public int count() {return count;}
+
     // helper methods
     // validate v to be an integer within 0 to N-1 range
     private void validate(int v) {if(v<0||v>=N)  throw new IndexOutOfBoundsException("given index is out of legal bounds!");}
