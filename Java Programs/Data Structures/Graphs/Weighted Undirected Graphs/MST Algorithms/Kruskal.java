@@ -36,6 +36,78 @@ public class Kruskal{
 
   // helper methods:
 
+  /* Union Find Data structure to maintain connected components of a graph G with V number of vertices */
+  private static class UF {
+    // instance variables:
+    private int N; // number of elements of a disjoint set instance
+    private int [] roots; // integer index array that maintains leader of cc for each member of a disjoint set instance
+    private int[] rank; // the rank of each member of the disjoint set instance (number of edges from the leaves)
+
+    // constructor:
+    public UF(int n) {
+      // sanity check n (the number of items in a disjoint set instance):
+      if(n<=0) throw new IllegalArgumentException("Number of items must be a positive integer!");
+
+      // initialize the instance members based on number of items in a disjoint set instance
+      N=n;
+      roots=new int[N];
+      rank=new int[N];
+      for(int i=0; i<N; i++) {
+        // initially each member is the leader of its cc (we have N cc each has only one item in it):
+        roots[i]=i;
+        rank[i]=0;
+      }
+    }
+
+    // API:
+    // instance methods:
+    //find the leader member of v's connected component (with path compression)
+    public int find(int v) {
+      // sanity check v:
+      validate(v);
+      // find v is leader by moving up in the UF tree until to get to the root node at which roots[v]=v (root points to itself as a root of itself)
+      while(roots[v]!=v) {
+	v=roots[roots[v]]; // path halfing => this change leads to AMORTIZED log*N performance
+      }
+      // return the leader:
+      return v;
+    }
+
+    // check if v and w belongs to a same cc or not: 
+    public boolean connected(int v, int w){
+      // sanity check v and w
+      validate(v);
+      validate(w);
+      // check if v and w have a same leader
+      return find(v)==find(w); // under union by rank and path compression in find, this operation takes 2xlog*N
+    }
+    // UNION: connect two nodes together (add them to the same cc)
+    public void union(int v, int w){
+      // sanity check v and w
+      validate(v);
+      validate(w);
+      // find v's and w's leaders:
+      int rootV=find(v);
+      int rootW=find(w);
+      // check if w and v are alreay connected:
+      if(rootV==rootW) return ; // if so do nothing
+      // otherwise: compare the rank of leader nodes and make the one with a higher rank the root of the other leader
+      if(rank[rootV]==rank[rootW]) {
+         // if both leader have a same rank (increase the height of UF tree by one and make the the leader of the first node the new root:
+         roots[rootW]=rootV;
+         rank[rootV]++;
+         // once rootW becomes a non-root node it rank would never change again!
+      }
+      // if leaders having different rank the height of the tree would not change (this makes the UF tree bushy and leads to a logN height)
+      else if(rank[rootV]>rank[rootW])  roots[rootW]=rootV;
+      else roots[rootV]=rootW;
+    }
+
+    // helper methods
+    // validate v to be an integer within 0 to N-1 range
+    private void validate(int v) {if(v<0||v>=N)  throw new IndexOutOfBoundsException("given index is out of legal bounds!");}
+  }
+
 
   /*
     Undirected weighted graph abstraction
