@@ -24,14 +24,15 @@ import java.util.ArrayDeque;
 public class Kruskal{
   private double weight;
   private Deque<Edge> mst;
-  private PriorityQueue<Edge> pq; // min oriented priority queue that keeps track of min weighted edges as we progress
-  private UF uf; // a disjoint set data structure to keep track of cc dynamically
 
   // Constructor: Find a Minimum Spanning Tree in a Connected Undirected Graph with DISTINCT edge weights
   public Kruskal(Graph G) {
     // initialize instance fields:
     int V=G.V(); // number of vertices
     mst=new ArrayDeque<Edge>(); // an empty collection for Edge data type in a form of queue
+
+    private PriorityQueue<Edge> pq; // min oriented priority queue that keeps track of min weighted edges as we progress
+    private UF uf; // a disjoint set data structure to keep track of cc dynamically
     pq=new PriorityQueue<Edge>();
     uf=new UF(V);
 
