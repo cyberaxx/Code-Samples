@@ -56,6 +56,13 @@ public class Kruskal{
     }
   }
 
+   /* Performance characteristics:
+      insertion edges to min oriented priority queue: ElogE
+      cycle checking using UF (disjoint set data structure) takes log*V
+      total: ElogE (using sort or min oriented priority queue) + ElogV*
+      extra space requirement: E for priority queue and V for union find data structure 
+   */
+
   // API:
   // Query methods:
   // MST: edges in the MST:
