@@ -31,8 +31,8 @@ public class Kruskal{
     int V=G.V(); // number of vertices
     mst=new ArrayDeque<Edge>(); // an empty collection for Edge data type in a form of queue
 
-    private PriorityQueue<Edge> pq; // min oriented priority queue that keeps track of min weighted edges as we progress
-    private UF uf; // a disjoint set data structure to keep track of cc dynamically
+    PriorityQueue<Edge> pq; // min oriented priority queue that keeps track of min weighted edges as we progress
+    UF uf; // a disjoint set data structure to keep track of cc dynamically
     pq=new PriorityQueue<Edge>();
     uf=new UF(V);
 
@@ -79,6 +79,7 @@ public class Kruskal{
     private int N; // number of elements of a disjoint set instance
     private int [] roots; // integer index array that maintains leader of cc for each member of a disjoint set instance
     private int[] rank; // the rank of each member of the disjoint set instance (number of edges from the leaves)
+    private int count; // number of cc
 
     // constructor:
     public UF(int n) {
@@ -87,6 +88,7 @@ public class Kruskal{
 
       // initialize the instance members based on number of items in a disjoint set instance
       N=n;
+      count=n;
       roots=new int[N];
       rank=new int[N];
       for(int i=0; i<N; i++) {
@@ -138,6 +140,9 @@ public class Kruskal{
       // if leaders having different rank the height of the tree would not change (this makes the UF tree bushy and leads to a logN height)
       else if(rank[rootV]>rank[rootW])  roots[rootW]=rootV;
       else roots[rootV]=rootW;
+
+      // decrease the number of cc:
+      count--;
     }
 
     // helper methods
