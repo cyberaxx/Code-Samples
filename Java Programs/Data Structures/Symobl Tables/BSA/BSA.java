@@ -98,16 +98,32 @@ public class BSA<Key extends Comparable<Key>, Value> {
     // return the first key is the SORTED array of keys:
     return keys[0];
   }
-
   // maximum key: O(1)
-  public Key minKey(){
+  public Key maxKey(){
     // check if ST is not empty:
     if(isEmpty()) throw new NoSuchElementException("Symbol Table is empty!");
     // return the last key is the SORTED array of keys:
     return keys[size-1];
   }
-
-, max, delMin, delMax, floor(key), ceiling(key), successor(key), predeccessor(key), select(k)
+  // delete the key-value pair associated with the smallest key:
+  public void delMin() {
+    // check if ST is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Symbol Table is empty!");
+    delete(minKey();
+  }
+  // delete the key-value pair associated with the largest key:
+  public void delMax() {
+    // check if ST is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Symbol Table is empty!");
+    delete(maxKey());
+  }
+  // select kth smallest Key (kth order statistics): O(1)
+  public Key select(int k) {
+    // check if ST is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Symbol Table is empty!");
+    if(k<=0 || k>size) throw new IndexOutOfBoundsExcpetion();
+    return keys[k-1];  // adjust for 0-based index array of sorted keys
+  }
   
   // find number of keys less than the given key (righful index of the given key in the 0-based index array of SORTED keys):
   public int rank(Key key) {
