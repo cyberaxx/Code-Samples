@@ -25,9 +25,9 @@ public class BSA<Key extends Comparable<Key>, Value> {
     if(size==keys.length)  resize(2*keys.length);
     // 2. find the rightful position of the given key in a sorted array of Comparable keys (preserved the ordering of the keys array):
     int index=rank(key);
-    // 3. check if ST already contains such a key associated with any value
+    // 3. SEARCH among KEYS in the ST and check if ST already contains such a key associated with any value:
     if(contains(key))
-      // simply rewirte the new value at the given index:
+      // if the given key exisit in the ST, then simply rewirte the new value by associating it with the same key:
       values[index]=value;
     else {
       // insert the new key at the given index and shift everything from "index" to size-1 one position to the right (presever the order of keys)
@@ -44,8 +44,18 @@ public class BSA<Key extends Comparable<Key>, Value> {
   }
 
   // Search for a value given a key (return the value associated with a given key): a[key]
-  public Value get(Key key){return null;}
+  public Value get(Key key){
+    // check if ST is empty return null
+    if(isEmpty())  return null; // null is a special value (so values cannot be null)
+    // Otherwise: the ST is not empty:
+    // 1. Search the sorted array of keys to find the given key using BINARY SEARCH method:
+    int index=binarySearch(key);
+    if(index<0) return null; // search miss
+    // Otherwise return the value associated with the given index:
+    return values[index];
+  }
   public boolean contains(Key key){return get(key)!=null;}
+
   // Delete a key-value pair (given the key)
   public void delete(Key key){}
 
@@ -64,11 +74,10 @@ public class BSA<Key extends Comparable<Key>, Value> {
     if(isEmpty()) return 0;
     // if BSA symbol table was not empty
     int lo=0; int hi=size-1;
-    while(lo<hi) {
+    while(lo<=hi) {
       // find the middle element in the keys array
       int mid=(lo+hi)/2;
       int cmp=key.compareTo(keys[mid]); // compare the given key with the key at the mid position of sorted array of keys in the symbol table
-
       // if the given key was greater than the key in the mid position: Search on mid's right subarray
       if(cmp>0) lo=mid+1;
       // if the given key was less than the key in the mid position: Search on mid's left subarray
@@ -97,5 +106,29 @@ public class BSA<Key extends Comparable<Key>, Value> {
     // update references to keys and values instance arrays
     keys=k;
     values=v;
+  }
+
+  // implement iterative binary search: return -1 in case of search miss
+  private int binarySearch(Key key) {
+    // array boundaries:
+    int lo=0; int hi=size-1;
+    while(lo<=hi) {
+      // find the middle of array:
+      int mid=(hi+lo)/2;
+      // compare the given key with the key at the mid position in the key array using compareTo method:
+      int cmp=key.compareTo(keys[mid]);
+      // a. if the given key is GREATER than the key at the middle of the array (assuming array is sorted in ascending order): search on RIGTH SUBARRAY
+      if(cmp>0) 
+	// modify array boundaries for search:
+        lo=mid+1; // hi stays the same: search from mid+1 to hi portion of sorted key array
+      // b. if the given key is LESS than the key at the middle of the array (assuming array is sorted in ascending order): search on LEFT SUBARRAY
+      else if(cmp<0) 
+	// modify array boundaries for search:
+        hi=mid-1; // lo stays the same: search from lo to mid-1 portion of sorted key array	
+      else // c. if key equal the mid element at the keys array:
+	return mid; // return the mid index
+    }
+    // if the hi pointer passed the lo (hi<lo) pointer and the given key was not found in the array:
+    return -1;
   }
 }
