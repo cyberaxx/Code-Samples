@@ -23,28 +23,32 @@ public class BSA<Key extends Comparable<Key>, Value> {
   // API: ST operations: put(key,val), get(key), delete(key), contains(key), size(), isEmpty()
   // insert a key-value pair to the ST (associative array abstraction): a[key]=value
   public void put(Key key, Value value) {
-    // 1. check if instance arrays are full: double the size
-    if(size==keys.length)  resize(2*keys.length);
-    // 2. find the rightful position of the given key in a sorted array of Comparable keys (preserved the ordering of the keys array):
-    int index=rank(key);
-    // 3. SEARCH among KEYS in the ST and check if ST already contains such a key associated with any value:
-    if(contains(key))
-      // if the given key exisit in the ST, then simply rewirte the new value by associating it with the same key:
-      values[index]=value;
+    if(key==null) throw new NullPointerExceotion();
+    if(value==null) delete(key);
     else {
-      // insert the new key at the given index and shift everything from "index" to size-1 one position to the right (presever the order of keys)
-      for(int i=size; i<=index; i--) {
-        // shift key value pairs in parallel arrays, one position to the right:
-	keys[i]=keys[i-1];
-	values[i]=values[i-1];
-      } // this linear time insertion (cause by shitfing keys around) makes BSA not a really good implementation for ST in presence of many insertions
+      // 1. check if instance arrays are full: double the size
+      if(size==keys.length)  resize(2*keys.length);
+      // 2. find the rightful position of the given key in a sorted array of Comparable keys (preserved the ordering of the keys array):
+      int index=rank(key);
+      // 3. SEARCH among KEYS in the ST and check if ST already contains such a key associated with any value:
+      if(index>0 && key.equals(keys[index]))
+        // if the given key exisit in the ST, then simply rewirte the new value by associating it with the same key:
+        values[index]=value;
+      else {
+        // insert the new key at the given index and shift everything from "index" to size-1 one position to the right (presever the order of keys)
+        for(int i=size; i<=index; i--) {
+          // shift key value pairs in parallel arrays, one position to the right:
+	  keys[i]=keys[i-1];
+	  values[i]=values[i-1];
+        } // this linear time insertion (cause by shitfing keys around) makes BSA not a really good implementation for ST in presence of many insertions
 	
-      // insert the new key value pair:
-      keys[index]=key;
-      values[index]=value;
+        // insert the new key value pair:
+        keys[index]=key;
+        values[index]=value;
+      }
+      // 4. update the size:
+      size++;
     }
-    // 4. update the size:
-    size++;
   }// O(n) AMORTIZED
 
   // Search for a value given a key (return the value associated with a given key): a[key]
@@ -109,7 +113,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
   public void delMin() {
     // check if ST is not empty:
     if(isEmpty()) throw new NoSuchElementException("Symbol Table is empty!");
-    delete(minKey();
+    delete(minKey());
   }
   // delete the key-value pair associated with the largest key:
   public void delMax() {
@@ -121,8 +125,8 @@ public class BSA<Key extends Comparable<Key>, Value> {
   public Key select(int k) {
     // check if ST is not empty:
     if(isEmpty()) throw new NoSuchElementException("Symbol Table is empty!");
-    if(k<=0 || k>size) throw new IndexOutOfBoundsExcpetion();
-    return keys[k-1];  // adjust for 0-based index array of sorted keys
+    if(k<0 || k>=size) throw new IndexOutOfBoundsExcpetion();
+    return keys[k];
   }
   
   // find number of keys less than the given key (righful index of the given key in the 0-based index array of SORTED keys):
@@ -163,29 +167,5 @@ public class BSA<Key extends Comparable<Key>, Value> {
     // update references to keys and values instance arrays
     keys=k;
     values=v;
-  }
-
-  // implement iterative binary search: return -1 in case of search miss
-  private int binarySearch(Key key) {
-    // array boundaries:
-    int lo=0; int hi=size-1;
-    while(lo<=hi) {
-      // find the middle of array:
-      int mid=(hi+lo)/2;
-      // compare the given key with the key at the mid position in the key array using compareTo method:
-      int cmp=key.compareTo(keys[mid]);
-      // a. if the given key is GREATER than the key at the middle of the array (assuming array is sorted in ascending order): search on RIGTH SUBARRAY
-      if(cmp>0) 
-	// modify array boundaries for search:
-        lo=mid+1; // hi stays the same: search from mid+1 to hi portion of sorted key array
-      // b. if the given key is LESS than the key at the middle of the array (assuming array is sorted in ascending order): search on LEFT SUBARRAY
-      else if(cmp<0) 
-	// modify array boundaries for search:
-        hi=mid-1; // lo stays the same: search from lo to mid-1 portion of sorted key array	
-      else // c. if key equal the mid element at the keys array:
-	return mid; // return the mid index
-    }
-    // if the hi pointer passed the lo (hi<lo) pointer and the given key was not found in the array:
-    return -1;
   }
 }
