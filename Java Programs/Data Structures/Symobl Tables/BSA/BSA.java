@@ -45,7 +45,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
     }
     // 4. update the size:
     size++;
-  }
+  }// O(n) AMORTIZED
 
   // Search for a value given a key (return the value associated with a given key): a[key]
   public Value get(Key key){
@@ -57,10 +57,10 @@ public class BSA<Key extends Comparable<Key>, Value> {
     if(index<0) return null; // search miss
     // Otherwise return the value associated with the given index:
     return values[index];
-  }
+  } // O(logN)
   public boolean contains(Key key){return get(key)!=null;}
 
-  // Delete a key-value pair (given the key)
+  // Delete a key-value pair (given the key): O(n) AMORTIZED
   public void delete(Key key){
     // if the ST is empty throw exception:
     if(isEmpty()) throw new NoSuchElementException("The symbol table is empty!");
@@ -73,7 +73,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
     for(int i=index; i<size; i++) {
       keys[i]=keys[i+1];
       values[i]=values[i+1];
-    }
+    } // Linear time deletion: shifting keys and values to maintain keys SORTED ordered
     // 3. prevent loitering:
     keys[size-1]=null;
     values[size-1]=null;
@@ -83,14 +83,31 @@ public class BSA<Key extends Comparable<Key>, Value> {
     if(size==(keys.length)/4 && size>0)  resize(keys.length/2); // shrink parallel arrays to half of their previous size
   }
 
-  // number of elements in ST:
+  // number of elements in ST: O(1)
   public int size(){return size;}
-  // if ST is empty?
+  // if ST is empty? O(1)
   public boolean isEmpty(){return size==0;}
   // Iterale object of keys
   public Iterable<Key> keys(){return null;}
 
-  // Ordered operation for Comparable keys: min, max, delMin, delMax, floor(key), ceiling(key), successor(key), predeccessor(key), select(k), rank(key), keys(),  
+  // ORDERED OPERATIONS for Comparable keys: 
+  // minimum key: O(1)
+  public Key minKey(){
+    // check if ST is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Symbol Table is empty!");
+    // return the first key is the SORTED array of keys:
+    return keys[0];
+  }
+
+  // maximum key: O(1)
+  public Key minKey(){
+    // check if ST is not empty:
+    if(isEmpty()) throw new NoSuchElementException("Symbol Table is empty!");
+    // return the last key is the SORTED array of keys:
+    return keys[size-1];
+  }
+
+, max, delMin, delMax, floor(key), ceiling(key), successor(key), predeccessor(key), select(k)
   
   // find number of keys less than the given key (righful index of the given key in the 0-based index array of SORTED keys):
   public int rank(Key key) {
