@@ -53,6 +53,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
 
   // Search for a value given a key (return the value associated with a given key): a[key]
   public Value get(Key key){
+    if(key==null) throw new NullPointerException();
     // check if ST is empty return null
     if(isEmpty())  return null; // null is a special value (so values cannot be null)
     // Otherwise: the ST is not empty:
@@ -66,6 +67,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
 
   // Delete a key-value pair (given the key): O(n) AMORTIZED
   public void delete(Key key){
+    if(key==null) throw new NullPointerException();
     // if the ST is empty throw exception:
     if(isEmpty()) throw new NoSuchElementException("The symbol table is empty!");
     // check if there exist a key-value pair associated with the given key:
