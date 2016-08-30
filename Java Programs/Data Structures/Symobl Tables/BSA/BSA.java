@@ -1,3 +1,5 @@
+import java.util.NoSuchElementException;
+
 /* Binary Search Array Data Structure:
    Implements ST interface using resizable parallel arrays to maintain a collection key-value pairs. */
 
@@ -41,6 +43,8 @@ public class BSA<Key extends Comparable<Key>, Value> {
       keys[index]=key;
       values[index]=value;
     }
+    // 4. update the size:
+    size++;
   }
 
   // Search for a value given a key (return the value associated with a given key): a[key]
@@ -57,14 +61,34 @@ public class BSA<Key extends Comparable<Key>, Value> {
   public boolean contains(Key key){return get(key)!=null;}
 
   // Delete a key-value pair (given the key)
-  public void delete(Key key){}
+  public void delete(Key key){
+    // if the ST is empty throw exception:
+    if(isEmpty()) throw new NoSuchElementException("The symbol table is empty!");
+    // check if there exist a key-value pair associated with the given key:
+    if(!contains(key)) throw new NoSuchElementException("Symbol table does not contain the given key!");
+    // Otherwise:
+    // 1. find the index of the given key by searching through the SORTED array of keys:
+    int index=binarySearch(key);
+    // 2. Delete the key value pair and shift all (key,value) pairs on parallel arrays that located after the given key, one position to the left (preserve the DS invariance (ascending order of keys)
+    for(int i=index; i<size; i++) {
+      keys[i]=keys[i+1];
+      values[i]=values[i+1];
+    }
+    // 3. prevent loitering:
+    keys[size-1]=null;
+    values[size-1]=null;
+    // 4. update the size:
+    size--;
+    // 5. shrink parallel arrays if required:
+    if(size==(keys.length)/4 && size>0)  resize(keys.length/2); // shrink parallel arrays to half of their previous size
+  }
 
   // number of elements in ST:
   public int size(){return size;}
   // if ST is empty?
   public boolean isEmpty(){return size==0;}
   // Iterale object of keys
-  public Iterable<Key> keys(){return null;}
+  public Iterable<Key> keys(){return keys;}
 
   // Ordered operation for Comparable keys: min, max, delMin, delMax, floor(key), ceiling(key), successor(key), predeccessor(key), select(k), rank(key), keys(),  
   
