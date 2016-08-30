@@ -18,6 +18,21 @@ public class BSA<Key extends Comparable<Key>, Value> {
   }
 
   // API: ST operations: put(key,val), get(key), delete(key), contains(key), size(), isEmpty()
+  // insert a key-value pair to the ST (associative array abstraction): a[key]=value
+  public void put(Key key, Value value) {}
+  // Search for a value given a key (return the value associated with a given key): a[key]
+  public Value get(Key key){return null;}
+  public boolean contains(Key key){return get(key)!=null;}
+  // Delete a key-value pair (given the key)
+  public void delete(Key key){}
+
+  // number of elements in ST:
+  public int size(){return size;}
+  // if ST is empty?
+  public boolean isEmpty(){return size==0;}
+  // Iterale object of keys
+  public Iterable<Key> keys(){return null;}  
+  
 
   // Ordered operation for Comparable keys: min, max, delMin, delMax, floor(key), ceiling(key), successor(key), predeccessor(key), select(k), rank(key), keys(),  
   
