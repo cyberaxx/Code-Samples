@@ -23,7 +23,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
   // API: ST operations: put(key,val), get(key), delete(key), contains(key), size(), isEmpty()
   // insert a key-value pair to the ST (associative array abstraction): a[key]=value
   public void put(Key key, Value value) {
-    if(key==null) throw new NullPointerExceotion();
+    if(key==null) throw new NullPointerException();
     if(value==null) delete(key);
     else {
       // 1. check if instance arrays are full: double the size
@@ -31,7 +31,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
       // 2. find the rightful position of the given key in a sorted array of Comparable keys (preserved the ordering of the keys array):
       int index=rank(key);
       // 3. SEARCH among KEYS in the ST and check if ST already contains such a key associated with any value:
-      if(index>0 && key.equals(keys[index]))
+      if(index>=0 && key.equals(keys[index]))
         // if the given key exisit in the ST, then simply rewirte the new value by associating it with the same key:
         values[index]=value;
       else {
@@ -56,11 +56,11 @@ public class BSA<Key extends Comparable<Key>, Value> {
     // check if ST is empty return null
     if(isEmpty())  return null; // null is a special value (so values cannot be null)
     // Otherwise: the ST is not empty:
-    // 1. Search the sorted array of keys to find the given key using BINARY SEARCH method:
-    int index=binarySearch(key);
-    if(index<0) return null; // search miss
-    // Otherwise return the value associated with the given index:
-    return values[index];
+    // find the rightful position of the given key in SORTED array of comparable keys
+    int index=rank(key);
+    // compare the given key with the key at its rightful position in the keys array
+    if(index>=0 && key.equals(keys[index])) return values[index]; // search hit
+    else return null;
   } // O(logN)
   public boolean contains(Key key){return get(key)!=null;}
 
@@ -72,7 +72,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
     if(!contains(key)) throw new NoSuchElementException("Symbol table does not contain the given key!");
     // Otherwise:
     // 1. find the index of the given key by searching through the SORTED array of keys:
-    int index=binarySearch(key);
+    int index=rank(key);
     // 2. Delete the key value pair and shift all (key,value) pairs on parallel arrays that located after the given key, one position to the left (preserve the DS invariance (ascending order of keys)
     for(int i=index; i<size; i++) {
       keys[i]=keys[i+1];
@@ -125,7 +125,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
   public Key select(int k) {
     // check if ST is not empty:
     if(isEmpty()) throw new NoSuchElementException("Symbol Table is empty!");
-    if(k<0 || k>=size) throw new IndexOutOfBoundsExcpetion();
+    if(k<0 || k>=size) throw new IndexOutOfBoundsException();
     return keys[k];
   }
   
