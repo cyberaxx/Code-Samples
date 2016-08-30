@@ -31,7 +31,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
       values[index]=value;
     else {
       // insert the new key at the given index and shift everything from "index" to size-1 one position to the right (presever the order of keys)
-      for(int i=size; i<=index; i++) {
+      for(int i=size; i<=index; i--) {
         // shift key value pairs in parallel arrays, one position to the right:
 	keys[i]=keys[i-1];
 	values[i]=values[i-1];
