@@ -276,7 +276,7 @@ public class BST<Key extends Comparable<Key>, Value> {
      if(x.left==null) return null; // x is the left most node and it does not have any predecessor
      return max(x.left); // return the node with the max key on x's left subtree
    }
-   
+
    // returns a key from the BST instance such that it is greater than or equal to the given key
    public Key ceiling(Key key) {
      // sanity check of the given key
@@ -287,11 +287,31 @@ public class BST<Key extends Comparable<Key>, Value> {
      if(x==null) return null; // given key is GREATER than all keys associated with BST nodes rooted at the root
      return x.key;
    }
-
+   /*
+    Compare the given key with the key assoctiated with the given node x:
+    1. if the given key is equal to the key associated with node x then return node x (node x's key is tightest upper bound for the given key)
+    2. if the given key is greater than the key associated with the node x: recursively search on x's right subtree (nodes with associated keys that are greater than x's key)
+    3. if the given key is less than the key associated with tne node x:
+       a. node x itselft could be an upper bound, but x.left could be a tighter upperbound
+          i. if x has no left child then retrun x;
+          ii. if the given key was greater than the key associated with x's left child then return x
+          iii. otherwise, recursively search for a tighter upper bound for the given key among keys associated with BST nodes 
+   */
    private Node ceiling(Node x, Key key) {
-
-   return null;
+     // BASE CASE: empty tree
+     if(x==null) return null;
+     // RECURRENCE:
+     int cmp=key.compareTo(x.key);
+     if(cmp==0) return x;
+     if(cmp<0) {
+       if(x.left==null) return x;
+       if(key.compareTo(x.left.key)>0) return x;
+       return ceiling(x.left, key);
+     }
+     return ceiling(x.right, key);
   }
+  
+  // Successor: find the node such that its associated key placed right after the given key in a SORTED array of keys
 }
 
 
