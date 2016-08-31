@@ -351,7 +351,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     // 2. if the given key is GREATER than the key associated with the node x:
     //    the number of nodes with keys assoctiated to them LESS than the given key is:
     //    node x itself + all nodes on its left subtree + recurse on x's right subtree (number of nodes on x's right subtree that are less than the given key)
-    if(cmp>0) return 1+size(x.left)+rank(x.right);
+    if(cmp>0) return 1+size(x.left)+rank(x.right, key);
     // 3. if the given key is less than the key associated with the key at the node x there is no node in the BST rooted at node x with keys associated to it with LESS than the given key!
     return 0;
   }
