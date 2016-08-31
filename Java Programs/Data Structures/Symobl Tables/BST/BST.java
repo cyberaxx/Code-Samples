@@ -77,7 +77,6 @@ public class BST<Key extends Comparable<Key>, Value> {
      // BASE CASE: empty BST
      // create a new Node and return a reference to the created Node up to the parent of the subtree:
      if(x==null) return new Node(key, value); // return a reference to a root of BST containing a key-value pair with null left and right links
-     
      /* RECURRENCE: 
       if the subtree under consideration is not empty (x is the root of subtree under consideration) put a new Node with the given key into BST 
       rooted at Node x such that the Symetric Order Condition does Not get violated:
@@ -90,27 +89,22 @@ public class BST<Key extends Comparable<Key>, Value> {
 
      // similar to comparing the new key with the key of the middle element in BSA subarray under consideration (rank operation)
      // 1. Compare the new key to the key of the root under consideration (to findout which subtree we have to go down to)
-     int cmp=key.compareTo(x.key); // 0 + - 
-
+     int cmp=key.compareTo(x.key); // 0 + - integer
      // 2. Recurse:
      // a. if the given key is greater than the key at the root under consideration: 
      //    i. the new key must be inserted to its right subtree
      //    ii.the link to its right subtree must get modified (pass on the structural modifications up to the parent Node)
      if(cmp>0) x.right=put(x.right, key, value);
-
      // b. if the given key is less than key of the root of the subtree under consideration
      //    i. the new key must be inserted to its left subtree
      //    ii.the link to its left subtree must get modified (pass on the structural modifications up to the parent Node)
      else if(cmp<0) x.left=put(x.left, key, value);
-
      // c. if the key is equal to the key at the root of the subtree under consideration:
      // update the value of the given key in the BST (no structural change required!)
      else
        x.value=value;
-
      // update the size of subtree rooted at Node x
      x.count= 1+size(x.left)+size(x.right);
-
      // return the reference to the root of the subtree under the consideration
      return x;
    }
