@@ -210,10 +210,7 @@ public class BST<Key extends Comparable<Key>, Value> {
      return max(x.right);
    }
 
-    /* floor:
-      ceiling:
-      predecessor:
-      successor:
+    /* 
       rank:
       select:
       range count:
@@ -267,6 +264,10 @@ public class BST<Key extends Comparable<Key>, Value> {
      if(key.compareTo(x.right.key)<0) return x;
      return floor(x.right, key);
    }
+
+   // find the node in the BST rooted at node x which its associate key 
+   // is the predecessor of the given key in an array of keys in SORTED order:
+   private 
 }
 
 
