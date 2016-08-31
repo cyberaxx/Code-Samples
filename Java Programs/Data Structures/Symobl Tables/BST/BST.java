@@ -210,7 +210,7 @@ public class BST<Key extends Comparable<Key>, Value> {
      return max(x.right);
    }
 
-   /* floor:
+    /* floor:
       ceiling:
       predecessor:
       successor:
@@ -226,12 +226,28 @@ public class BST<Key extends Comparable<Key>, Value> {
    public Key floor(Key key) {
      // sanity check the given key:
      if(key==null) throw new NullPointerException();
-     // check if the BST is empty
+     // if ST is empty
      if(isEmpty()) throw new NoSuchElementException();
-     
-     
+
+     // Otherwise recursively find the floor of the given key among keys in the ST
+     Node x=floor(root, key);
+     if(x==null) return null; // the given key is less than all the keys in the ST
+     return x.key;
    }
-   
+
+   // recursive helper method to find the floor of given keys among keys in subtree BST rooted at node x
+   private Node floor(Node x, Key key) {
+     // BASE CASE: empty subtree -> search miss
+     if(x==null) return null;
+
+     // RECURRENCE:
+     // compare the given key with the key at the node x:
+     int cmp=key.compareTo(x.key); // the result of comparing keys would guide the search
+
+     // if the given key is greater than the key at root node of subtree rooted at node x:
+     if(cmp>0)
+
+   }  
 }
 
 
