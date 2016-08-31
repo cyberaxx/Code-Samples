@@ -355,6 +355,23 @@ public class BST<Key extends Comparable<Key>, Value> {
     // 3. if the given key is less than the key associated with the key at the node x there is no node in the BST rooted at node x with keys associated to it with LESS than the given key!
     return 0;
   }
+
+  // return the node that has key associated to it which is the k-th smallest among all keys
+  // associated to the node of BST
+  public Key select(int k) {
+    // sanity check k:
+    if(k<0 || k>=size()) throw new IndexOutOfBoundsException();
+
+    // otherwise recursively search for the node with the key assoicated to it is the k-th smallest key
+    // among all node in BST rooted at node root:
+    Node x=select(root, k);
+    return x.key; // return the key associate with such a node
+  }
+  // recursive helper method: find the node with the key associated to it being kth smallest key among all keys in the BST rooted at node x
+  private Node select(Node x, int k) {
+    // 	BASE CASE: empty tree
+    return null;
+  }
 }
 
 
