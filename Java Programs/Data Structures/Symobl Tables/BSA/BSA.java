@@ -203,10 +203,12 @@ public class BSA<Key extends Comparable<Key>, Value> {
 
     // check the rank of the give key: number of keys in the SORTED key array that are less than the given key:
     int index=rank(key);
-    if(index<size && key.compareTo(keys[index])==0) return keys[index];
+
     // if the given key is greater than all keys in the sorted array of keys
     if(index==size) return null;
-    else return keys[index+1]; // since index is not equal to size, this would not cause index out of bounds exception
+    
+    // otherwise: the key at the rank position is greater than or equal to the given key
+    return keys[index];
   }
   // find a successor of the key in the SORTED array of keys:
   public Key successor(Key key) {
