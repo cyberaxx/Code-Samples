@@ -264,10 +264,34 @@ public class BST<Key extends Comparable<Key>, Value> {
      if(key.compareTo(x.right.key)<0) return x;
      return floor(x.right, key);
    }
-
    // find the node in the BST rooted at node x which its associate key 
    // is the predecessor of the given key in an array of keys in SORTED order:
-   private 
+   private Node predecessor(Node x) {
+     // sanity check:
+     if(x==null) throw new NullPointerException();
+     /* predecessor of a node x is the node such that its key is the largest key LESS than the key of the node x:
+        1. if node x has no left child it does not have a predecessor return null
+        2. if node x has left child, return the node with the max key on its left subtree that node would be the predecessor of x
+     */
+     if(x.left==null) return null; // x is the left most node and it does not have any predecessor
+     return max(x.left); // return the node with the max key on x's left subtree
+   }
+   
+   // returns a key from the BST instance such that it is greater than or equal to the given key
+   public Key ceiling(Key key) {
+     // sanity check of the given key
+     if(key==null) throw new NullPointerException();
+
+     // Otherwise: recursive search for node (if existed such a node) with a key which is the ceiling key of the given key on the BST rooted root
+     Node x=ceiling(root, key);
+     if(x==null) return null; // given key is GREATER than all keys associated with BST nodes rooted at the root
+     return x.key;
+   }
+
+   private Node ceiling(Node x, Key key) {
+
+   return null;
+  }
 }
 
 
