@@ -98,7 +98,12 @@ public class BSA<Key extends Comparable<Key>, Value> {
   // if ST is empty? O(1)
   public boolean isEmpty(){return size==0;}
   // Iterale object of keys
-  public Iterable<Key> keys(){return null;}
+  public Iterable<Key> keys(){
+    Deque<Key> queue=new ArrayDeque<Key>();
+    for(int i=0; i<size; n++)
+      queueu.offer(keys[i]);
+    return queue; // a Queue of keys in sorted order
+  }
 
   // ORDERED OPERATIONS for Comparable keys: 
   // minimum key: O(1)
@@ -230,14 +235,10 @@ public class BSA<Key extends Comparable<Key>, Value> {
     if(lo==null || hi==null) throw new NullPointerException();
     // if ST is empty
     if(isEmpty()) throw new NoSuchElementException();
-    // if lo and hi are equals:
-    if(lo.compareTo(hi)==0) return 0;
-    int loIndex=rank(lo);
-    int hiIndex=rank(hi);
-    if (contains(lo) && contains(hi))  return hiIndex-loIndex+1; 
-    if (contains(lo))  return hiIndex-loIndex+1; 
-    if (contains(hi))  return hiIndex-loIndex+1; 
-    return hiIndex-loIndex+1;
+    // if lo is passed hi
+    if(lo.compareTo(hi)>0) return 0;
+    if (contains(hi))  return rank(hi)-rank(lo)+1; // if BSA contains a key equal to hi key 
+    else rank(hi)-rank(lo); // otherwise the last key (the key at the size position is the last key GREATER than hi, so it has to be excluded
   }
 
   // helper methods:
