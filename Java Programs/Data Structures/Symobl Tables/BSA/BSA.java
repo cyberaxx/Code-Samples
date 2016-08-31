@@ -100,8 +100,8 @@ public class BSA<Key extends Comparable<Key>, Value> {
   // Iterale object of keys
   public Iterable<Key> keys(){
     Deque<Key> queue=new ArrayDeque<Key>();
-    for(int i=0; i<size; n++)
-      queueu.offer(keys[i]);
+    for(int i=0; i<size; i++)
+      queue.offer(keys[i]);
     return queue; // a Queue of keys in sorted order
   }
 
@@ -238,7 +238,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
     // if lo is passed hi
     if(lo.compareTo(hi)>0) return 0;
     if (contains(hi))  return rank(hi)-rank(lo)+1; // if BSA contains a key equal to hi key 
-    else rank(hi)-rank(lo); // otherwise the last key (the key at the size position is the last key GREATER than hi, so it has to be excluded
+    else return rank(hi)-rank(lo); // otherwise the last key (the key at the size position is the last key GREATER than hi, so it has to be excluded
   }
 
   // helper methods:
