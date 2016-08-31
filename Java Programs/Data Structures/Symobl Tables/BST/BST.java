@@ -369,8 +369,14 @@ public class BST<Key extends Comparable<Key>, Value> {
   }
   // recursive helper method: find the node with the key associated to it being kth smallest key among all keys in the BST rooted at node x
   private Node select(Node x, int k) {
-    // 	BASE CASE: empty tree
-    return null;
+    // find the rank of node x: number of nodes in ST with keys associated to them less than x's key:
+    int rank=rank(x.key);
+  
+    // if the rank of node x was equal to the given k return node x
+    if(k==rank) return x; // return node x
+    if(k<rank) return select(x.left, k); // recursively search for the k-th smallest on x's left subtree
+    // if k>rank : we have to look for k-rank-1 th smallest key in ST on x's right subtree (subtract rank, and 1 for x itself)
+    return select(x.right, k-rank-1);
   }
 }
 
