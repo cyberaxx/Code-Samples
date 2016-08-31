@@ -310,8 +310,18 @@ public class BST<Key extends Comparable<Key>, Value> {
      }
      return ceiling(x.right, key);
   }
-  
   // Successor: find the node such that its associated key placed right after the given key in a SORTED array of keys
+  private Node successor(Node x, Key key) {
+    // sanity check the key:
+    if(key==null) throw new NullPointerException();
+    // if ST is empty
+    if(isEmpty()) throw new NoSuchElementException();
+
+    // if x has no right child (x itself is the right most child) then it has no successor node in BST:
+    if(x.right==null) return null;
+    // otherwise the node with the min key associated with it on x's right subtree is x's successor:
+    return min(x.right);
+  }
 }
 
 
