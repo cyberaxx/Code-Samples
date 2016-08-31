@@ -218,8 +218,7 @@ public class BST<Key extends Comparable<Key>, Value> {
       select:
       range count:
       range keys:
-   */
-   
+   */  
 
    // return a key from the ST (if exists such a key) such that the given key is the LARGEST key in the ST LESS than or EQUAL to the given key:
    // st.floor(key).compareTo(key) <=0
@@ -234,32 +233,41 @@ public class BST<Key extends Comparable<Key>, Value> {
      if(x==null) return null; // the given key is less than all the keys in the ST
      return x.key;
    }
-
    // recursive helper method to find the floor of given keys among keys in subtree BST rooted at node x
    private Node floor(Node x, Key key) {
      // BASE CASE: empty subtree -> search miss
      if(x==null) return null;
-
      // RECURRENCE:
+     /*
+       Compare the given key with the key at the root of the subtree under consideration (node x):
+       int cmp=key.compareTo(x.key); // 0 - + -> there are going to be 3 cases:
+       1. if the given key is EQUAL to the key at the node x then return node x (it cannot get closer to the key from below)
+       2. if the given key is LESS than the key at the node x recursively search for a key that is bounded from above by (less than or equal to) 
+          the given key on nodes that have keys less than the node x (x's left subtree): return floor(x.left, key)
+       3. if the given key is GREATER than the key at the node x:
+
+          NOTE: node x itself can be a candidate to be the floor of the given key, and anything on its left subtree is definitely NOT a candidate
+                but its right subtree (nodes with key greater than x) may contain a better candidate which is GREATER than x but still less than the given key
+
+          a. check if node x has a right child:
+             i. if NOT return the node x
+          b. Otherwise:
+             i. check if the right child of the node x is greater than the given key
+             ii. if so, return node x (node x is the best candidate which is less than the given node)
+             iii. if not, right child of the node x is greater than x and less than the given key so recursively search for the 
+                  floor of the given key on node x's right subtree
+     */
      // compare the given key with the key at the node x:
      int cmp=key.compareTo(x.key); // the result of comparing keys would guide the search
-
-     // if the given key is greater than the key at root node of subtree rooted at node x:
-     if(cmp>0)
-
-   }  
+     if(cmp==0)  return x;
+     if(cmp<0) return floor(x.left, key);
+     // cmp > 0 : the given key is greater than the key at the node x:
+     if(x.right==null) return x;
+     // if the given key is less than the key of x's right child then return x
+     if(key.compareTo(x.right)<0) return x;
+     return floor(x.right, key);
+   }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
