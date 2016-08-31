@@ -39,6 +39,17 @@ public class BST<Key extends Comparable<Key>, Value> {
     private Node right;
     // number of nodes in the BST rooted at the node instance:
     private int count;
+
+    // Constructor:
+    public Node(){}
+    public Node(Key key, Value value) {
+      //initialize Node's instance fields:
+      this.key=key;
+      this.value=value;
+      this.count=0;
+      this.left=null;
+      this.right=null;
+    }
   }
 
    // BST Constructor
@@ -62,8 +73,8 @@ public class BST<Key extends Comparable<Key>, Value> {
 
    // private recursive helper method that takes a reference to the root of subtree and key and value to be inserted to the subtree rooted at node
    private Node put(Node node, Key key, Value value) {
-
-
-   return null;
+     // BASE CASE: if subtree is empty -> create a node and return a reference to the created node up to the parent of the subtree:
+     if(node==null) return new Node(key, value); // return a reference to a BST node containing a key-value pair with null left and right links
+     return null;    
    }
 }
