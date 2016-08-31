@@ -317,7 +317,6 @@ public class BST<Key extends Comparable<Key>, Value> {
     if(key==null) throw new NullPointerException();
     // if ST is empty
     if(isEmpty()) throw new NoSuchElementException();
-
     // if x has no right child (x itself is the right most child) then it has no successor node in BST:
     if(x.right==null) return null;
     // otherwise the node with the min key associated with it on x's right subtree is x's successor:
@@ -330,7 +329,6 @@ public class BST<Key extends Comparable<Key>, Value> {
     if(key==null) throw new NullPointerException();
     // check if the ST is empty
     if(isEmpty()) throw new NoSuchElementException();
-
     // otherwise recursively fid the number of node is BST with keys associated to them LESS than the given key
     int rank=rank(root, key);
     return rank;
@@ -340,10 +338,8 @@ public class BST<Key extends Comparable<Key>, Value> {
   private int rank(Node x, Key key) {
     // BASE CASE: empty tree
     if(x==null) return 0; // 0 node with keys less than the given key
-
     // compare the given key with the key associated with the node x:
     int cmp=key.compareTo(x.key);
-
     // 1. if the given key is equal to the key associated with the node x:
     //    number of nodes with keys associated to them LESS than the give key
     //    is precisely the number of nodes on x's left subtree:
@@ -361,7 +357,6 @@ public class BST<Key extends Comparable<Key>, Value> {
   public Key select(int k) {
     // sanity check k:
     if(k<0 || k>=size()) throw new IndexOutOfBoundsException();
-
     // otherwise recursively search for the node with the key assoicated to it is the k-th smallest key
     // among all node in BST rooted at node root:
     Node x=select(root, k);
@@ -371,7 +366,6 @@ public class BST<Key extends Comparable<Key>, Value> {
   private Node select(Node x, int k) {
     // find the rank of node x: number of nodes in ST with keys associated to them less than x's key:
     int rank=rank(x.key);
-  
     // if the rank of node x was equal to the given k return node x
     if(k==rank) return x; // return node x
     if(k<rank) return select(x.left, k); // recursively search for the k-th smallest on x's left subtree
