@@ -24,29 +24,30 @@ public class BSA<Key extends Comparable<Key>, Value> {
   // insert a key-value pair to the ST (associative array abstraction): a[key]=value
   public void put(Key key, Value value) {
     if(key==null) throw new NullPointerException();
-    if(value==null) delete(key);
+    if(value==null) { delete(key); return ;}
+    
+    // 1. check if instance arrays are full: double the size
+    if(size==keys.length)  resize(2*keys.length);
+    // 2. find the rightful position of the given key in a sorted array of Comparable keys (preserved the ordering of the keys array):
+    int index=rank(key);
+    // 3. SEARCH among KEYS in the ST and check if ST already contains such a key associated with any value:
+    if(index<size && key.equals(keys[index])) {
+      // if the given key exisit in the ST, then simply rewirte the new value by associating it with the same key:
+      values[index]=value;
+    }
     else {
-      // 1. check if instance arrays are full: double the size
-      if(size==keys.length)  resize(2*keys.length);
-      // 2. find the rightful position of the given key in a sorted array of Comparable keys (preserved the ordering of the keys array):
-      int index=rank(key);
-      // 3. SEARCH among KEYS in the ST and check if ST already contains such a key associated with any value:
-      if(index>=0 && key.equals(keys[index]))
-        // if the given key exisit in the ST, then simply rewirte the new value by associating it with the same key:
-        values[index]=value;
-      else {
-        // insert the new key at the given index and shift everything from "index" to size-1 one position to the right (presever the order of keys)
-        for(int i=size; i<=index; i--) {
-          // shift key value pairs in parallel arrays, one position to the right:
-	  keys[i]=keys[i-1];
-	  values[i]=values[i-1];
-        } // this linear time insertion (cause by shitfing keys around) makes BSA not a really good implementation for ST in presence of many insertions
+      // insert the new key at the given index and shift everything from "index" to size-1 one position to the right (presever the order of keys)
+      for(int i=size; i>index; i--) {
+        // shift key value pairs in parallel arrays, one position to the right:
+	keys[i]=keys[i-1];
+	values[i]=values[i-1];
+      } // this linear time insertion (cause by shitfing keys around) makes BSA not a really good implementation for ST in presence of many insertions
 	
-        // insert the new key value pair:
-        keys[index]=key;
-        values[index]=value;
-      }
-      // 4. update the size:
+      // insert the new key value pair:
+      keys[index]=key;
+      values[index]=value;
+
+      // update the size:
       size++;
     }
   }// O(n) AMORTIZED
@@ -60,7 +61,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
     // find the rightful position of the given key in SORTED array of comparable keys
     int index=rank(key);
     // compare the given key with the key at its rightful position in the keys array
-    if(index>=0 && key.equals(keys[index])) return values[index]; // search hit
+    if(index<size && key.equals(keys[index])) return values[index]; // search hit
     else return null;
   } // O(logN)
   public boolean contains(Key key){return get(key)!=null;}
@@ -76,7 +77,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
     // 1. find the index of the given key by searching through the SORTED array of keys:
     int index=rank(key);
     // 2. Delete the key value pair and shift all (key,value) pairs on parallel arrays that located after the given key, one position to the left (preserve the DS invariance (ascending order of keys)
-    for(int i=index; i<size; i++) {
+    for(int i=index; i<size-1; i++) {
       keys[i]=keys[i+1];
       values[i]=values[i+1];
     } // Linear time deletion: shifting keys and values to maintain keys SORTED ordered
@@ -127,11 +128,12 @@ public class BSA<Key extends Comparable<Key>, Value> {
   public Key select(int k) {
     // check if ST is not empty:
     if(isEmpty()) throw new NoSuchElementException("Symbol Table is empty!");
-    if(k<0 || k>=size) throw new IndexOutOfBoundsException();
+    if(k<0 || k>=size) return null;
     return keys[k];
   }  
   // find number of keys less than the given key (righful index of the given key in the 0-based index array of SORTED keys):
   public int rank(Key key) {
+    if(key==null) throw new NullPointerException();
     // sanity check: if the ST instance is empty return 0:
     if(isEmpty()) return 0;
     // if BSA symbol table was not empty
@@ -153,36 +155,45 @@ public class BSA<Key extends Comparable<Key>, Value> {
     */
     return lo;
   }
-
   // find the largest key less than the given key in the Sorted array of keys
   public Key floor(Key key) {
     if(key==null) throw new NullPointerException();
     // empty ST
     if(isEmpty()) throw new NoSuchElementException();
-    
     // fin number of keys less than the given key in the sorted array of keys
-    int index=rank(key); // O(logN) 
-    // there is no key less than the given key
-    if(index==0) {
-      // if the key at index 0 is equal to the given key:
-      if(key.equals(keys[index])) return keys[index];
-      else return null;
-    }
-    // if there exist keys kess than the given key in the SORTED array of keys
-    if(key.equals(keys[index]))  return keys[index];
+    int index=rank(key); // O(logN)
+
+    /* There are only two possible of cases:
+       1. the given key is equal to the key in the sorted array of keys at rank(key) position: key.compareTo(keys[rank(key)]) == 0
+       2. the given key is greater than the key in the sorted array of keys at rank(key) position: key.compareTo(keys[rank(key)]) > 0
+       NOTE:  
+          key.compareTo(keys[rank(key)]) < 0:
+          the given key being LESS than the key in the sorted array of keys at rank(key) IS NOT THE CASE: 
+             because the rank method, returns the numbe of keys LESS than
+             the given key in the sorted array of keys and if the key at the rank(key) position
+             was less than the given key, the rank method would have counted it in a first place!
+    */
+    
+    // if the given key and the key at the index position are equal
+    if(index<size && key.compareTo(keys[index])==0) return keys[index];
+   
+    // if the rank of the given key is 0 meaning and keys are not equal: 
+    // there is no key less than the given key in the sorted array of keys
+    if(index==0)
+      return null;
+
+    // otherwise: if the key at the rank index is greater than the given key, the largest key less than the given key would be at rank-1 index
     return keys[index-1];
   }
   // find the predecessor of a given key: O(logN)
   public Key predecessor(Key key) {
     if(key==null) throw new NullPointerException(); // given key is null
     if(isEmpty()) throw new NoSuchElementException(); // ST is empty
-   
     // O(logN)
     int index=rank(key); // returns the index of key in ST
     if(index==0) return null; // the first key does not have any predecessor
     return keys[index-1]; // return the key on its left (SORTED)
   }
-
   // find the smallest key that is greater than the give key (may or may not be in the ST)
   public Key ceiling(Key key) {
     // if the given key is null
@@ -192,12 +203,21 @@ public class BSA<Key extends Comparable<Key>, Value> {
 
     // check the rank of the give key: number of keys in the SORTED key array that are less than the given key:
     int index=rank(key);
-   
+    if(index<size && key.compareTo(keys[index])==0) return keys[index];
     // if the given key is greater than all keys in the sorted array of keys
     if(index==size) return null;
-
-    if(key.equals(keys[index])) return keys[index];
     else return keys[index+1]; // since index is not equal to size, this would not cause index out of bounds exception
+  }
+  // find a successor of the key in the SORTED array of keys:
+  public Key successor(Key key) {
+    // if the given key is null
+    if(key==null) throw new NullPointerException();
+    // is ST is empty:
+    if(isEmpty()) throw new NoSuchElementException();
+
+    int index=rank(key);// find the index of the given key in the array in logN time
+    if(index>=size-1) return null; 
+    return keys[index+1];
   }
   
   // helper methods:
