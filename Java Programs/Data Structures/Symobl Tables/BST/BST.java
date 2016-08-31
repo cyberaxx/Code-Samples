@@ -226,11 +226,10 @@ public class BST<Key extends Comparable<Key>, Value> {
    public Key floor(Key key) {
      // sanity check the given key:
      if(key==null) throw new NullPointerException();
+     // check if the BST is empty
+     if(isEmpty()) throw new NoSuchElementException();
      
-
-
-     return null;
-   
+     
    }
    
 }
