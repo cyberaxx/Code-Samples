@@ -323,6 +323,38 @@ public class BST<Key extends Comparable<Key>, Value> {
     // otherwise the node with the min key associated with it on x's right subtree is x's successor:
     return min(x.right);
   }
+
+  // Return number of nodes with keys associated to them LESS than the given key
+  public int rank(Key key) {
+    // sanity check the key:
+    if(key==null) throw new NullPointerException();
+    // check if the ST is empty
+    if(isEmpty()) throw new NoSuchElementException();
+
+    // otherwise recursively fid the number of node is BST with keys associated to them LESS than the given key
+    int rank=rank(root, key);
+    return rank;
+  }
+
+  // recursive helper method that finds number nodes with keys associated to them less than the given key in a BST rooted at node x:
+  private int rank(Node x, Key key) {
+    // BASE CASE: empty tree
+    if(x==null) return 0; // 0 node with keys less than the given key
+
+    // compare the given key with the key associated with the node x:
+    int cmp=key.compareTo(x.key);
+
+    // 1. if the given key is equal to the key associated with the node x:
+    //    number of nodes with keys associated to them LESS than the give key
+    //    is precisely the number of nodes on x's left subtree:
+    if(cmp==0) return size(x.left);
+    // 2. if the given key is GREATER than the key associated with the node x:
+    //    the number of nodes with keys assoctiated to them LESS than the given key is:
+    //    node x itself + all nodes on its left subtree + recurse on x's right subtree (number of nodes on x's right subtree that are less than the given key)
+    if(cmp>0) return 1+size(x.left)+rank(x.right);
+    // 3. if the given key is less than the key associated with the key at the node x there is no node in the BST rooted at node x with keys associated to it with LESS than the given key!
+    return 0;
+  }
 }
 
 
