@@ -24,6 +24,8 @@
 
 */
 
+import java.util.NoSuchElementException;
+
 public class BST<Key extends Comparable<Key>, Value> {
   // instance variables:
   private Node root; // A BST characterize by a reference to its root node
@@ -59,6 +61,9 @@ public class BST<Key extends Comparable<Key>, Value> {
 
    // API:
    // Symbol Table basic Operations: put, get, contains, delete, size, isEmpty, keys
+
+   // check if BST is empty
+   public boolean isEmpty(){return root==null;}
 
    // insertion: an insertion to a Symbol Table is always predeceased by a search to prevent duplicate keys (same keys associated to different values -> Associative Array Abstraction violation!)
    public void put(Key key, Value value) {
@@ -122,4 +127,79 @@ public class BST<Key extends Comparable<Key>, Value> {
      return 1+size(x.left)+size(x.right); 
    }
 
+   // return a value associated  with a given key (if such a key-value exists in the symbol table implemented by BST)
+   public Value get(Key key) {
+     // sanity check the given key:
+     if(key==null) throw new NullPoniterException();
+     // if ST is empty:
+     if(isEmpty()) throw new NoSuchElementException();
+
+     // check if the ke exist in the ST: 
+     // Search for the given Key in the BST by comparing keys and directing search based on the the result of comparison (similar to Binary Search in an array)
+     Node x=get(root, key);
+     if(x==null) return null; // search miss
+     return x.value; // return the value associated with the given key
+   }
+   // private recursive helper method: working on a BST by having a copy of a reference to the root node:
+   private Node get(Node x, Key key) {
+     // BASE CASE: empty BST
+     if(x==null) return null; // search miss
+     // RECURRENCE:
+     // Like Binary Search Array, compare the given key with the key of the subtree rooted at the Node x and direct
+     // search for the given key based on result of the comparison:
+     int cmp=key.compareTo(x.key);
+     if(cmp>0) // search x's right subtree
+       return get(x.right, key);
+     else if (cmp<0) // search x's left subtree
+       return get(x.left, key);
+     else return x; // return the node with the key equal to the given key: search hit 
+   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
