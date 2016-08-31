@@ -1,5 +1,8 @@
 import java.util.NoSuchElementException;
 
+import java.util.Deque;
+import java.util.ArrayDeque;
+
 /* Binary Search Array Data Structure:
    Implements ST interface using resizable parallel arrays to maintain a collection key-value pairs. */
 
@@ -221,7 +224,22 @@ public class BSA<Key extends Comparable<Key>, Value> {
     if(index>=size-1) return null; 
     return keys[index+1];
   }
-  
+  // count the number of (key-value) pairs where keys are within a particular range [lo hi] inclusive
+  public int count(Key lo, Key hi) {
+    // extreme test cases:
+    if(lo==null || hi==null) throw new NullPointerException();
+    // if ST is empty
+    if(isEmpty()) throw new NoSuchElementException();
+    // if lo and hi are equals:
+    if(lo.compareTo(hi)==0) return 0;
+    int loIndex=rank(lo);
+    int hiIndex=rank(hi);
+    if (contains(lo) && contains(hi))  return hiIndex-loIndex+1; 
+    if (contains(lo))  return hiIndex-loIndex+1; 
+    if (contains(hi))  return hiIndex-loIndex+1; 
+    return hiIndex-loIndex+1;
+  }
+
   // helper methods:
   // resize: grow and shrink the Symbol Table as required:
   private void resize(int capacity) {
