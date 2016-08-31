@@ -211,8 +211,9 @@ public class BST<Key extends Comparable<Key>, Value> {
    }
 
     /* 
-      rank:
-      select:
+      delMin:
+      delMax:
+      Hibbard Deletion:
       range count:
       range keys:
    */  
