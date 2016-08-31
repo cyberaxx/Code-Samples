@@ -264,7 +264,7 @@ public class BST<Key extends Comparable<Key>, Value> {
      // cmp > 0 : the given key is greater than the key at the node x:
      if(x.right==null) return x;
      // if the given key is less than the key of x's right child then return x
-     if(key.compareTo(x.right)<0) return x;
+     if(key.compareTo(x.right.key)<0) return x;
      return floor(x.right, key);
    }
 }
