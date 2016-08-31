@@ -240,7 +240,20 @@ public class BSA<Key extends Comparable<Key>, Value> {
     if (contains(hi))  return rank(hi)-rank(lo)+1; // if BSA contains a key equal to hi key 
     else return rank(hi)-rank(lo); // otherwise the last key (the key at the size position is the last key GREATER than hi, so it has to be excluded
   }
+  // returns Iterable collection of keys within an inclusive key range [lo hi] in sorted order:
+  public Iterable<Key> keys(Key lo, Key hi) {
+    // extreme test cases:
+    if(lo==null || hi==null) throw new NullPointerException();
+    // if ST is empty
+    if(isEmpty()) throw new NoSuchElementException();
 
+    Deque<Key> queue=new ArrayDeque<Key>();
+    // if lo key is greater than the hi key return the empty queue
+    if(lo.compareTo(hi)>0) return queue;
+    
+    if(contains(hi)) return keys(rank(lo), rank(hi), queue);
+    else return keys(rank(lo), rank(hi)-1, queue); 	
+  }
   // helper methods:
   // resize: grow and shrink the Symbol Table as required:
   private void resize(int capacity) {
@@ -255,5 +268,10 @@ public class BSA<Key extends Comparable<Key>, Value> {
     // update references to keys and values instance arrays
     keys=k;
     values=v;
+  }
+  private Iterable<Key> keys(int lo, int hi, Deque<Key> queue) {
+    for(int i=lo; i<=hi; i++)
+      queue.offer(keys[i]);
+    return queue;
   }
 }
