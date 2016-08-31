@@ -130,7 +130,7 @@ public class BST<Key extends Comparable<Key>, Value> {
    // return a value associated  with a given key (if such a key-value exists in the symbol table implemented by BST)
    public Value get(Key key) {
      // sanity check the given key:
-     if(key==null) throw new NullPoniterException();
+     if(key==null) throw new NullPointerException();
      // if ST is empty:
      if(isEmpty()) throw new NoSuchElementException();
 
@@ -154,6 +154,85 @@ public class BST<Key extends Comparable<Key>, Value> {
        return get(x.left, key);
      else return x; // return the node with the key equal to the given key: search hit 
    }
+   
+   // check if ST contains a key-value pair indexed by the given key:
+   public boolean contains(Key key){return get(key)!=null;}
+
+   // ORDERED Operaions: 
+   // For Comparable keys we can perform ordered operations on key with SORTED order represent by BST data structure
+   
+   // returns the Min key (smallest key):
+   // The left most node of the BST contains the key which is LESS than ALL keys in the BST
+   // (because of Symetric Order condition) similar to the left most key in the Binary Search Array BSA[0]
+   public Key minKey(){
+     // BST is empty?
+     if(isEmpty()) throw new NoSuchElementException();
+
+     // otherwise call a recursive helper method to find the left most node of the tree:
+     Node x=min(root); // All bst operations take root as an input argument and work with
+     return x.key; // return the key associate with the left most key in BST (min key)
+   } 
+   // find the min key in a subtree root at the Node x:
+   private Node min(Node x) {
+     // Sanity check
+     if(x==null) throw new NullPointerException();
+
+     // BASE CASE:
+     // no further left child
+     if(x.left==null) return x; // x is the left most child
+     // RECURRENCE:
+     // go to the left subtree of x:
+     return min(x.left);
+   }
+
+   // returns the key associate the max key in the BST symbol table
+   public Key maxKey() {
+     // check if BST symbol table is empty:
+     if(isEmpty()) throw new NoSuchElementException();
+     
+     // call to a recursive helper method that take the root node
+     // as an input and returns the right most node of the BST rooted
+     // at the root node:
+     Node x=max(root);
+     return x.key;// retyrn the key associate with the right most node of the BSE rooted at root node
+   }
+
+   // recursive max method: Find the right most node in the BST rooted at node x:
+   private Node max(Node x) {
+     // sanity check:
+     if(x==null) throw new NullPointerException();
+     
+     // BASE CASE: 
+     // if node x has no right child: x itself the right most child of the tree rooted at x:
+     if(x.right==null) return x;
+     // RECURRENCE:
+     // recusively move down the BST using its right link
+     return max(x.right);
+   }
+
+   /* floor:
+      ceiling:
+      predecessor:
+      successor:
+      rank:
+      select:
+      range count:
+      range keys:
+   */
+   
+
+   // return a key from the ST (if exists such a key) such that the given key is the LARGEST key in the ST LESS than or EQUAL to the given key:
+   // st.floor(key).compareTo(key) <=0
+   public Key floor(Key key) {
+     // sanity check the given key:
+     if(key==null) throw new NullPointerException();
+     
+
+
+     return null;
+   
+   }
+   
 }
 
 
