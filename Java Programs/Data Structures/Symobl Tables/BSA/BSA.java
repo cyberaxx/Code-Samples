@@ -129,8 +129,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
     if(isEmpty()) throw new NoSuchElementException("Symbol Table is empty!");
     if(k<0 || k>=size) throw new IndexOutOfBoundsException();
     return keys[k];
-  }
-  
+  }  
   // find number of keys less than the given key (righful index of the given key in the 0-based index array of SORTED keys):
   public int rank(Key key) {
     // sanity check: if the ST instance is empty return 0:
@@ -155,6 +154,52 @@ public class BSA<Key extends Comparable<Key>, Value> {
     return lo;
   }
 
+  // find the largest key less than the given key in the Sorted array of keys
+  public Key floor(Key key) {
+    if(key==null) throw new NullPointerException();
+    // empty ST
+    if(isEmpty()) throw new NoSuchElementException();
+    
+    // fin number of keys less than the given key in the sorted array of keys
+    int index=rank(key); // O(logN) 
+    // there is no key less than the given key
+    if(index==0) {
+      // if the key at index 0 is equal to the given key:
+      if(key.equals(keys[index])) return keys[index];
+      else return null;
+    }
+    // if there exist keys kess than the given key in the SORTED array of keys
+    if(key.equals(keys[index]))  return keys[index];
+    return keys[index-1];
+  }
+  // find the predecessor of a given key: O(logN)
+  public Key predecessor(Key key) {
+    if(key==null) throw new NullPointerException(); // given key is null
+    if(isEmpty()) throw new NoSuchElementException(); // ST is empty
+   
+    // O(logN)
+    int index=rank(key); // returns the index of key in ST
+    if(index==0) return null; // the first key does not have any predecessor
+    return keys[index-1]; // return the key on its left (SORTED)
+  }
+
+  // find the smallest key that is greater than the give key (may or may not be in the ST)
+  public Key ceiling(Key key) {
+    // if the given key is null
+    if(key==null) throw new NullPointerException();
+    // is ST is empty:
+    if(isEmpty()) throw new NoSuchElementException();
+
+    // check the rank of the give key: number of keys in the SORTED key array that are less than the given key:
+    int index=rank(key);
+   
+    // if the given key is greater than all keys in the sorted array of keys
+    if(index==size) return null;
+
+    if(key.equals(keys[index])) return keys[index];
+    else return keys[index+1]; // since index is not equal to size, this would not cause index out of bounds exception
+  }
+  
   // helper methods:
   // resize: grow and shrink the Symbol Table as required:
   private void resize(int capacity) {
