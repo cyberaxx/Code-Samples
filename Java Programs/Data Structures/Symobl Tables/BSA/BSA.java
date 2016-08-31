@@ -1,17 +1,24 @@
 import java.util.NoSuchElementException;
-
 import java.util.Deque;
 import java.util.ArrayDeque;
 
 /* Binary Search Array Data Structure:
-   Implements ST interface using resizable parallel arrays to maintain a collection key-value pairs. */
+   Implements ST interface using resizable parallel arrays to maintain a collection key-value pairs.
+ 
+   NOTE: following Associative Array abstraction, a value associate to a DISTINCT (unique) key, so the value can be accessed by
+         the key because there is 1-to-1 correspondence between keys and values.
+
+   NOTE: since keys are Comparable (they have a total order) we would like to iterate through set of keys in SORTED order and maintain
+         the sorted order invariance for the array that maintain a collection of keys -> DS invariance: keys array preseves its SORTED order through a sequence of 
+         insertions and deletion to the Symbol Table DS implemented by Binary Search Array.
+*/
 
 // This class implements Symbol Table interface: ST<Key,Value> for keys with total order
 public class BSA<Key extends Comparable<Key>, Value> {
 
   // instance variables:
   // parallel resizable arrays to maintain key-value pairs:
-  private Key[] keys; // generic array of keys
+  private Key[] keys; // generic array of DISTINCT keys
   private Value[] values; // generic array values
   private int size;
 
@@ -254,6 +261,7 @@ public class BSA<Key extends Comparable<Key>, Value> {
     if(contains(hi)) return keys(rank(lo), rank(hi), queue);
     else return keys(rank(lo), rank(hi)-1, queue); 	
   }
+
   // helper methods:
   // resize: grow and shrink the Symbol Table as required:
   private void resize(int capacity) {
