@@ -116,6 +116,45 @@ public class BST<Key extends Comparable<Key>, Value> {
 
   // delete a key-value pair with the given associated key from ST
   public void delete(Key key) {
+    // sanity check the key:
+    if(key==null) throw new NoSuchElementException();
+    // if there in no key-value pair associated with the given key in ST
+    if(!contains(key)) throw new NoSuchElementException();
+    // if the ST is empty
+    if(isEmpty()) throw new NoSuchElementException();
+
+    // delete the node with associated key that is equal to the given key in the BST rooted at node root
+    // and update the structure of tree and maintain DS invariance:
+    root=delete(root, key);
+  }
+
+  // recursively search for the node with the given key associated to it and delete that node and update BST structure
+  private Node delete(Node x, Key key) {
+    // BASE CASE: empty node
+    if(x==null) return null;
+
+    // RECURRENCE:
+    int cmp=key.compareTo(x.key);
+    if(cmp<0)  x.left=delete(x.left, key);
+    else if(cmp>0)  x.right=delete(x.right, key);
+
+    // if the given key equals the key associated with node x:
+    else {
+      // CASE 1. if x has only one child (or no child):
+      if(x.right==null)  x=x.left;
+      if(x.left==null)  x=x.right;
+
+      // CASE 2. if x has both left and right child:
+      //      i. swap it with its successor
+      //      ii. deleteMin on its right subtree
+
+
+
+    }
+
+    // update the count:
+    x.count=1+size(x.left)+size(x.right);
+    return x;
   }
 
   // return number of Nodes (key-value pairs) in the BST instance:
