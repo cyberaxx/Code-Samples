@@ -27,8 +27,6 @@
 import java.util.NoSuchElementException;
 import java.util.Deque;
 import java.util.ArrayDeque;
-import java.util.List;
-import java.util.ArrayList;
 
 public class BST<Key extends Comparable<Key>, Value> {
   // instance variables:
@@ -503,10 +501,6 @@ public class BST<Key extends Comparable<Key>, Value> {
     queue.offer(x.key);
     inorder(x.right, queue);
   }
-
-  /* 
-    range keys:
-  */  
 
   // return the number of keys in the ST that are within a specified range of keys [lo hi] inculsive
   public int size(Key lo, Key hi) {
