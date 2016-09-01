@@ -25,6 +25,8 @@
 */
 
 import java.util.NoSuchElementException;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 public class BST<Key extends Comparable<Key>, Value> {
   // instance variables:
@@ -261,12 +263,6 @@ public class BST<Key extends Comparable<Key>, Value> {
    return max(x.right);
   }
 
-  /* 
-    keys
-    range count:
-    range keys:
-  */  
-
   // return a key from the ST (if exists such a key) such that the given key is the LARGEST key in the ST LESS than or EQUAL to the given key:
   // st.floor(key).compareTo(key) <=0
   public Key floor(Key key) {
@@ -489,6 +485,29 @@ public class BST<Key extends Comparable<Key>, Value> {
    x.count=1+size(x.left)+size(x.right);
    return x;
   }
+  // return a Iterable collection of all keys in the ST in a SORTED order
+  public Iterable<Key> keys() {
+    // Instantiate a Queue of type Deque:
+    Deque<Key> queue=new ArrayDeque<Key>();
+    inorder(root, queue);
+    return queue;
+  }
+  // recursively traverse the BST in order:
+  private void inorder(Node x, Deque<Key> queue) {
+    // BASE CASE: empty tree
+    if(x==null) return ;
+    // RECURRENCE:
+    inorder(x.left, queue);
+    queue.offer(x.key);
+    inorder(x.right, queue);
+  }
+
+  /* 
+    range count:
+    range keys:
+  */  
+
+
 }
 
 
