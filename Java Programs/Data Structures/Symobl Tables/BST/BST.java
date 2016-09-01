@@ -392,9 +392,9 @@ public class BST<Key extends Comparable<Key>, Value> {
    // 2. if the given key is GREATER than the key associated with the node x:
    //   the number of nodes with keys assoctiated to them LESS than the given key is:
    //   node x itself + all nodes on its left subtree + recurse on x's right subtree (number of nodes on x's right subtree that are less than the given key)
-   if(cmp>0) return 1+size(x.left)+rank(x.right, key);
-   // 3. if the given key is less than the key associated with the key at the node x there is no node in the BST rooted at node x with keys associated to it with LESS than the given key!
-   return 0;
+   else if(cmp>0) return 1+size(x.left)+rank(x.right, key);
+   // 3. if the given key is less than the key associated with the key at the node x: search on x's left subtree for nodes with keys associated to them LESS than the given key!
+   else return rank(x.left, key);
   }
 
   // return the node that has key associated to it which is the k-th smallest among all keys
@@ -503,10 +503,26 @@ public class BST<Key extends Comparable<Key>, Value> {
   }
 
   /* 
-    range count:
     range keys:
   */  
 
+  // return the number of keys in the ST that are within a specified range of keys [lo hi]
+  public int size(Key lo, Key hi) {
+    // sanity check
+    if(lo==null || hi==null) throw new NullPointerException();
+    // if the ST is empty:
+    if(isEmpty()) throw new NoSuchElementException();
+    
+    // compare the lo and hi key:
+    int cmp=lo.compareTo(hi);
+    if(cmp>0) return 0; // if lo bound is greater than the hi bound return 0
+
+    // find the floor node of lo:
+    // x is a node with a key greater than or equal to lo
+    Node x=floor(root, lo); 
+    // find the ceiling node for hi
+
+  }
   // BST verification
   private boolean isBST(){return isBST(root);}
   private boolean isBST(Node x){return false;}
