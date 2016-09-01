@@ -506,22 +506,22 @@ public class BST<Key extends Comparable<Key>, Value> {
     range keys:
   */  
 
-  // return the number of keys in the ST that are within a specified range of keys [lo hi]
+  // return the number of keys in the ST that are within a specified range of keys [lo hi] inculsive
   public int size(Key lo, Key hi) {
     // sanity check
     if(lo==null || hi==null) throw new NullPointerException();
     // if the ST is empty:
     if(isEmpty()) throw new NoSuchElementException();
-    
+
     // compare the lo and hi key:
     int cmp=lo.compareTo(hi);
     if(cmp>0) return 0; // if lo bound is greater than the hi bound return 0
-
-    // find the floor node of lo:
-    // x is a node with a key greater than or equal to lo
-    Node x=floor(root, lo); 
-    // find the ceiling node for hi
-
+    // find the rank of lo key:
+    int loRank=rank(lo); // number of nodes in BST with keys associated to them less than the lo key
+    int hiRank=rank(hi); // number of nodes in BST with keys associated to them less than the hi key
+    // if the BST contains the hi key:
+    if(contains(hi)) return hiRank-loRank+1;
+    else return hiRank-loRank;
   }
   // BST verification
   private boolean isBST(){return isBST(root);}
