@@ -43,6 +43,8 @@ public class BST<Key extends Comparable<Key>, Value> {
    private Node right;
    // number of nodes in the BST rooted at the node instance:
    private int count;
+   // the height of the node in the BST
+   private int h;
 
    // Constructor:
    // default constructor
@@ -53,6 +55,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     this.key=key;
     this.value=value;
     this.count=0;
+    this.h=0;
     this.left=null;
     this.right=null;
    }
@@ -537,17 +540,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     return q;
   }
 
-  /*
-    Method height() that computes the height of the tree:
-
-   Develop two implementations: a recursive method (which takes linear time and space proportional to the height)
-
-   and method like size() that adds a field to each node in the tree (and takes linear space and constant time per query).
-
-
-
-*/
-
+  /* Method height() that computes the height of the tree */
   public int height() {
     // if tree is empty
     if(isEmpty()) throw new NoSuchElementException();
@@ -555,7 +548,6 @@ public class BST<Key extends Comparable<Key>, Value> {
     int height=height(root);
     return height;
   }
-
   private int height(Node x) {
     // BASE CASE: no left and right child
     if(x.left==null && x.right==null)  return 0;
@@ -567,8 +559,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     // 2. height of right subtree of x:
     int r=height(x.right);
     // return the height of the taller subtree + 1
-    if(r>l) return r+1;
-    else return l+1;
+    return 1+Math.max(r,l);
   } 
 
   // BST verification
