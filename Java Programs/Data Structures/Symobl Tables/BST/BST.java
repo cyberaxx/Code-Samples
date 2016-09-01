@@ -27,6 +27,8 @@
 import java.util.NoSuchElementException;
 import java.util.Deque;
 import java.util.ArrayDeque;
+import java.util.List;
+import java.util.ArrayList;
 
 public class BST<Key extends Comparable<Key>, Value> {
   // instance variables:
@@ -522,6 +524,19 @@ public class BST<Key extends Comparable<Key>, Value> {
     // if the BST contains the hi key:
     if(contains(hi)) return hiRank-loRank+1;
     else return hiRank-loRank;
+  }
+  // returns an Iterable Collection of keys within the range:
+  public Iterable<Key> keys(Key lo, Key hi) {
+    Deque<Key> q=new ArrayDeque<Key>();
+    int loRank=rank(lo); 
+    int hiRank=rank(hi);
+    int i=0;
+    for(Key key:keys()) {
+      if((i>=loRank && i<hiRank))
+	q.offer(key);
+      i++;
+    }
+    return q;
   }
   // BST verification
   private boolean isBST(){return isBST(root);}
