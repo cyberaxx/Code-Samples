@@ -536,6 +536,41 @@ public class BST<Key extends Comparable<Key>, Value> {
     }
     return q;
   }
+
+  /*
+    Method height() that computes the height of the tree:
+
+   Develop two implementations: a recursive method (which takes linear time and space proportional to the height)
+
+   and method like size() that adds a field to each node in the tree (and takes linear space and constant time per query).
+
+
+
+*/
+
+  public int height() {
+    // if tree is empty
+    if(isEmpty()) throw new NoSuchElementException();
+    // otherwise: helper recursive method with a copy of reference to the root node of BST
+    int height=height(root);
+    return height;
+  }
+
+  private int height(Node x) {
+    // BASE CASE: no left and right child
+    if(x.left==null && x.right==null)  return 0;
+    // RECURRENCE:
+    if(x.left==null) return 1+height(x.right);
+    if(x.right==null) return 1+height(x.left);
+    // 1. height of left subtree of x:
+    int l=height(x.left);
+    // 2. height of right subtree of x:
+    int r=height(x.right);
+    // return the height of the taller subtree + 1
+    if(r>l) return r+1;
+    else return l+1;
+  } 
+
   // BST verification
   private boolean isBST(){return isBST(root);}
   private boolean isBST(Node x){return false;}
