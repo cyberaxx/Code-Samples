@@ -211,8 +211,7 @@ public class BST<Key extends Comparable<Key>, Value> {
    }
 
     /* 
-      delMin:
-      delMax:
+      keys
       Hibbard Deletion:
       range count:
       range keys:
@@ -371,6 +370,38 @@ public class BST<Key extends Comparable<Key>, Value> {
     if(k<rank) return select(x.left, k); // recursively search for the k-th smallest on x's left subtree
     // if k>rank : we have to look for k-rank-1 th smallest key in ST on x's right subtree (subtract rank, and 1 for x itself)
     return select(x.right, k-rank-1);
+  }
+
+  // delete the node with the min key
+  public void delMin() {
+    // if ST is empty
+    if(isEmpty()) throw new NoSuchElementException();
+
+    // find the min key:
+    Key min=minKey();
+    // recursively search for the key, remove the node associate with the key and update the BST structure on the way up
+    root=delMin(root, min);
+  }
+  private Node delMin(Node x, Key key) {
+    // sanity check 
+    if(x==null) throw new NullPointerException();
+    
+    // BASE CASE: x has no left child: 
+    // x itself is the node with Min key in a BST rooted at x: return a reference to its right child
+    if(x.left==null) x=x.right;
+
+    // RECURRENCE: move down on the tree and update links and counts
+    else {
+      int cmp=key.compareTo(x.key);
+      if(cmp<0) x.left=delMin(x.left, key); // if the given key is less than the key associated to node x: search for the key among nodes on x's left subtree
+      else if(cmp>0) x.right=delMin(x.right, key); // if the given key is greater than the key associated with the node x: search for key among nodes on x's right subtree
+      else x=x.right; // if the given key is equal to the key associate with the node x
+    }
+
+    // recursively corrent the count for each node on the path from root to the min
+    x.count=1+size(x.left)+size(x.right);
+    
+    return x;
   }
 }
 
