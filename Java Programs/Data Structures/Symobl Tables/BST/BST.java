@@ -522,12 +522,16 @@ public class BST<Key extends Comparable<Key>, Value> {
   // returns an Iterable Collection of keys within the range:
   public Iterable<Key> keys(Key lo, Key hi) {
     Deque<Key> q=new ArrayDeque<Key>();
+    if(lo.compareTo(hi)>0) return q;
+
     int loRank=rank(lo); 
     int hiRank=rank(hi);
     int i=0;
     for(Key key:keys()) {
       if((i>=loRank && i<hiRank))
 	q.offer(key);
+      if(i==hiRank && contains(hi))
+        q.offer(key);
       i++;
     }
     return q;
