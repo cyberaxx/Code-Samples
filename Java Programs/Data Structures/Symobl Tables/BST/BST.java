@@ -73,7 +73,8 @@ public class BST<Key extends Comparable<Key>, Value> {
      argument and go over the BST change its strucrure and pass on the changes back to the root node and all nodes in the path
    */
    // Sanity check of input arguments:
-   if(key==null || value==null) throw new NullPointerException();
+   if(key==null) throw new NullPointerException();
+   if(value==null) {delete(key); return ;}
    root=put(root, key, value);
   }
 
@@ -148,8 +149,15 @@ public class BST<Key extends Comparable<Key>, Value> {
       //      i. swap it with its successor
       //      ii. deleteMin on its right subtree
 
-
-
+      // make a copy of a reference to node x:
+      Node copy=x;
+      // 1. replace node x with its successor node
+      x=successor(x, x.key);
+      // 2. delete min on the right subtree (this would delete the successor)
+      copy=delMin(copy.right, x.key);
+      // 3. rewire links:
+      x.right=copy.right;
+      x.left=copy.left;
     }
 
     // update the count:
