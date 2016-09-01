@@ -507,7 +507,9 @@ public class BST<Key extends Comparable<Key>, Value> {
     range keys:
   */  
 
-
+  // BST verification
+  private boolean isBST(){return isBST(root);}
+  private boolean isBST(Node x){return false;}
 }
 
 
