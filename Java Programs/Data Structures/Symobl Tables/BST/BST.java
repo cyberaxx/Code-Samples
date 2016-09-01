@@ -400,7 +400,6 @@ public class BST<Key extends Comparable<Key>, Value> {
 
     // recursively corrent the count for each node on the path from root to the min
     x.count=1+size(x.left)+size(x.right);
-    
     return x;
   }
 
@@ -438,6 +437,7 @@ public class BST<Key extends Comparable<Key>, Value> {
 
     // update the count:
     x.count=1+size(x.left)+size(x.right);
+    return x;
   }
 }
 
