@@ -114,8 +114,13 @@ public class BST<Key extends Comparable<Key>, Value> {
    // update the value of the given key in the BST (no structural change required!)
    else
     x.value=value;
+
    // update the size of subtree rooted at Node x
    x.count= 1+size(x.left)+size(x.right);
+   
+   // update the height of the node recursively:
+   x.h=1+Math.max(h(x.left), h(x.right));
+
    // return the reference to the root of the subtree under the consideration
    return x;
   }
@@ -170,6 +175,13 @@ public class BST<Key extends Comparable<Key>, Value> {
     return x;
   }
 
+  // return the height of the BST:
+  public int h() {return h(root);}
+  private int h(Node x) {
+    // if x is null
+    if(x==null) return 0;
+    return x.h;
+  }
   // return number of Nodes (key-value pairs) in the BST instance:
   public int size() {return size(root);}// returns the size of root Node
   // returns the size of subtree rooted at node x:
