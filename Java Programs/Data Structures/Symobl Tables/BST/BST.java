@@ -166,7 +166,7 @@ public class BST<Key extends Comparable<Key>, Value> {
       // 1. replace node x with its successor node
       x=successor(x, x.key);
       // 2. delete min on the right subtree (this would delete the successor)
-      copy.right=delMin(copy.right, x.key);
+      copy.right=delMin(copy.right);
       // 3. rewire links:
       x.right=copy.right;
       x.left=copy.left;
@@ -442,28 +442,16 @@ public class BST<Key extends Comparable<Key>, Value> {
   public void delMin() {
    // if ST is empty
    if(isEmpty()) throw new NoSuchElementException();
-
-   // find the min key:
-   Key min=minKey();
-   // recursively search for the key, remove the node associate with the key and update the BST structure on the way up
-   root=delMin(root, min);
+   // recursively search for the min key, remove the node associate with the min key and update the BST structure on the way up
+   root=delMin(root);
   }
-  private Node delMin(Node x, Key key) {
-   // sanity check 
-   if(x==null) throw new NullPointerException();
-   
+  private Node delMin(Node x) {
    // BASE CASE: x has no left child: 
    // x itself is the node with Min key in a BST rooted at x: return a reference to its right child
    if(x.left==null) x=x.right;
-
-   // RECURRENCE: move down on the tree and update links and counts
-   else {
-    int cmp=key.compareTo(x.key);
-    if(cmp<0) x.left=delMin(x.left, key); // if the given key is less than the key associated to node x: search for the key among nodes on x's left subtree
-    else if(cmp>0) x.right=delMin(x.right, key); // if the given key is greater than the key associated with the node x: search for key among nodes on x's right subtree
-    else x=x.right; // if the given key is equal to the key associate with the node x
-   }
-
+   // RECURRENCE: move down on left subtree the tree and update links and counts
+   else
+     x.left=delMin(x.left);
    // recursively corrent the count for each node on the path from root to the min
    x.count=1+size(x.left)+size(x.right);
    x.h=1+Math.max(h(x.left), h(x.right));
@@ -474,34 +462,20 @@ public class BST<Key extends Comparable<Key>, Value> {
   public void delMax() {
    // sanity check:
    if(isEmpty()) throw new NoSuchElementException(); // the BST (ST) is empty
-   
-   // fin the max key among all key in ST (BST)
-   Key max=maxKey();
-   
+  
    // recursively move down through the tree until reaching the node with max key assoicated with it, delete the node and
    // update the tree structure moving back up recursively:
-   root=delMax(root, max);
+   root=delMax(root);
   }
 
   // search for the given key among the nodes of the subtree rooted at the node x and delete the node associated with the given key and update
   // the structure of the BST rooted at node x recursively:
-  private Node delMax(Node x, Key key) {
-   // sanity check:
-   if(key==null) throw new NullPointerException();
-   // isEmpty()?
-   if(isEmpty()) throw new NoSuchElementException();
-  
+  private Node delMax(Node x) {
    // BASE CASE: x is the right most child of the subtree rooted at x
    if(x.right==null) x=x.left;
-
    // RECURRENCE: search for the key in x's subtrees
-   else {
-    int cmp=key.compareTo(x.key);
-    if(cmp>0)  x.right=delMax(x.right, key);
-    else if(cmp<0) x.left=delMax(x.left, key);
-    else x=x.left;
-   }
-
+   else
+     x.right=delMax(x.right);
    // update the count:
    x.count=1+size(x.left)+size(x.right);
    x.h=1+Math.max(h(x.left), h(x.right));
