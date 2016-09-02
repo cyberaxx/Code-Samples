@@ -679,8 +679,10 @@ public class BST<Key extends Comparable<Key>, Value> {
         // push its right child to stack
         if(t.right!=null)  x=t.right;
       }
-      stack.push(x);
-      x=x.left;
+      else {
+        stack.push(x);
+        x=x.left;
+      }
     }
   }
 
