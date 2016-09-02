@@ -2,162 +2,117 @@
 Dynamic-median finding:
 Design a data type that supports insert in logarithmic time, find the median in constant time, and remove the median in logarithmic time.
 
+Solution. Keep the median key in v; 
+use a max-oriented heap for keys less than the key of v; 
+use a min-oriented heap for keys greater than the key of v. 
+To insert, add the new key into the appropriate heap, replace v with the key extracted from that heap.
+
 http://algs4.cs.princeton.edu/24pq/
 */
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import java.util.Deque;
-import java.util.ArrayDeque;
+/*
+  Implement the MedianPQ data type using binary heap abstraction (a complete binary tree that preserve head order condition).
+  However, we modify the heap order condition invariance to address the median rather than the max or min.
+*/
 
-import java.util.Arrays;
-
-// MedianPQ is a Collection data type which contain generic keys that have total ordering:
-// It's type prameter is Key
 public class MedianPQ<Key extends Comparable<Key>> implements Iterable<Key> {
-  /* Data Structure Invariant:
-     Median is alway accessible at the head of priority queue O(1) time. 
-     This invariant has to be presevered after any structural changes to priority queue (insertion/deletion)
-  */
-  // Instance variable:
-  private Key[] items; // An array of generic type Key to maintain a collection of items
-  private int N; // number of items in an instance of MedianPQ
-  private Deque<Key> minStack; // maintain the min (Linear extra space) 
-  private Deque<Key> maxStack; // maintain the max (Linear extra space)
+  // instance field of MedianPQ:
+  // a resizable array of generic type Key to maintain a collection of keys
+  private Key[] pq;
+  // number of items in Medain PQ
+  private int N;
 
-  // Constructor:
+  // Constructor
   public MedianPQ() {
-    // initialize:
-    N=0;
-    items=(Key[]) new Comparable[2]; // UGLY CASTING: Java does NOT allow generic array creation
-    minStack=new ArrayDeque<Key>();
-    maxStack=new ArrayDeque<Key>();
-  }
-
-  public MedianPQ(Key[] inputArray) {}
-
-  // Instance methods:
-  // API: insert/delete/isEmpty/size/min/max/toArray
-
-  // Add a key to an instance of MedianPQ:
-  public void add(Key key) {
-    // OVERFLOW: check if array is not already full:
-    if(N==items.length-1)  resize(2*items.length);
-    
-    // Max, Min update:
-    if(isEmpty()) {
-      maxStack.push(key);
-      minStack.push(key);
-    }
-    //MedianPQ instance is not empty compare the curren key with the top of Min, Max stacks
-    else {
-      // if key "is less than or equal to the min (minStack.peek() item) push it to the min stack
-      if(key.compareTo(minStack.peek())<=0)  minStack.push(key);
-      // if key "is greater than or equal to the max (maxStack.peek() item) push it to the max stack
-      if(key.compareTo(maxStack.peek())>=0)  maxStack.push(key);
-    }
-
-    // add the new item to the end of MedianPQ instance array:
-    items[++N]=key;
-    // swim it up to its rightful level of competence:
-    swim(N);
-  }
-
-  // delete Median for an instance of a MedianPQ:
-  public Key delMedian(){return null;}
-
-  // return the median of an instance of a MedianPQ:
-  public Key median(){
-    // if priority queue is empty throw exception:
-    if(isEmpty()) throw new NoSuchElementException("Failed to perfom median() operation because a MedianPQ is Empty!");
-    // otherwise return the head of the array items[1]
-    return items[1];
-  }
-
-  // return the min of an instance of a MedianPQ:
-  public Key min(){
-    // if priority queue is empty throw exception:
-    if(isEmpty()) throw new NoSuchElementException("Failed to perfom min() operation because a MedianPQ is Empty!");
-    // otherwise return the top of the min stack
-    return minStack.peek();
-  }
-
-  // return the max of an instance of a MedianPQ:
-  public Key max(){
-    // if priority queue is empty throw exception:
-    if(isEmpty()) throw new NoSuchElementException("Failed to perfom max() operation because a MedianPQ is Empty!");
-    // otherwise return the top of the max stack
-    return maxStack.peek();
-  }
-
-  // return the number of elements in an instance of MedianPQ
-  public int size(){return N;}
-
-  // check if an instance of a MedianPQ is empty:
-  public boolean isEmpty(){return N==0;}
-
-  // return an array representation on of an instance of a MedianPQ
-  public Key[] toArray(){
-    // instantiate a new array of generic type Key (subtype of java Comparable interface)
-    Key[] temp=(Key[]) new Comparable[N]; // UGLY CASTING
-    for(int i=1; i<=N; i++)  temp[i-1]=items[i]; // handle the 1-based to 0-based conversion
-    return temp;
-  }
-
-  // Helper methods:
-  private void resize(int capacity){
-    // instantiate a new array of type Key[] with a new capacity:
-    Key[]temp=(Key[]) new Comparable[capacity]; // UGLY CASTIN
-    // COPY over from the original array of items, to the new array (NOTE: 1-based array is used to represent binary heap!)
-    for(int i=1; i<=N; i++) {
-      temp[i]=items[i]; // do Not touch the 0-index item
-    }
-    items=temp;
+    // use 1-based index array for heap representation
+    pq=(Key[]) new Comparable[16]; // UGLY CASTING: java does not allow generic array creation
+    N=0; // no item in the MedainPQ
   } 
+
+  // API: 
+  // instance method:
+  // insert a new item to the MedainPQ (preserving MedianPQ order condition)
+  public void insert(Key key){}
+  // remove the head (median) of the MedianPQ (preserving MedianPQ order condition)
+  public Key delMedian(){return null;}
+  // sneek peek at the head of the MedianPQ (head is the median of items in the PQ):
+  public Key median(){
+    // if MedianPQ is empty
+    if(isEmpty()) throw new NoSuchElementException();
+    // otherwise: return the head of the MedianPQ
+    return pq[1];
+  }
+  // check if MedianPQ is empty or not:
+  public boolean isEmpty(){return N==0;}
+  // number of items stored in MedianPQ
+  public int size(){return N;}
   
-  // Sink and swim operations:
-  // Sink down a new root to its rightful level of competence:
-  private void sink(int k){} 
 
-  // Swim up the new added node to its rightful level of competence:
-  private void swim(int k) {}
+  /* MedianPQ collection of generic keys implements java Iterable interface by
+     overriding its abstract method iterator(): */ 
+  @Override
+  public Iterator<Key> iterator(){return null;}
 
-  // generic comparison and swap method
-  private boolean less(int i, int j) {
-    return items[i].compareTo(items[j])<0;
-  }
-  private boolean greater(int i, int j) {
-    return items[i].compareTo(items[j])>0;
-  }
-  private void exch(int i, int j) {
-    Key temp=items[i];
-    items[i]=items[j];
-    items[j]=temp;
-  }
-
-  // check if an instance of a MedianPQ satisfies Median-Heap-Ordered condintion
+  // helper methods:
+  private void resize(int capacity){}
   private boolean isMedianPQ(){return false;}
+  private void minSink(int k){
+    // while node k has a chind in the binary heap (has not demoted to leave level yet!)
+    while(2*k<=N) {
+      int j=2*k; // k's left child in binary heap
+      // check if k has a right child and the right child is the most qualified children:
+      if(j+1<=N && compare(j+1, j)<0) j++; // the right child of node k is a candidate to replace it
 
-
-  // Iterator:
-  /*
-   As a Collection data type, MedianPQ implements java Iterable interface
-   by overriding its public abstract method iterator() to enable a client 
-   to iterate over items within the Median Priority Queue Collection typ:
-  */
-   public Iterator<Key> iterator(){return null;} 
-
-
-  // test client:
-  public static void main(String[] args) {
-    MedianPQ<Integer> pq=new MedianPQ<Integer>();
-    for(int i=0; i<11; i++) pq.add(i);
-    System.out.println("Min: " + pq.min());
-    System.out.println("Max: " + pq.max());
-    System.out.println("Median: " + pq.median());
-    System.out.print(Arrays.toString(pq.items));
-    System.out.println();
+      // compare the node k with its best of children:
+      if(compare(k,j)<0) break; // k is at its rightful position
+      // otherwise:
+      exch(k,j);
+      // move node k one level down:
+      k=j;
+    }
   }
+  private void minSwim(int k){
+    // while node k is not the root of binary MinHeap and min-heap-order condition is violated
+    while(k>1 && compare(k, k/2)<0) {
+      // promote node k to its parent's level
+      exch(k,k/2);
+      // move up one level:
+      k=k/2;
+    }
+  }
+  private void maxSink(int k){
+    // while node k has a chind in the binary heap (has not demoted to leave level yet!)
+    while(2*k<=N) {
+      int j=2*k; // k's left child in binary heap
+      // check if k has a right child and the right child is the most qualified children:
+      if(j+1<=N && compare(j+1, j)>0) j++; // the right child of node k is a candidate to replace it
 
+      // compare the node k with its best of children:
+      if(compare(k,j)>0) break; // k is at its rightful position
+      // otherwise:
+      exch(k,j);
+      // move node k one level down:
+      k=j;
+    }
+  }
+  private void maxSwim(int k){
+    // while node k is not the root of binary MaxHeap and max-heap-order condition is violated
+    while(k>1 && compare(k, k/2)>0) {
+      // promote node k to its parent's level
+      exch(k,k/2);
+      // move up one level:
+      k=k/2;
+    }
+  }
+  // generic comparison of two keys in MedianPq
+  private int compare(int i, int j) {return pq[i].compareTo(pq[j]);}
+  // swap:
+  private void exch(int i, int j) {
+    Key temp=pq[i];
+    pq[i]=pq[j];
+    pq[j]=temp;
+  }
 }
