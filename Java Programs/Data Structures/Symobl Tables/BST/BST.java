@@ -427,17 +427,21 @@ public class BST<Key extends Comparable<Key>, Value> {
    // otherwise recursively search for the node with the key assoicated to it is the k-th smallest key
    // among all node in BST rooted at node root:
    Node x=select(root, k);
+   if(x==null) return null;
    return x.key; // return the key associate with such a node
   }
   // recursive helper method: find the node with the key associated to it being kth smallest key among all keys in the BST rooted at node x
   private Node select(Node x, int k) {
-   // find the rank of node x: number of nodes in ST with keys associated to them less than x's key:
-   int rank=rank(x.key);
+   // BASE CASE: empty tree
+   if(x==null) return null;
+   // find the number of nodes in ST with keys associated to them less than x's key:
+   // number of nodes on x's left subtree:
+   int rank=size(x.left);
    // if the rank of node x was equal to the given k return node x
    if(k==rank) return x; // return node x
-   if(k<rank) return select(x.left, k); // recursively search for the k-th smallest on x's left subtree
+   else if(k<rank) return select(x.left, k); // recursively search for the k-th smallest on x's left subtree
    // if k>rank : we have to look for k-rank-1 th smallest key in ST on x's right subtree (subtract rank, and 1 for x itself)
-   return select(x.right, k-rank-1);
+   else return select(x.right, k-rank-1);
   }
 
   // delete the node with the min key
@@ -673,24 +677,13 @@ public class BST<Key extends Comparable<Key>, Value> {
   }
 
   // BST verification
-  private boolean isBST(){return isBST(root);}
-  private boolean isBST(Node x) {
+  private boolean isBST(){return isBST(root, null, null);}
+  private boolean isBST(Node x, Key min, Key max) {
     // BASE CASE:
     if(x==null) return true; // empty tree
-    if(x.left==null && x.right==null) return true; // tree with only one node
 
     // RECURRENCE: both its left and right subtree must be BSTs
     //CASE 1: one child
-    if(x.left==null) {
-      if(x.key.compareTo(x.right.key)>0) return false; // Symetric condition violation
-      return isBST(x.right);
-    }
-    if(x.right==null) {
-      if(x.key.compareTo(x.left.key)<0) return false; // Symetric condition violation
-      return isBST(x.left);
-    }
+
     //CASE 2: two children
-    if(x.key.compareTo(x.left.key)<0 || x.key.compareTo(x.right.key)>0) return false;
-    return isBST(x.left)&&isBST(x.right);
-  }
 }
