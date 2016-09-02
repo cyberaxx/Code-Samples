@@ -616,26 +616,44 @@ public class BST<Key extends Comparable<Key>, Value> {
   }
   private Node iPut(Node x, Key key, Value value) {
     boolean valUpdate=false;
+    Node r=x; // take a copy of root node
 
     // empty tree:
-    if(x==null) return new Node(key, value);
+    if(r==null) return new Node(key, value);
 
     // check if the key is already in the ST
     if(contains(key)) valUpdate=true;
 
     // Search BST
-    while(x!=null) {
+    while(r!=null) {
       // compare the given key with node x's key to find the rightful position of new key-value pair
-      int cmp=key.compareTo(x.key);
+      int cmp=key.compareTo(r.key);
       if(cmp>0) {
 	if(!valUpdate) {
 	  // the size and height of tree rooted at x has to be updated (structural changes)
-          x.count++;
+          r.count++;
           // x.h++; Not Neccessarily
         }
+	r=r.right;
+      }
+      else if(cmp<0) {
+	if(!valUpdate) {
+	  // the size and height of tree rooted at x has to be updated (structural changes)
+          r.count++;
+          // x.h++; Not Neccessarily
+        }
+	r=r.left;
+      }
+      else {
+        r.value=value; // no structural change
       }
     }
 
+    // search miss: add the new key-valu pair
+    r=new Node(key, value);
+    r.count++;
+
+    return x; // return the reference to the root node
   }
 
 
