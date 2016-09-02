@@ -656,8 +656,21 @@ public class BST<Key extends Comparable<Key>, Value> {
     return x; // return the reference to the root node
   }
 
+  // Iterative approach to create an Iterable collection from keys in the ST (in SORTED order)
+  public Iterable<Key> iKey() {
+    Deque<Key> q=new ArrayDeque<Key>(); // queue of keys in Sorted order
+
+    // if ST is empty:
+    if(isEmpty()) return q; // an empty queue
+    iInOrder(root, q); // perform iterative in order tree traversal on BST rooted at node root
+    return q;
+  }
+  private void iInOrder(Node x, Deque<Key> q) {
+    // recursion stack:
+    Deque<Key> stack=new ArrayDeque<Key>();
 
 
+  }
 
 
   // BST verification
