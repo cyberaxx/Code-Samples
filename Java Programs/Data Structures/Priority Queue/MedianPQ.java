@@ -18,8 +18,8 @@ import edu.princeton.cs.algs4.MaxPQ;
 
 public class MedianPQ<Key extends Comparable<Key>> implements Iterable<Key> {
   // instance field of MedianPQ:
-  private MinPQ<Key> minPQ;
-  private MaxPQ<Key> maxPQ;
+  private MinPQ<Key> minPQ; // collection of keys GREATER than the median
+  private MaxPQ<Key> maxPQ; // collection of keys LESS than the median
   private Key median;
 
   // Constructor
@@ -67,6 +67,14 @@ public class MedianPQ<Key extends Comparable<Key>> implements Iterable<Key> {
     }
   }
 
+  // delete the median
+  public Key delMedian() {
+    if(isEmpty()) throw new NoSuchElementException();
+    Key key=median;
+    // take the max key from collection of keys less than median to replace it with
+    median=maxPQ.delMax();
+    return key;
+  }
 
   // return median O(1)
   public Key median() {
