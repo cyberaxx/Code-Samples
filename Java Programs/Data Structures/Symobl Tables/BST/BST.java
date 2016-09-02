@@ -164,7 +164,7 @@ public class BST<Key extends Comparable<Key>, Value> {
       // make a copy of a reference to node x:
       Node copy=x;
       // 1. replace node x with its successor node
-      x=successor(x, x.key);
+      x=successor(x);
       // 2. delete min on the right subtree (this would delete the successor)
       copy.right=delMin(copy.right);
       // 3. rewire links:
@@ -335,6 +335,7 @@ public class BST<Key extends Comparable<Key>, Value> {
   private Node predecessor(Node x) {
    // sanity check:
    if(x==null) throw new NullPointerException();
+   if(isEmpty()) throw new NoSuchElementException();
    /* predecessor of a node x is the node such that its key is the largest key LESS than the key of the node x:
     1. if node x has no left child it does not have a predecessor return null
     2. if node x has left child, return the node with the max key on its left subtree that node would be the predecessor of x
@@ -377,11 +378,12 @@ public class BST<Key extends Comparable<Key>, Value> {
     return ceiling(x.right, key);
   }
   // Successor: find the node such that its associated key placed right after the given key in a SORTED array of keys
-  private Node successor(Node x, Key key) {
-   // sanity check the key:
-   if(key==null) throw new NullPointerException();
+  private Node successor(Node x) {
+   // sanity check the node:
+   if(x==null) throw new NullPointerException();
    // if ST is empty
    if(isEmpty()) throw new NoSuchElementException();
+
    // if x has no right child (x itself is the right most child) then it has no successor node in BST:
    if(x.right==null) return null;
    // otherwise the node with the min key associated with it on x's right subtree is x's successor:
