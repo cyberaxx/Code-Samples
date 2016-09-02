@@ -61,8 +61,8 @@ public class BST<Key extends Comparable<Key>, Value> {
    }
   }
 
-  // BST Constructor
-  public BST(){root=new Node();}
+  // BST default Constructor
+  public BST(){}
 
   // API:
   // Symbol Table basic Operations: put, get, contains, delete, size, isEmpty, keys
@@ -85,44 +85,46 @@ public class BST<Key extends Comparable<Key>, Value> {
 
   // private recursive helper method that takes a reference to the root of subtree and key and value to be inserted to the subtree rooted at node
   private Node put(Node x, Key key, Value value) {
-   // BASE CASE: empty BST
-   // create a new Node and return a reference to the created Node up to the parent of the subtree:
-   if(x==null) return new Node(key, value); // return a reference to a root of BST containing a key-value pair with null left and right links
-   /* RECURRENCE: 
-    if the subtree under consideration is not empty (x is the root of subtree under consideration) put a new Node with the given key into BST 
-    rooted at Node x such that the Symetric Order Condition does Not get violated:
-    1. Search for the rightful position of the new Node
-      by comparing its key to the key of the ROOT of the subtree under consideration
-    2a. If there was already a node with the same key -> update its value to the new value
-    2b. Otherwise, create a new node containing the given key-value pair to the proper subtree of Node x
-    3. pass on the structural changes back up to the root node (by updating all links on the path from node x to the newly added Node) -> recursive structure takes care of this step
-   */
+    // BASE CASE: empty BST
+    // create a new Node and return a reference to the created Node up to the parent of the subtree:
+    if(x==null) return new Node(key, value); // return a reference to a root of BST containing a key-value pair with null left and right links
+    /* RECURRENCE: 
+     if the subtree under consideration is not empty (x is the root of subtree under consideration) put a new Node with the given key into BST 
+     rooted at Node x such that the Symetric Order Condition does Not get violated:
+     1. Search for the rightful position of the new Node
+       by comparing its key to the key of the ROOT of the subtree under consideration
+     2a. If there was already a node with the same key -> update its value to the new value
+     2b. Otherwise, create a new node containing the given key-value pair to the proper subtree of Node x
+     3. pass on the structural changes back up to the root node (by updating all links on the path from node x to the newly added Node) -> recursive structure takes care of this step
+    */
 
-   // similar to comparing the new key with the key of the middle element in BSA subarray under consideration (rank operation)
-   // 1. Compare the new key to the key of the root under consideration (to findout which subtree we have to go down to)
-   int cmp=key.compareTo(x.key); // 0 + - integer
-   // 2. Recurse:
-   // a. if the given key is greater than the key at the root under consideration: 
-   //   i. the new key must be inserted to its right subtree
-   //   ii.the link to its right subtree must get modified (pass on the structural modifications up to the parent Node)
-   if(cmp>0) x.right=put(x.right, key, value);
-   // b. if the given key is less than key of the root of the subtree under consideration
-   //   i. the new key must be inserted to its left subtree
-   //   ii.the link to its left subtree must get modified (pass on the structural modifications up to the parent Node)
-   else if(cmp<0) x.left=put(x.left, key, value);
-   // c. if the key is equal to the key at the root of the subtree under consideration:
-   // update the value of the given key in the BST (no structural change required!)
-   else
-    x.value=value;
+    // similar to comparing the new key with the key of the middle element in BSA subarray under consideration (rank operation)
+    // 1. Compare the new key to the key of the root under consideration (to findout which subtree we have to go down to)
+    int cmp=key.compareTo(x.key); // 0 + - integer
+    // 2. Recurse:
+    // a. if the given key is greater than the key at the root under consideration: 
+    //   i. the new key must be inserted to its right subtree
+    //   ii.the link to its right subtree must get modified (pass on the structural modifications up to the parent Node)
+    if(cmp>0) x.right=put(x.right, key, value);
+    // b. if the given key is less than key of the root of the subtree under consideration
+    //   i. the new key must be inserted to its left subtree
+    //   ii.the link to its left subtree must get modified (pass on the structural modifications up to the parent Node)
+    else if(cmp<0) x.left=put(x.left, key, value);
+    // c. if the key is equal to the key at the root of the subtree under consideration:
+    // update the value of the given key in the BST (no structural change required!)
+    else
+      x.value=value;
 
-   // update the size of subtree rooted at Node x
-   x.count= 1+size(x.left)+size(x.right);
-   
-   // update the height of the node recursively:
-   x.h=1+Math.max(h(x.left), h(x.right));
+    // update the size of subtree rooted at Node x
+    // a. +1 for the Node x itself
+    // b. + size of its left subtree and
+    // c. + size of its right subtree
+    x.count= 1+size(x.left)+size(x.right);
+    // update the height of the node recursively:
+    x.h=1+Math.max(h(x.left), h(x.right));
 
-   // return the reference to the root of the subtree under the consideration
-   return x;
+    // return the reference to the root of the subtree under the consideration
+    return x;
   }
 
   // delete a key-value pair with the given associated key from ST
@@ -170,7 +172,10 @@ public class BST<Key extends Comparable<Key>, Value> {
       x.left=copy.left;
     }
 
-    // update the size of subtree rooted at Node x
+    // update the size of subtree rooted at Node x:
+    // a. +1 for the Node x itself
+    // b. + size of its left subtree and
+    // c. + size of its right subtree
     x.count= 1+size(x.left)+size(x.right);
    
     // update the height of the node recursively:
@@ -192,11 +197,7 @@ public class BST<Key extends Comparable<Key>, Value> {
   private int size(Node x) {
    // BASE CASE: empty BST
    if(x==null) return 0;
-   // RECURRENCE:
-   // a. +1 for the Node x itself
-   // b. + size of its left subtree and
-   // c. + size of its right subtree
-   return 1+size(x.left)+size(x.right); 
+   return x.count; 
   }
 
   // return a value associated  with a given key (if such a key-value exists in the symbol table implemented by BST)
