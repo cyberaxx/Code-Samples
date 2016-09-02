@@ -681,9 +681,8 @@ public class BST<Key extends Comparable<Key>, Value> {
   private boolean isBST(Node x, Key min, Key max) {
     // BASE CASE:
     if(x==null) return true; // empty tree
-
-    // RECURRENCE: both its left and right subtree must be BSTs
-    //CASE 1: one child
-
-    //CASE 2: two children
+    // RECURRENCE:
+    if(min!=null && x.key.compareTo(min)<=0) return false;
+    if(max!=null && x.key.compareTo(max)>=0) return false;
+    return isBST(x.left, min, x.key) && isBST(x.right, x.key, max);
 }
