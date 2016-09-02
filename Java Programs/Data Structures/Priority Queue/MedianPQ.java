@@ -93,7 +93,6 @@ public class MedianPQ<Key extends Comparable<Key>> implements Iterable<Key> {
     maxPQ.insert(median);
     median=temp;
   }
-
   private void minExch() {
     Key temp=minPQ.delMin();
     minPQ.insert(median);
@@ -102,4 +101,14 @@ public class MedianPQ<Key extends Comparable<Key>> implements Iterable<Key> {
 
   @Override
   public Iterator<Key> iterator(){return null;}
+
+  // test client:
+  public static void main(String[] args) {
+    MedianPQ<Integer> mpq=new MedianPQ<Integer>();
+    for(int i=-11; i<11; i++) mpq.insert(i);
+    System.out.println("Median: " + mpq.median());
+    System.out.println();
+  }
+
+
 }
