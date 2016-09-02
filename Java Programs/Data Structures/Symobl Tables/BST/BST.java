@@ -599,7 +599,7 @@ public class BST<Key extends Comparable<Key>, Value> {
       else // if the key was found return the node with the given key
         return x; // search hit!
     }
-    return x;
+    return x;		
   }
 
   // add the given key-value pair to the ST collection of key-value pairs
@@ -670,27 +670,17 @@ public class BST<Key extends Comparable<Key>, Value> {
     Deque<Node> stack=new ArrayDeque<Node>();
     
     // while x is not null: go to the left as far as possible
-    while(x!=null) {
-     stack.push(x);
-     x=x.left;
-    }
-
-    // while stack is not empty
-    while(!stack.isEmpty()) {
-      // pop the node from the stack:
-      Node t=stack.pop();
-      // add key associated to node t to the queue
-      q.offer(t.key);
-
-      // check its right child if it has one:
-      if(t.right!=null) {
-        // go left as far as possible:
-        Node r=t.right;
-        while(r!=null) {
-	  stack.push(r);
-          r=r.left;
-        }
+    while(x!=null||!stack.isEmpty()) {
+      if(x==null) {
+        // pop the node from the stack:
+        Node t=stack.pop();
+        // add key associated to node t to the queue
+        q.offer(t.key);       
+        // push its right child to stack
+        if(t.right!=null)  x=t.right;
       }
+      stack.push(x);
+      x=x.left;
     }
   }
 
