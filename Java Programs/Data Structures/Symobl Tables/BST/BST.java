@@ -466,7 +466,7 @@ public class BST<Key extends Comparable<Key>, Value> {
 
    // recursively corrent the count for each node on the path from root to the min
    x.count=1+size(x.left)+size(x.right);
-   x.h=Math.max(h(x.left), h(x.right));
+   x.h=1+Math.max(h(x.left), h(x.right));
    return x;
   }
 
@@ -504,6 +504,7 @@ public class BST<Key extends Comparable<Key>, Value> {
 
    // update the count:
    x.count=1+size(x.left)+size(x.right);
+   x.h=1+Math.max(h(x.left), h(x.right));
    return x;
   }
   // return a Iterable collection of all keys in the ST in a SORTED order
