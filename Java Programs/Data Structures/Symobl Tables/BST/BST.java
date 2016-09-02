@@ -515,18 +515,14 @@ public class BST<Key extends Comparable<Key>, Value> {
   private void keys(Node x, Key lo, Key hi, Deque<Key> q) {
     // BASE CASE:
     if(x==null) return ;
-    
+  
     // RECURRENCE:
     // compare the lo key with the key associated with the node x
-    if(lo.compareTo(x.key)>0) keys(x.right, lo, hi, q);
-    // compare the hi key with the key associated with the node x
-    else if(hi.compareTo(x.key)<0) keys(x.left, lo, hi, q);
-    else {
+    if(lo.compareTo(x.key)<0) keys(x.left, lo, hi, q);
+    if(lo.compareTo(x.key)<=0 &&hi.compareTo(x.key)>=0)
       // if x is within [lo hi] range: in order traversal:
-      keys(x.left, lo, hi, q);
       q.offer(x.key);
-      keys(x.right, lo, hi, q);
-    }
+    if(hi.compareTo(x.key)>0) keys(x.right, lo, hi, q);
   }
 
   // return a Iterable collection of all keys in the ST in a SORTED order
