@@ -466,6 +466,7 @@ public class BST<Key extends Comparable<Key>, Value> {
 
    // recursively corrent the count for each node on the path from root to the min
    x.count=1+size(x.left)+size(x.right);
+   x.h=Math.max(h(x.left), h(x.right));
    return x;
   }
 
