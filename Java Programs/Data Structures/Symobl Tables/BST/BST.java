@@ -170,8 +170,12 @@ public class BST<Key extends Comparable<Key>, Value> {
       x.left=copy.left;
     }
 
-    // update the count:
-    x.count=1+size(x.left)+size(x.right);
+    // update the size of subtree rooted at Node x
+    x.count= 1+size(x.left)+size(x.right);
+   
+    // update the height of the node recursively:
+    x.h=1+Math.max(h(x.left), h(x.right));
+
     return x;
   }
 
@@ -573,6 +577,29 @@ public class BST<Key extends Comparable<Key>, Value> {
     // return the height of the taller subtree + 1
     return 1+Math.max(r,l);
   } 
+
+  /* Give nonrecursive implementations of get(), put(), and keys() for BST. */
+  public Value iGet(Key key) {
+    // sanity check:
+    if(key==null) throw new NullPointerException();
+    // if ST is empty:
+    if(isEmpty()) throw new NoSuchElementException();
+
+    Node x=iGet(root, key);
+    if(x==null) return null; // search miss (no such a key-value pair exists in the ST)
+    return x.value; // return the value associated with the given key
+  }
+  private Node iGet(Node x, Key key) {
+    while(x!=null) {
+      // compare the key with the key of the node x:
+      int cmp=key.compareTo(x.key);
+      if(cmp>0) x=x.right; // go to x's right subtree (nodes with keys greater than x's key)
+      else if(cmp<0) x=x.left; // go to x's left subtree (nodes with keys less than x's keys)
+      else // if the key was found return the node with the given key
+        return x; // search hit!
+    }
+    return x;
+  }
 
   // BST verification
   private boolean isBST(){return isBST(root);}
