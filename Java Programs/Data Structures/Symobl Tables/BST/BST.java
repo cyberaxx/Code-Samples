@@ -27,6 +27,8 @@
 import java.util.NoSuchElementException;
 import java.util.Deque;
 import java.util.ArrayDeque;
+import java.util.List;
+import java.util.ArrayList;
 
 public class BST<Key extends Comparable<Key>, Value> {
   // instance variables:
@@ -670,6 +672,27 @@ public class BST<Key extends Comparable<Key>, Value> {
         x=x.left;
       }
     }
+  }
+
+  // return an Iterable collection of Keys in level order
+  public Iterable<Key> levelOrder() {
+    Deque<Node> q=new ArrayDeque<Node>();
+    List<Key> list=new ArrayList<Key>();
+
+    if(isEmpty()) return list; // return empty list
+ 
+    // recursive helper method:
+    levelOrder(root, q);
+    return q;
+  }
+
+  private void levelOrder(Node x, Deque<Key> q) {
+    // BASE CASE: empty tree
+    if(x==null) return;
+
+    // RECURRENCE: add x.left and x.right if not null to the q
+    q.offer(x.key);
+    
   }
 
   // BST verification
