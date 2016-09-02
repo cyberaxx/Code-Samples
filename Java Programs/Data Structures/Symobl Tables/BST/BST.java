@@ -483,22 +483,6 @@ public class BST<Key extends Comparable<Key>, Value> {
    x.h=1+Math.max(h(x.left), h(x.right));
    return x;
   }
-  // return a Iterable collection of all keys in the ST in a SORTED order
-  public Iterable<Key> keys() {
-    // Instantiate a Queue of type Deque:
-    Deque<Key> queue=new ArrayDeque<Key>();
-    inorder(root, queue);
-    return queue;
-  }
-  // recursively traverse the BST in order:
-  private void inorder(Node x, Deque<Key> queue) {
-    // BASE CASE: empty tree
-    if(x==null) return ;
-    // RECURRENCE:
-    inorder(x.left, queue);
-    queue.offer(x.key);
-    inorder(x.right, queue);
-  }
 
   // return the number of keys in the ST that are within a specified range of keys [lo hi] inculsive
   public int size(Key lo, Key hi) {
@@ -533,6 +517,23 @@ public class BST<Key extends Comparable<Key>, Value> {
       i++;
     }
     return q;
+  }
+
+  // return a Iterable collection of all keys in the ST in a SORTED order
+  public Iterable<Key> keys() {
+    // Instantiate a Queue of type Deque:
+    Deque<Key> queue=new ArrayDeque<Key>();
+    inorder(root, queue);
+    return queue;
+  }
+  // recursively traverse the BST in order:
+  private void inorder(Node x, Deque<Key> queue) {
+    // BASE CASE: empty tree
+    if(x==null) return ;
+    // RECURRENCE:
+    inorder(x.left, queue);
+    queue.offer(x.key);
+    inorder(x.right, queue);
   }
 
   /* Method height() that computes the height of the tree */
