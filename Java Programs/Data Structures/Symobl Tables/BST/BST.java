@@ -694,10 +694,27 @@ public class BST<Key extends Comparable<Key>, Value> {
     }
   }
 
-
   // BST verification
   private boolean isBST(){return isBST(root);}
-  private boolean isBST(Node x){return false;}
+  private boolean isBST(Node x) {
+    // BASE CASE:
+    if(x==null) return true; // empty tree
+    if(x.left==null && x.right==null) return true; // tree with only one node
+
+    // RECURRENCE: both its left and right subtree must be BSTs
+    //CASE 1: one child
+    if(x.left==null) {
+      if(x.key.compareTo(x.right.key)>0) return false; // Symetric condition violation
+      return isBST(x.right);
+    }
+    if(x.right==null) {
+      if(x.key.compareTo(x.left.key)<0) return false; // Symetric condition violation
+      return isBST(x.left);
+    }
+    //CASE 2: two children
+    if(x.key.compareTo(x.left.key)<0 || x.key.compareTo(x.right.key)>0) return false;
+    return isBST(x.left)&&isBST(x.right);
+  }
 }
 
 
