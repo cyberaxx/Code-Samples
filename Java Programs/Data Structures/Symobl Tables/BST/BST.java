@@ -678,21 +678,21 @@ public class BST<Key extends Comparable<Key>, Value> {
   public Iterable<Key> levelOrder() {
     Deque<Node> q=new ArrayDeque<Node>();
     List<Key> list=new ArrayList<Key>();
-
     if(isEmpty()) return list; // return empty list
- 
-    // recursive helper method:
-    levelOrder(root, q);
-    return q;
-  }
-
-  private void levelOrder(Node x, Deque<Key> q) {
-    // BASE CASE: empty tree
-    if(x==null) return;
-
-    // RECURRENCE: add x.left and x.right if not null to the q
-    q.offer(x.key);
-    
+    Node x=root; // copy of a reference to thr root
+    // add the x to the processing q:
+    q.offer(x);
+    // while q is not empty
+    while(!q.isEmpty()) {
+      // remove the head of queue:
+      Node t=q.poll();
+      // add the key associated with it to the list:
+      list.add(t.key);
+      // add its children to the the queue to be processed necxt:
+      if(t.left!=null) q.offer(t.left);
+      if(t.right!=null) q.offer(t.right);
+    }
+    return list;
   }
 
   // BST verification
@@ -704,4 +704,5 @@ public class BST<Key extends Comparable<Key>, Value> {
     if(min!=null && x.key.compareTo(min)<=0) return false;
     if(max!=null && x.key.compareTo(max)>=0) return false;
     return isBST(x.left, min, x.key) && isBST(x.right, x.key, max);
+  }
 }
