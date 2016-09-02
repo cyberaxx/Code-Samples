@@ -666,10 +666,32 @@ public class BST<Key extends Comparable<Key>, Value> {
     return q;
   }
   private void iInOrder(Node x, Deque<Key> q) {
-    // recursion stack:
-    Deque<Key> stack=new ArrayDeque<Key>();
+    // recursion stack of nodes:
+    Deque<Node> stack=new ArrayDeque<Node>();
+    
+    // while x is not null: go to the left as far as possible
+    while(x!=null) {
+     stack.push(x);
+     x=x.left;
+    }
 
+    // while stack is not empty
+    while(!stack.isEmpty()) {
+      // pop the node from the stack:
+      Node t=stack.pop();
+      // add key associated to node t to the queue
+      q.offer(t.key);
 
+      // check its right child if it has one:
+      if(t.right!=null) {
+        // go left as far as possible:
+        Node r=t.right;
+        while(r!=null) {
+	  stack.push(r);
+          r=r.left;
+        }
+      }
+    }
   }
 
 
