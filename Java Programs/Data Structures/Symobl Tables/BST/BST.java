@@ -131,10 +131,10 @@ public class BST<Key extends Comparable<Key>, Value> {
   public void delete(Key key) {
     // sanity check the key:
     if(key==null) throw new NoSuchElementException();
-    // if there in no key-value pair associated with the given key in ST
-    if(!contains(key)) throw new NoSuchElementException();
     // if the ST is empty
     if(isEmpty()) throw new NoSuchElementException();
+    // if there in no key-value pair associated with the given key in ST
+    if(!contains(key)) throw new NoSuchElementException();
 
     // delete the node with associated key that is equal to the given key in the BST rooted at node root
     // and update the structure of tree and maintain DS invariance:
@@ -166,7 +166,7 @@ public class BST<Key extends Comparable<Key>, Value> {
       // 1. replace node x with its successor node
       x=successor(x, x.key);
       // 2. delete min on the right subtree (this would delete the successor)
-      copy=delMin(copy.right, x.key);
+      copy.right=delMin(copy.right, x.key);
       // 3. rewire links:
       x.right=copy.right;
       x.left=copy.left;
