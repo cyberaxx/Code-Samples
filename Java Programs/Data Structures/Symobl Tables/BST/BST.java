@@ -584,7 +584,8 @@ public class BST<Key extends Comparable<Key>, Value> {
     if(key==null) throw new NullPointerException();
     // if ST is empty:
     if(isEmpty()) throw new NoSuchElementException();
-
+    
+    // Search for the given key in the BST starting from the root of the tree
     Node x=iGet(root, key);
     if(x==null) return null; // search miss (no such a key-value pair exists in the ST)
     return x.value; // return the value associated with the given key
@@ -600,6 +601,46 @@ public class BST<Key extends Comparable<Key>, Value> {
     }
     return x;
   }
+
+  // add the given key-value pair to the ST collection of key-value pairs
+  public void iPut(Key key, Value value) {
+    // sanity check:
+    if (key==null) throw new NullPointerException();
+    // if value is null invoke the delete method to remove the value associated with the key from ST
+    if (value==null) {delete(key); return ;}
+
+    // insert the key at its rightful position in the BST
+    // 1. SEARCH: if such key is already in the BST (ST), update its value
+    // 2. INSERT: add a new node with containing the given key-value pair to BST and update its structure (size, height, links on the path)
+    root=iPut(root, key, value);
+  }
+  private Node iPut(Node x, Key key, Value value) {
+    boolean valUpdate=false;
+
+    // empty tree:
+    if(x==null) return new Node(key, value);
+
+    // check if the key is already in the ST
+    if(contains(key)) valUpdate=true;
+
+    // Search BST
+    while(x!=null) {
+      // compare the given key with node x's key to find the rightful position of new key-value pair
+      int cmp=key.compareTo(x.key);
+      if(cmp>0) {
+	if(!valUpdate) {
+	  // the size and height of tree rooted at x has to be updated (structural changes)
+          x.count++;
+          // x.h++; Not Neccessarily
+        }
+      }
+    }
+
+  }
+
+
+
+
 
   // BST verification
   private boolean isBST(){return isBST(root);}
