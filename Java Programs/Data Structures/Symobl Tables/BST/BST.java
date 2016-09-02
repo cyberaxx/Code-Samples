@@ -677,7 +677,7 @@ public class BST<Key extends Comparable<Key>, Value> {
         // add key associated to node t to the queue
         q.offer(t.key);       
         // push its right child to stack
-        if(t.right!=null)  x=t.right;
+        x=t.right;
       }
       else {
         stack.push(x);
