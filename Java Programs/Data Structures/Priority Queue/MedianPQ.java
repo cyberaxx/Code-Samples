@@ -71,7 +71,7 @@ public class MedianPQ<Key extends Comparable<Key>> {
     int cmp=key.compareTo(median);
 
     /* 2. if the new key is GREATER than the median:
-          if the number of items in PQs are differen +-1
+          if the number of items in PQs are different more than +-1
             i. median has to get UPDATED.
             ii. new median has to be GREATER than the previous one
 
@@ -100,7 +100,7 @@ public class MedianPQ<Key extends Comparable<Key>> {
     }
 
     /* 3. if the new key is LESS than the median:
-          if the number of items in PQs are differen +-1
+          if the number of items in PQs are different more than +-1
             i. median has to get UPDATED.
             ii. new median has to be GREATER than the previous one
 
@@ -133,15 +133,69 @@ public class MedianPQ<Key extends Comparable<Key>> {
 
   }
 
-  
+  public Key delMedian() {
+    // check if MedianPQ is empty:
+    if(isEmpty()) throw new NoSuchElementException();
+    // copy the median:
+    Key key=median();
+
+    // if both PQs are empty:
+    if(lKeys.isEmpty() && gKeys.isEmpty()) median=null; // set the new median to null
+    else if(lKeys.isEmpty()) median=gKeys.delMin(); // set the new median to min of keys GREATER than the old median
+    else if(gKeys.isEmpty()) median=lKeys.delMax(); // set the new median to max of keys LESS than the old median
+    else {
+      // if both PQs are non-empty:
+      if(lKeys.size()>gKeys.size()) median=lKeys.delMax();
+      else if(lKeys.size()<gKeys.size())  median=gKeys.delMin();
+      else median=lKeys.delMax(); // arbitary
+    }
+  return key;
+  } 
+ 
   // test client:
   public static void main(String[] args) {
     MedianPQ<Integer> pq=new MedianPQ<Integer>();
-    for(int i=0; i<6; i++) pq.insert(i);
+    for(int i=1; i<10; i++) pq.insert(i);
     System.out.println("Median: " + pq.median());
     System.out.println("Size: " + pq.size());
     System.out.println("Empty? " + pq.isEmpty());
     System.out.println();
+
+    System.out.println();
+    System.out.println("Median: " + pq.median());
+    System.out.println(pq.delMedian());
+    System.out.println("Median: " + pq.median());
+    System.out.println("Size: " + pq.size());
+    System.out.println("Empty? " + pq.isEmpty());
+    System.out.println();
+
+    System.out.println();
+    System.out.println("Median: " + pq.median());
+    System.out.println(pq.delMedian());
+    System.out.println("Median: " + pq.median());
+    System.out.println("Size: " + pq.size());
+    System.out.println("Empty? " + pq.isEmpty());
+    System.out.println();
+
+
+    System.out.println();
+    System.out.println("Median: " + pq.median());
+    System.out.println(pq.delMedian());
+    System.out.println("Median: " + pq.median());
+    System.out.println("Size: " + pq.size());
+    System.out.println("Empty? " + pq.isEmpty());
+    System.out.println();
+
+
+    System.out.println();
+    System.out.println("Median: " + pq.median());
+    System.out.println(pq.delMedian());
+    System.out.println("Median: " + pq.median());
+    System.out.println("Size: " + pq.size());
+    System.out.println("Empty? " + pq.isEmpty());
+    System.out.println();
+
+
   }
 
 
