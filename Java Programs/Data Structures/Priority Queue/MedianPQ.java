@@ -13,8 +13,8 @@ http://algs4.cs.princeton.edu/24pq/
   To implement this data structure, instead of implicit array implementation of binary heap (that have been used in MinPQ and MaxPQ) we need a more
   sophistacate collection data type.
   We need to use one min oriented and one max oriented priority queue to maintain keys of MedianPQ:
-	1. Maintain a collection of M largest keys LESS than the median key: MinPQ (efficiently filtering out (extract) MIN key repeatedly)
-	2. Maintain a collection of M smallest keys GREATER than the medain key: MaxPQ (efficiently filtering out (extract) MAX key repeatedly)
+	1. Maintain a collection of keys LESS than the median key: MaxPQ (efficiently filtering out (extract) MAX key repeatedly)
+	2. Maintain a collection of keys GREATER than the medain key: MinPQ (efficiently filtering out (extract) MIN key repeatedly)
 	3. Data Structue invariance:
 	     i. Median is always LESS than the head of MinPQ of keys with greater values
              ii. Median is always GREATER than the head of MaxPQ of keys with less values
@@ -65,14 +65,15 @@ public class MedianPQ<Key extends Comparable<Key>> {
 
     // if the median priority queue is empty:
     if(isEmpty()) {median=key; return ;}// set the first key as the median
-    
+
     // Otherwise:
     // 1. Compare the new key with the current median:
     int cmp=key.compareTo(median);
 
     /* 2. if the new key is GREATER than the median:
-          i. median has to get UPDATED.
-          ii. new median has to be GREATER than the previous one
+          if the number of items in PQs are differen +-1
+            i. median has to get UPDATED.
+            ii. new median has to be GREATER than the previous one
 
 	  to accomplish this:
 	a. add the new key to the MinPQ of keys greater than the median
@@ -83,19 +84,25 @@ public class MedianPQ<Key extends Comparable<Key>> {
 
     Key temp;
     if(cmp>0) {
-      // a. insert the new key to the MinPQ of keys GREATER than median
+      // 1. insert the new key to the MinPQ of keys GREATER than median
       gKeys.insert(key);
-      // b. extract the Min key from the MinPQ of keys GREATER than median
-      // c. replace the extracted key with the median
-      temp=median;
-      median=gKeys.delMin();
-      // d. insert the old median to the MaxPQ of keys less than the median
-      lKeys.insert(temp);
+
+      // compare the number of keys in both PQ corresponding to keys LESS and keys GREATER than median:
+      if(Math.abs(lKeys.size()-gKeys.size())>1) {
+        // UPDATE the median:
+        // 2. extract the Min key from the MinPQ of keys GREATER than median
+        // 3. replace the extracted key with the median
+        temp=median;
+        median=gKeys.delMin();
+        // 4. insert the old median to the MaxPQ of keys less than the median
+        lKeys.insert(temp);
+      }
     }
 
     /* 3. if the new key is LESS than the median:
-          i. median has to get UPDATED.
-          ii. new median has to be LESS than the previous one
+          if the number of items in PQs are differen +-1
+            i. median has to get UPDATED.
+            ii. new median has to be GREATER than the previous one
 
 	  to accomplish this:
 	a. add the new key to the collection of keys less than the median
@@ -104,14 +111,19 @@ public class MedianPQ<Key extends Comparable<Key>> {
 	d. add the old median to the collection of keys greater than the median
     */
     if(cmp<0){
-      // a. add the new key to MaxPQ of keys less than the median
+      // 1. add the new key to MaxPQ of keys less than the median
       lKeys.insert(key);
-      // b. remve the max key from the MaxPQ of keys less than the median
-      // c. replace the median with the extracted key
-      temp=median;
-      median=lKeys.delMax();
-      // d. add the old median to the collection of keys greater than the median
-      gKeys.insert(temp); 
+
+      // compare the number of keys in both PQ corresponding to keys LESS and keys GREATER than median:
+      if(Math.abs(lKeys.size()-gKeys.size())>1) {
+        // UPDATE the median:
+        // 2. remove the max key from the MaxPQ of keys less than the median
+        // 3. replace the median with the extracted key
+        temp=median;
+        median=lKeys.delMax();
+        // 4. add the old median to the collection of keys greater than the median
+        gKeys.insert(temp);
+      }
     }
 
     /* 4. if the new key is EQUAL to the median: Do NOT support duplicate keys
@@ -121,13 +133,14 @@ public class MedianPQ<Key extends Comparable<Key>> {
 
   }
 
+  
   // test client:
   public static void main(String[] args) {
     MedianPQ<Integer> pq=new MedianPQ<Integer>();
-    for(int i=0; i<5; i++) pq.insert(i);
+    for(int i=0; i<6; i++) pq.insert(i);
     System.out.println("Median: " + pq.median());
-   System.out.println("Size: " + pq.size());
-   System.out.println("Empty? " + pq.isEmpty());
+    System.out.println("Size: " + pq.size());
+    System.out.println("Empty? " + pq.isEmpty());
     System.out.println();
   }
 
