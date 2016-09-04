@@ -705,4 +705,37 @@ public class BST<Key extends Comparable<Key>, Value> {
     if(max!=null && x.key.compareTo(max)>=0) return false;
     return isBST(x.left, min, x.key) && isBST(x.right, x.key, max);
   }
+
+  /*
+  Reverse a BST.
+  Given a standard BST (where each key is greater than the keys in its left subtree and smaller than the keys in its right subtree), 
+  design a linear-time algorithm to transform it into a reverese BST (where each key is smaller than the keys in its left subtree and greater than the keys in its right subtree). 
+  The resulting tree shape should be symmetric to the original one.
+  */
+  public void reverseBST() {
+    // if isEmpty:
+    if(isEmpty())  throw new NoSuchElementException();
+    // recursive helper function
+    root=reverse(root);
+  }
+  private Node reverse(Node x) {
+    // BASE CASE: empty tree
+    if(x==null) return x; // empty subtree rooted at x
+
+    // RECURRENCE:
+    x.left=reverse(x.left); // update left link
+    x.right=reverse(x.right); // update right link
+
+    // exchange pointers:
+    Node temp;
+    temp=x.left;
+    x.left=x.right;
+    x.right=temp;
+   
+    return x;    
+  }
+
+  // isBalanced?
+  
+
 }
