@@ -1,8 +1,3 @@
-/* 
-BST reconstruction. 
-Given the preorder traversal of a BST (not including null nodes), reconstruct the tree.
-*/
-
 import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.List;
@@ -40,10 +35,22 @@ public class BSTReconstruction {
     return inOrder;
   }
 
+/*
+BST reconstruction. 
+Given the preorder traversal of a BST (not including null nodes), reconstruct the tree.
+
+
+Level-order traversal reconstruction of a BST. 
+Given a sequence of keys, design a linear-time algorithm to determine whether it is the level-order traversal of some BST (and construct the BST itself).
+*/
+
+
+
+
+
   public static void main(String[] args) {    
     Deque<String> preOrder=new ArrayDeque<String>(Arrays.asList("z","x","t","s","q","h","d","a"));
     System.out.println(bst(preOrder));
     System.out.println(bst(new ArrayDeque<Integer>(Arrays.asList(5,3,2,4,6,7))));
-
   }
 }
