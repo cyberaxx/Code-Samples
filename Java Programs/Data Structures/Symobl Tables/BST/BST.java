@@ -735,7 +735,76 @@ public class BST<Key extends Comparable<Key>, Value> {
     return x;    
   }
 
-  // isBalanced?
-  
+  // PRE-Order traversal:
+  public Iterable<Key> preOrder() {
+    // if tree is empty:
+    if(isEmpty()) throw new NoSuchElementException();
+    // Otherwise:
+    List<Key> keys=new ArrayList<Key>(); // an empty list of keys
+    // pass a reference to a collection type to the recursive method (do NOT create any reference type insisde recursive calls!!! => MASSIVE LOITERING) 
+    preOrder(root, keys); // recursively fill out the list of keys in preOrder traversal
+    return keys;
+  }
+  // recursive helper method to recurse on the bst rooted at node x and fill out the list of keys in pre order (DLR)
+  private void preOrder(Node x, List<Key> list) {
+    // BASE CASE: 
+    // empty tree (add nothing to the list:
+    if (x==null) return ;
+    // RECURRENCE:
+    // 1. add the key associated with the node x to the list:
+    list.add(x.key); // D
+    // 2. Recurse on left subtree of x:
+    preOrder(x.left, list); // D
+    // 3. Recurse on right subtree of x:
+    preOrder(x.right, list); // R
+  }
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 }
