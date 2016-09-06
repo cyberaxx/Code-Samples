@@ -36,30 +36,32 @@ public class BSA<Key extends Comparable<Key>, Value> {
     if(key==null) throw new NullPointerException();
     if(value==null) { delete(key); return ;}
     
-    // 1. check if instance arrays are full: double the size
-    if(size==keys.length)  resize(2*keys.length);
-    // 2. find the rightful position of the given key in a sorted array of Comparable keys (preserved the ordering of the keys array):
+    // find the rightful position of the given key in a sorted array of Comparable keys (preserved the ordering of the keys array):
     int index=rank(key);
-    // 3. SEARCH among KEYS in the ST and check if ST already contains such a key associated with any value:
-    if(index<size && key.equals(keys[index])) {
+    //  SEARCH among KEYS in the ST and check if ST already contains such a key associated with any value:
+    if(index<size && key.compareTo(keys[index])==0) {
       // if the given key exisit in the ST, then simply rewirte the new value by associating it with the same key:
       values[index]=value;
+      return ;
     }
-    else {
-      // insert the new key at the given index and shift everything from "index" to size-1 one position to the right (presever the order of keys)
-      for(int i=size; i>index; i--) {
-        // shift key value pairs in parallel arrays, one position to the right:
-	keys[i]=keys[i-1];
-	values[i]=values[i-1];
-      } // this linear time insertion (cause by shitfing keys around) makes BSA not a really good implementation for ST in presence of many insertions
-	
-      // insert the new key value pair:
-      keys[index]=key;
-      values[index]=value;
 
-      // update the size:
-      size++;
-    }
+    // check if instance arrays are full: double the size
+    if(size==keys.length)  resize(2*keys.length);
+
+    // insert the new key at the given index and shift everything from "index" to size-1 one position to the right (presever the order of keys)
+    for(int i=size; i>index; i--) {
+      // shift key value pairs in parallel arrays, one position to the right:
+      keys[i]=keys[i-1];
+      values[i]=values[i-1];
+    } // this linear time insertion (cause by shitfing keys around) makes BSA not a really good implementation for ST in presence of many insertions
+	
+    // insert the new key value pair:
+    keys[index]=key;
+    values[index]=value;
+
+    // update the size:
+    size++;
+    
   }// O(n) AMORTIZED
 
   // Search for a value given a key (return the value associated with a given key): a[key]
