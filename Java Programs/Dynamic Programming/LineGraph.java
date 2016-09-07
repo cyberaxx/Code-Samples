@@ -23,8 +23,10 @@ public class LineGraph {
     }
 
     // path reconstruction:
-    for(int i=n; i>=2; i--)
-      if(memo[i]==memo[i-2]+weights[i-1]) {path.add(i-1); i--;}
+    for(int i=n; i>=1; i--) {
+      if(i<2) {path.add(i-1);}
+      else if(memo[i]==memo[i-2]+weights[i-1]) {path.add(i-1); i--;}
+    }
 
     return memo[n];
   }
