@@ -92,22 +92,43 @@ public class CoinChange {
     System.out.println("List of indexes of coins used: "+path);
 
     // coin change counting: number of possible ways to represent an amount:
-    /*
-     10
-     5
-    */
     coins=new int[]{2,5,3,6};
-    amount=10;
+    amount=10; /* 5 */
     System.out.println("Number different ways can you make change: "+coinChangeCount(coins, amount));
     
   }
-
 
   /*
     How many different ways can you make change for an amount, 
     given a list of coins?
   */
   public static int coinChangeCount(int[] coins, int amount) {
-	return 0;
+    /*
+      Consider a sequence of N coins from 1...N and all possible integral values 0.....W
+      For each possible value count the number of possible changes considering a sequence of N coins 1...N
+    */
+    int N=coins.length;
+    int W=amount; // capacity constraint
+
+    // memo table to cache recursive calls:
+    int[][] memo=new int[N+1][W+1];
+
+    // Base cases: (trivial cases)
+    // 1. how many different way can 0 with 0...N coins: 1 way {}
+    for(int i=0; i<=N; i++) memo[i][0]=1;
+    // 2. how many different way W can be change with no coins: no way
+    for(int w=1; w<=W; w++) memo[0][w]=0;
+
+    // Recurrences:
+    for(int w=0; w<=W; w++) {
+      for(int i=1; i<=N; i++) {
+        int v=coins[i-1];
+        if(v>w) // coin i cannot be used to change w which is less than its value
+	  memo[i][w]=memo[i-1][w];
+	else 
+	  memo[i][w]=memo[i-1][w]+memo[i][w-v];
+      }
+    }
+    return memo[N][W];
   }
 }
