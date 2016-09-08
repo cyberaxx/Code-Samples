@@ -9,13 +9,13 @@
   strings in a natural language or in financial data.
 */
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 public class Alignment {
 
   // penalty types: 1. insert gap to x (mismatch), 2. insert gap to y (mismatch), 3. match
-  public static double optimalAlignment(String x, String y, double[] penalties, List<Character> alignX, List<Character> alignY) {
+  public static double optimalAlignment(String x, String y, double[] penalties, Deque<Character> alignX, Deque<Character> alignY) {
     // two sequences of chars with length M and N:
     int M=x.length();
     int N=y.length();
@@ -34,9 +34,9 @@ public class Alignment {
     */
 
     // Base cases: 
-    // 1. aligning subsequences of x with empty y sequence
+    // 1. aligning subsequences of x with gaps in y sequence
     for(int i=0; i<=M; i++) memo[i][0]=i*penalties[1]; // insert a gap in y sequence
-    // 2. aligning subsequences of y with empty x sequence
+    // 2. aligning subsequences of y with gaps in x sequence
     for(int j=0; j<=N; j++) memo[0][j]=j*penalties[0]; // insert a gap in x sequence
 
     // Recurrence:
@@ -49,9 +49,9 @@ public class Alignment {
     // path reconstruction:
     int r=M; int c=N;
     while(r>0 && c>0) {
-      if(memo[r][c]==memo[r-1][c-1]+penalties[2]) {alignX.add(x.charAt(r-1)); alignY.add(y.charAt(c-1)); r--; c--;}
-      else if(memo[r][c]==memo[r][c-1]+penalties[2]) {alignX.add('_'); alignY.add(y.charAt(c-1)); c--;}
-      else {alignX.add(x.charAt(r-1)); alignY.add('_'); r--;}
+      if(memo[r][c]==memo[r-1][c-1]+penalties[2]) {alignX.push(x.charAt(r-1)); alignY.push(y.charAt(c-1)); r--; c--;}
+      else if(memo[r][c]==memo[r][c-1]+penalties[2]) {alignX.push('_'); alignY.push(y.charAt(c-1)); c--;}
+      else {alignX.push(x.charAt(r-1)); alignY.push('_'); r--;}
     }
   
     return memo[M][N];
@@ -62,8 +62,8 @@ public class Alignment {
     String y="AGAGCTC";
     double[] penalties={0.12, 0.134, 0.1122};   
 
-    List<Character> alignX=new ArrayList<Character>();// empty list of Character
-    List<Character> alignY=new ArrayList<Character>();// empty list of Character
+    Deque<Character> alignX=new ArrayDeque<Character>();// empty stack of Character
+    Deque<Character> alignY=new ArrayDeque<Character>();// empty stack of Character
 
     System.out.println("Min penalty to align x and y is: "+ optimalAlignment(x,y,penalties, alignX, alignY));
     System.out.println("alignX is: "+ alignX);
