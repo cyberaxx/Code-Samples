@@ -1,9 +1,9 @@
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 public class Knapsack {
   // return the optimal value and reconstuct the optimal path
-  public static int maxKnapsackValue(int[] values, int[] sizes, int capacity, List<Integer> path) {
+  public static int maxKnapsackValue(int[] values, int[] sizes, int capacity, Deque<Integer> path) {
     // number of available items:
     int N=values.length;
 
@@ -53,7 +53,7 @@ public class Knapsack {
       }
       else {
         // take the item:
-        path.add(r-1);
+        path.push(values[r-1]);
         r--;
         c-=sizes[r-1];
       }
@@ -66,10 +66,10 @@ public class Knapsack {
     int[] v={3,2,4,4};
     int[] w={4,3,2,3};
     int W=6;
-    List<Integer> path=new ArrayList<Integer>();// empty list of integers
+    Deque<Integer> path=new ArrayDeque<Integer>();// empty list of integers
 
     System.out.println("Max knapsack value: "+ maxKnapsackValue(v,w,W,path));
-    System.out.println("Indexes of items in knapsack: "+ path);
+    System.out.println("Items in the optimal knapsack: "+ path);
 
   }
 

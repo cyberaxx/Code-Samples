@@ -10,12 +10,12 @@ so their corresponding subtraction is also an INTEGER value
 
 */
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 public class CoinChange {
   
-  public static int minCoinChange(int[] coins, int amount, List<Integer> path) {
+  public static int minCoinChange(int[] coins, int amount, Deque<Integer> path) {
     /*  consider n coins a sequence indexed from 1 ... N
         the final solution considers all N coins, but optimal substructures (optimal solution to subproblems) 
 	consider prefixes of 1...N coins.
@@ -71,7 +71,7 @@ public class CoinChange {
         }
         else {
           // take the coins 
-    	  path.add(r-1); // index of the coin
+    	  path.push(coins[r-1]); // value of the coin
 	  c-=coins[r-1];
         }
       }
@@ -87,9 +87,9 @@ public class CoinChange {
     */
     int[] coins={1,2,5};
     int amount=11;
-    List<Integer> path=new ArrayList<Integer>();
+    Deque<Integer> path=new ArrayDeque<Integer>();
     System.out.println("Min number of coins used is: "+minCoinChange(coins, amount, path));
-    System.out.println("List of indexes of coins used: "+path);
+    System.out.println("List of coins used: "+path);
 
     // coin change counting: number of possible ways to represent an amount:
     coins=new int[]{2,5,3,6};

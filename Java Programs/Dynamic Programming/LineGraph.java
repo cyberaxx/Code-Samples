@@ -1,9 +1,9 @@
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 public class LineGraph {
 
-  public static int maxWIS(int [] weights, List<Integer> path) {
+  public static int maxWIS(int [] weights, Deque<Integer> path) {
     // number of vertices of the graph
     int n=weights.length;
     // A memo table to keep track of the value of the optimal solution to subproblems (optimal substructure)
@@ -24,8 +24,8 @@ public class LineGraph {
 
     // path reconstruction:
     for(int i=n; i>=1; i--) {
-      if(i<2) {path.add(i-1);}
-      else if(memo[i]==memo[i-2]+weights[i-1]) {path.add(i-1); i--;}
+      if(i<2) {path.push(weights[i-1]);}
+      else if(memo[i]==memo[i-2]+weights[i-1]) {path.push(weights[i-1]); i--;}
     }
 
     return memo[n];
@@ -33,7 +33,7 @@ public class LineGraph {
 
   public static void main(String[] args) {
     int [] weights=new int [args.length];
-    List<Integer> path=new ArrayList<Integer>(); // an empty list instance
+    Deque<Integer> path=new ArrayDeque<Integer>(); // an empty list instance
     for(int i=0; i<weights.length; i++)
       weights[i]=Integer.parseInt(args[i]);
     System.out.println("MAX WIS: "+maxWIS(weights, path));
