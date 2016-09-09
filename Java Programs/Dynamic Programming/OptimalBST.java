@@ -86,13 +86,6 @@ public class OptimalBST {
       }
     }
 
-    for(int r=0; r<st.length; r++) {
-     for(int c=0; c<st[r].length; c++) {
-	System.out.print(st[r][c]+"\t");
-     }
-    System.out.println();
-    }
-
     return st[0][N-1];
   }
 
