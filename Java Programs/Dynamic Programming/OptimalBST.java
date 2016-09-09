@@ -9,7 +9,8 @@
 
   Would like to find out optimal BST formation (preserve the symmetric order of nodes in BST) and also minimizes the the Average Search Time for keys in the bst
 */
-import java.util.Arrays;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 public class OptimalBST {
 
@@ -37,7 +38,7 @@ public class OptimalBST {
 
   */
 
-  public static double minSearchTime(double[] frequencies) {
+  public static double minSearchTime(double[] frequencies, Deque<Integer> path) {
     // assuming nodes labeled 1....N are in sorted order of their associated keys (such that 1<2<3<.....<N)
     int N=frequencies.length;
 
@@ -103,6 +104,8 @@ public class OptimalBST {
   }
   public static void main(String [] args) {
     double [] freqArray = new double[]{0.05, 0.4, 0.08,0.04,0.1,0.1,0.23};
-    System.out.println(minSearchTime(freqArray));
+    Deque<Integer> path=new ArrayDeque<Integer>(); // empty stack of integers
+    System.out.println(minSearchTime(freqArray, path));
+    System.out.println(path);
   }
 }
