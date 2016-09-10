@@ -18,6 +18,7 @@ public class KSInf {
     // memo table: maintain the optimal value associate with each optimal subproblem (optimal substructure)
     int[] ks=new int[W+1];
     int[] items=new int[N];
+    // space required: O(W+N)
 
     // base case: 
     ks[0]=0; // the max value of 0-capacity knapsack is 0
