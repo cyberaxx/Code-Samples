@@ -4,8 +4,6 @@
 
 import java.util.Deque;
 import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.Arrays;
 
 public class KSInf {
   public static int knapsack(int[] values, int[] weights, int capacity, boolean inf, Deque<Integer> items) {
