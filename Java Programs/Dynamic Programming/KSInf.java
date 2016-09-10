@@ -6,6 +6,47 @@ import java.util.Deque;
 import java.util.ArrayDeque;
 
 public class KSInf {
+
+  public static int knapsackInf(int[] values, int[] weights, int capacity, Deque<Integer> path) {
+    // input sanity check:
+    if(values==null || weights==null || path==null) throw new NullPointerException();
+
+    // number of items in a sequence of 1....N items:
+    int N=values.length;
+    // a sequence of all possible integral remaining capacity of the knapsack:
+    int W=capacity; // 0 .... W
+    // memo table: maintain the optimal value associate with each optimal subproblem (optimal substructure)
+    int[] ks=new int[W+1];
+    int[] items=new int[N];
+
+    // base case: 
+    ks[0]=0; // the max value of 0-capacity knapsack is 0
+    // for possible integral remaining space in the knapsack:
+    for(int w=1; w<=W; w++) {
+      for(int i=0; i<N; i++) {
+	// consider the weight and value of the i-th item in the input sequence:
+        int weight=weights[i];
+	int val=values[i];
+        // if the item does not fit the knapsack, 1 choice remains: not picking the i-th item:
+	if(weight>w) items[i]=0;
+	// Otherwise:
+	else items[i]=ks[w-weights[i]]+values[i];
+      }
+      ks[w]=max(items);
+    }
+    return ks[W];
+  }
+
+  private static int max(int[] items) {
+    // max of items (greater than 0)
+    int max=items[0];
+    for(int i=0; i<items.length; i++) {
+      if(items[i]>max)
+	max=items[i];
+    }
+    return max;
+  }
+
   public static int knapsack(int[] values, int[] weights, int capacity, boolean inf, Deque<Integer> items) {
     // input sanity check:
     if(values==null || weights==null || items==null) throw new NullPointerException();
@@ -68,6 +109,10 @@ public class KSInf {
     int capacity=10;
     boolean inf=true;
     System.out.println("Max value of the knapsack (unlimited): "+ knapsack(values,weights,capacity,inf,path));
+    System.out.println("Items in the optimal knapsack (unlimited): "+ path);
+
+    path=new ArrayDeque<Integer>();
+    System.out.println("Max value of the knapsack (unlimited): "+ knapsackInf(values,weights,capacity,path));
     System.out.println("Items in the optimal knapsack (unlimited): "+ path);
 
     path=new ArrayDeque<Integer>();
