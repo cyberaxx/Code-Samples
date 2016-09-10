@@ -76,8 +76,5 @@ public class KSInf {
     System.out.println("Max value of the knapsack (limited): "+ knapsack(values,weights,capacity,false,path));
     System.out.println("Items in the optimal knapsack (limited): "+ path);
   }
-  
-
-
 }
 
