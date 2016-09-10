@@ -7,9 +7,9 @@ import java.util.ArrayDeque;
 
 public class KSInf {
 
-  public static int knapsackInf(int[] values, int[] weights, int capacity, Deque<Integer> path) {
+  public static int knapsackInf(int[] values, int[] weights, int capacity) {
     // input sanity check:
-    if(values==null || weights==null || path==null) throw new NullPointerException();
+    if(values==null || weights==null) throw new NullPointerException();
 
     // number of items in a sequence of 1....N items:
     int N=values.length;
@@ -112,9 +112,7 @@ public class KSInf {
     System.out.println("Max value of the knapsack (unlimited): "+ knapsack(values,weights,capacity,inf,path));
     System.out.println("Items in the optimal knapsack (unlimited): "+ path);
 
-    path=new ArrayDeque<Integer>();
-    System.out.println("Max value of the knapsack (unlimited): "+ knapsackInf(values,weights,capacity,path));
-    System.out.println("Items in the optimal knapsack (unlimited): "+ path);
+    System.out.println("Max value of the knapsack (unlimited): "+ knapsackInf(values,weights,capacity));
 
     path=new ArrayDeque<Integer>();
     System.out.println("Max value of the knapsack (limited): "+ knapsack(values,weights,capacity,false,path));
