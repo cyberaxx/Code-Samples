@@ -3,7 +3,9 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class intKnapsack {
+import java.util.HashMap;
+
+public class intKnapsackRecursive {
 
   public static void main(String[] args) throws IOException {
   
@@ -18,9 +20,12 @@ public class intKnapsack {
     // Total capacity has to be integer:
     int totalCapacity = inputArrayList[2][0]; 
     
+
+    HashMap<Integer, HashMap<Integer, Integer>> memo=new HashMap<Integer, HashMap<Integer, Integer>>();
+
     // We would like to compute the maximum
     // value that could fit to the capacity
-    int maxValue = intKnapsackValue(valueArray, sizeArray, totalCapacity);
+    int maxValue = intKnapsackValue(valueArray, sizeArray, totalCapacity, sizeArray.length, memo);
     System.out.println("The maximum value that fit into the knapsack is: " + maxValue);
 
   }
@@ -67,45 +72,74 @@ public class intKnapsack {
 
   }
 
-  public static int intKnapsackValue(int [] valueArray, int [] sizeArray, int totalCapacity) {
-    // We want to fill out knapsacks with different integral capacities
-    // considering all of the items:
-    // Since the values are all chosen to be integer, the type of the matrix that keeps track
-    // of value is integer as well:
-    int [][] DP = new int [valueArray.length+1][totalCapacity+1];
-
-    // Basecases:
-    // no items:
-    for (int s = 1; s<= totalCapacity; s++)
-      DP[0][s] = 0;
-    // 0 capacity:
-    for (int i = 0; i < valueArray.length; i++)
-      DP[i][0] = 0;
-
-    // The dimensions of the DP matrix denotes the index of items we have considered so far
-    // and the remaining space in the knapsack, respectively
-    for (int s = 1; s <= totalCapacity; s++ ) {
-      for (int i = 1; i <= valueArray.length; i++) {
-	  if ( s - sizeArray[i-1] < 0 )
-	    DP[i][s] = DP[i-1][s]; 
-	  else 
-	    DP[i][s] = Math.max(DP[i-1][s - sizeArray[i-1]] + valueArray[i-1], DP[i-1][s]); 
-      }
+  public static int intKnapsackValue(int[] values, int[] weights, int W, int N, HashMap<Integer, HashMap<Integer, Integer>> memo) {
+    // if recursion has been already memoized:
+    if(memo.containsKey(W)) {
+      if(memo.get(W).containsKey(N))
+	return memo.get(W).get(N);
     }
- 
-   //matrixRenderer(DP);
-   return DP[valueArray.length][totalCapacity];
 
-  }
+    // Base cases:
+    // case 1: if knapsack has 0 capacity
+    if(W==0) {
+      HashMap<Integer, Integer> hm;
+      // Add the new solution to the memo table:
+      if(memo.containsKey(W))
+	hm=memo.get(W);
+      else
+	hm=new HashMap<Integer, Integer>();
+      hm.put(N,0);
+      memo.put(W, hm);
 
-  public static void matrixRenderer(int [][] matrix){
-    for (int i = 0; i < matrix.length; i++) {
-      for (int j = 0; j < matrix[i].length; j++) {
-        System.out.print(matrix[i][j] + "  ");
-      }
-      System.out.print("\n");
+     // The return 0
+     return 0;
     }
-    System.out.print("\n");
-  }
 
+    // case 2: if there is no item to pick
+    if(N==0) {
+      HashMap<Integer, Integer> hm;
+      // Add the new solution to the memo table:
+      if(memo.containsKey(W))
+	hm=memo.get(W);
+      else
+	hm=new HashMap<Integer, Integer>();
+      hm.put(N,0);
+      memo.put(W, hm);
+
+     // The return 0
+     return 0;
+    }
+
+    // case 3: if knapsack capacity is smaller than object size:
+    if(weights[N-1]>W) {
+      HashMap<Integer, Integer> hm;
+      // Add the new solution to the memo table:
+      if(memo.containsKey(W))
+	hm=memo.get(W);
+      else
+	hm=new HashMap<Integer, Integer>();
+      hm.put(N,0);
+      memo.put(W, hm);
+
+     // The return 0
+     return 0;
+    }
+
+    int ks=Math.max(
+		intKnapsackValue(values, weights,W,N-1, memo),
+		intKnapsackValue(values, weights,W-weights[N-1],N-1, memo)+values[N-1]
+		);
+
+    // Add the new solution to the memo table:
+    HashMap<Integer, Integer> hm;
+    if(memo.containsKey(W))
+      hm=memo.get(W);
+    else
+      hm=new HashMap<Integer, Integer>();
+
+    hm.put(N,ks);
+    memo.put(W, hm);
+
+    return ks;
+  }
 }
