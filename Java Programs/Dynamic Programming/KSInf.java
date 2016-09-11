@@ -34,19 +34,9 @@ public class KSInf {
 	// Otherwise:
 	else items[i]=Math.max(ks[w-weight]+val, items[i-1]);
       }
-      ks[w]=max(items);
+      ks[w]=items[N];
     }
     return ks[W];
-  }
-
-  private static int max(int[] items) {
-    // max of items (greater than 0)
-    int max=items[0];
-    for(int i=0; i<items.length; i++) {
-      if(items[i]>max)
-	max=items[i];
-    }
-    return max;
   }
 
   public static int knapsack(int[] values, int[] weights, int capacity, boolean inf, Deque<Integer> items) {
