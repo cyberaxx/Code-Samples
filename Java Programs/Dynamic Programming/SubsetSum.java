@@ -55,7 +55,7 @@ public class SubsetSum {
       }
     }
     return subsetSum[N][W];
-  }
+  } // O(NW)
 
   public static void main(String[] args) {
     Deque<Integer> path=new ArrayDeque<Integer>();
