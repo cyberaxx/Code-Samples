@@ -27,7 +27,6 @@ public class intKnapsackRecursive {
     // value that could fit to the capacity
     int maxValue = intKnapsackValue(valueArray, sizeArray, totalCapacity, sizeArray.length, memo);
     System.out.println("The maximum value that fit into the knapsack is: " + maxValue);
-
   }
 
   // Reading input from the file:
