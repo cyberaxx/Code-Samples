@@ -31,7 +31,7 @@ public class KSInf {
         int weight=weights[i-1];
 	int val=values[i-1];
         // if the item does not fit the knapsack, 1 choice remains: not picking the i-th item:
-	if(weight>w) items[i]=0;
+	if(weight>w) items[i]=items[i-1];
 	// Otherwise:
 	else items[i]=Math.max(ks[w-weight]+val, items[i-1]);
       }
