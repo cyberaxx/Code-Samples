@@ -19,6 +19,7 @@ public class KSInf {
     int[] ks=new int[W+1];
     int[] items=new int[N+1];
     // space required: O(W+N)
+    // time complexity O(WN)
 
     // base case:
     items[0]=0; 
