@@ -17,21 +17,22 @@ public class KSInf {
     int W=capacity; // 0 .... W
     // memo table: maintain the optimal value associate with each optimal subproblem (optimal substructure)
     int[] ks=new int[W+1];
-    int[] items=new int[N];
+    int[] items=new int[N+1];
     // space required: O(W+N)
 
-    // base case: 
+    // base case:
+    items[0]=0; 
     ks[0]=0; // the max value of 0-capacity knapsack is 0
     // for possible integral remaining space in the knapsack:
     for(int w=1; w<=W; w++) {
-      for(int i=0; i<N; i++) {
+      for(int i=1; i<=N; i++) {
 	// consider the weight and value of the i-th item in the input sequence:
-        int weight=weights[i];
-	int val=values[i];
+        int weight=weights[i-1];
+	int val=values[i-1];
         // if the item does not fit the knapsack, 1 choice remains: not picking the i-th item:
 	if(weight>w) items[i]=0;
 	// Otherwise:
-	else items[i]=ks[w-weights[i]]+values[i];
+	else items[i]=Math.max(ks[w-weight]+val, items[i-1]);
       }
       ks[w]=max(items);
     }
