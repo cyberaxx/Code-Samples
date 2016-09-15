@@ -61,6 +61,43 @@ public class Graph {
   }
 
   // 3. query methods
+  public int degree(int v) {
+    //  validate v
+    validate(v);
+    // degree of vertex v: number of edges incident to v
+    return adj[v].size();
+  }
+
+  public int minDegree(){
+    int min=adj[0].size();
+    for(int v=1; v<V; v++)
+      if(adj[v].size()<min)
+        min=adj[v].size();
+    return min;
+  }
+
+  public int maxDegree(){
+    int max=adj[0].size();
+    for(int v=1; v<V; v++)
+      if(adj[v].size()>max)
+        max=adj[v].size();
+    return max;
+  }
+
+  public int selfLoopCounter(){
+    int count=0;
+    for(int v=1; v<V; v++)
+      if(adj[v].contains(v))
+        count++;
+    return count/2; // we count
+  }
+
+  // average degree is the average number of edges
+  // incident to each vertec of the graph: Sum(degree(v))/v
+  public int avgDegree(){
+    // sum(degree(v)) for all v's: 2*E (each edge is incident to its both endpoints)
+    return (2*E)/V;
+  }
 
   // helper methods: vertex validator
   private void validate(int v) {

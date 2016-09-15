@@ -13,6 +13,11 @@ public class GraphLauncher {
     for(int i=0; i<5; i++)
       System.out.println(i+": "+G.adj(i));
 
+    System.out.println("Degree of vertex "+4+": "+G.degree(4));
+    System.out.println("Max Degree: "+G.maxDegree());
+    System.out.println("Min Degree: "+G.minDegree());
+    System.out.println("Average Degree: "+G.avgDegree());
+    System.out.println("Number of Self Loops: "+G.selfLoopCounter());
   }
 
 }
