@@ -1,94 +1,70 @@
-import java.util.List;
-import java.util.LinkedList;
-import java.util.ArrayList;
+/*
+  Undirected Graph Abstraction
+*/
+import java.util.List; // List ADT specification
+import java.util.LinkedList; // List interface implementation using Doubly Linked List
 
 public class Graph {
-  // instance variable:
-  private final int V; // number of Vertices of the graph
-  private int E; // number of Edges of the graph
-  private List<Integer>[] adj; // adjacency List of the Graph: private ArrayList<List<Integer>> adj
+
+  // instance member: Graph Representation
+  // Adjacency List: 
+  // A vertex index array of Lists
+  private List<Integer>[] adj;
+  // number of vertices
+  private int V;
+  // number of edges
+  private int E;
 
   // Constructor:
+  // takes v and construct a graph with v vertices and 0 edge
   public Graph(int v) {
-    // number of vertices can not be negative
-    if(v<0) throw new IllegalArgumentException("Number of vertices can not be negative!");
-
-    // initialize instance fields:
-    this.V=v;
-    this.E=0;
-    // instantiate the adjacency list:
-    adj=(List<Integer>[]) new List[V]; // UGLY CASTIN: no generic array creation
+    // initialize instance variables:
+    V=v;
+    E=0;    
+    // Adjancency list:
+    adj=new List[V];
+    // initialize adjacency list of each vertex v:
     for(int i=0; i<V; i++) {
-      adj[i]=new LinkedList<Integer>();
-    } 
+      adj[i]=new LinkedList<Integer>(); // an empty linked list
+    }
   }
 
-  public Graph(Graph G) {
-    // initialize number of vertices and edges
-    this.V=G.V();
-    this.E=G.E();
+  // API: 1. getter methods 2. modification methods 3. query methods
 
-    // instantiate the adjacency list:
-    adj=(List<Integer>[]) new List[V]; // UGLY CASTIN: no generic array creation
-    for(int v=0; v<V; v++) {
-      adj[v]=new LinkedList<Integer>(G.adj(v));
-    } 
-  }
-
-  // API:
-  // instance methods:
+  // 1. getter methods
   public int V(){return V;}
   public int E(){return E;}
+  public List<Integer> adj(int v) {
+    // validate v:
+    validate(v);
+    // returns a list vertices incident to v
+    return adj[v]; 
+  }
+
+  // 2. modification methods
   public void addEdge(int v, int w) {
-    // validate vertices:
-    validateVertex(v);
-    validateVertex(w);
-    // undirected graph: add v to the adj[w] and add w to adj[v]:
-    adj[v].add(w); // adds w to the tail of DList adj[v] in constant time
-    adj[w].add(v); // adds v to the tail of DList adj[w] in constant time
-    // update the edge count:
+    // validate v, w:
+    validate(v);
+    validate(w);
+
+    // NOTE: parallel edges and selfloops are allowed
+    //       in this implementation
+
+    // since G is an undirected graph:
+    // 1. add v to the adj list of w
+    adj[w].add(v);
+    // 2. add w to the adj list of v
+    adj[v].add(w);
+
+    // increase the number of edges:
     E++;
   }
 
-  // returns an Iterable data type that represents all vertices adjacent to vertex v
-  public List<Integer> adj(int v){return adj[v];}
-  
-  // compute the degree of vertex v in an instance of a Graph type:
-  public int degree(int v) {
-    validateVertex(v);  
-    return adj(v).size();
+  // 3. query methods
+
+  // helper methods: vertex validator
+  private void validate(int v) {
+    if(v<0 || v>=V) throw new IndexOutOfBoundsException("Vertex index is out of legal bounds!");
   }
 
-  // Helper methods:
-  private void validateVertex(int v){
-    if(v<0 || v>=this.V) throw new IllegalArgumentException();
-  }
-
-  // static methods:
-  // find the max degree among vertice of a given instance of Graph type
-  public static int maxDegree(Graph G) {
-    int maxDegree=G.adj(0).size();
-    for(int v=1; v<G.V(); v++)
-      if (maxDegree<G.adj(v).size())  maxDegree=G.adj(v).size();
-    return maxDegree;
-  }
-
-  // find the min degree among vertice of a given instance of Graph type
-  public static int minDegree(Graph G) {
-    int minDegree=G.adj(0).size();
-    for(int v=1; v<G.V(); v++)
-      if (minDegree>G.adj(v).size())  minDegree=G.adj(v).size();
-    return minDegree;
-  }
-
-  // sum of degrees of all vertices in an undirected graph is 2*E (twice the number of edges because each edge counts twice (once from each end point)
-  public static int averageDegree(Graph G) {return (2*G.E())/G.V();}
-
-  // count number of self loops in a given instance of Graph type
-  public static int SelfLoopCount(Graph G) {
-    int count=0;
-    for(int v=0; v<G.V(); v++)
-      if(G.adj(v).contains(v)) count++;
-    return count;
-  }
 }
