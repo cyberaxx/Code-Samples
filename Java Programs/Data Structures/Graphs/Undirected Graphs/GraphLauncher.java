@@ -3,6 +3,9 @@ public class GraphLauncher {
   // test client for the graph API
   public static void main(String[] args) {
     Graph G=new Graph(5);
+
+    G.addEdge(0, 0);
+    G.addEdge(1, 1);
     G.addEdge(1, 2);
     G.addEdge(0, 3);
     G.addEdge(4, 1);

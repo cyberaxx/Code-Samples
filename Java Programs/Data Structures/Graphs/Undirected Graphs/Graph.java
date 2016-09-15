@@ -86,10 +86,11 @@ public class Graph {
 
   public int selfLoopCounter(){
     int count=0;
-    for(int v=1; v<V; v++)
-      if(adj[v].contains(v))
-        count++;
-    return count/2; // we count
+    for(int v=0; v<V; v++)
+      for(Integer w:adj[v])
+	if(w==v)
+          count++;
+    return count/2; // we count each self loop twice (once iserting a selfloop addEdge(v,v) it got inserted twice
   }
 
   // average degree is the average number of edges
