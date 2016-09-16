@@ -20,6 +20,7 @@ public class CC {
     int n=G.V();
     marked=new boolean[n];
     edgeTo=new int[n];
+    id=new int[n];
     count=0;
 
     // from all vertices of the G
@@ -47,28 +48,26 @@ public class CC {
   }
 
   // API:
-
   // number of connected components:
   public int count(){return count;}
-
+  public boolean isConnected(){return count==1;}
   // nodes in each connected component:
-  public Iterable<Integer> components() {
+  public List<List<Integer>> components() {
     List<List<Integer>> components=new ArrayList<List<Integer>>();
-    return null;
+    for(int c=0; c<count; c++) {
+      List<Integer> cc=new LinkedList<Integer>();
+      for(int i=0; i<id.length; i++) {
+	if(id[i]==c)
+	  cc.add(i);
+      }
+      components.add(cc);
+    }
+    return components;
   }
- 
   // check v and w belongs to the same connected component (v and w are connected, or there exists a path between v and w)
   public boolean isConnected (int v, int w) {
     validate(v); validate(w);
     return id[v]==id[w];
-  }
-
-  public Iterable<Integer> path(int v, int w) {
-    validate(v); validate(w);
-    if(!isConnected(v,w)) return null; // not connected
-
-    Deque<Integer> path;
-    return null;
   }
 
   private void validate(int v) {

@@ -2,8 +2,6 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Deque;
 import java.util.ArrayDeque;
-import java.util.Random;
-import java.util.Arrays;
 
 public class GraphLauncher {
 
@@ -23,7 +21,6 @@ public class GraphLauncher {
     for(int i=0; i<5; i++)
       System.out.println(i+": "+G.adj(i));
 
-
     System.out.println();
     System.out.println();
 
@@ -33,6 +30,14 @@ public class GraphLauncher {
     System.out.println("The path to 4: "+bfs.path(4));
     System.out.println("is G connected? "+bfs.isConnected());
 
+    System.out.println();
+    System.out.println();
+
+    CC cc=new CC(G);
+    System.out.println("is G connected? "+cc.isConnected());
+    System.out.println("is 3 connect to 4 "+cc.isConnected(3,4));
+    System.out.println("Number of conencted components: "+cc.count());
+    System.out.println("All conennted componenets are: "+cc.components());
 
 /*
     List[] adj=new List[5];
