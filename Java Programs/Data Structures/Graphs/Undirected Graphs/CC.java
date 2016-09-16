@@ -8,10 +8,9 @@ public class CC {
 
   // vertex index array of boolean to keep track of visited vertices:
   private boolean[] marked;
-  // vertex index array of parent pointers:
-  private int[] edgeTo;
   // vertex index array of cc id
   private int[] id;
+  private int[] size;
   // number of cc's
   private int count;
    
@@ -19,7 +18,7 @@ public class CC {
     // number of veritces:
     int n=G.V();
     marked=new boolean[n];
-    edgeTo=new int[n];
+    size=new int[n];
     id=new int[n];
     count=0;
 
@@ -37,19 +36,21 @@ public class CC {
   private void dfs(Graph G, int v) {
     // mark v visited:
     marked[v]=true;
+    id[v]=count;
+    size[count]++;
     // recursively visit all UNvisited vertices adjacent to v in graph G
-    for(Integer w:G.adj(v)) {
-      if(!marked[w]) {
-        edgeTo[w]=v;
-	id[w]=count;
+    for(Integer w:G.adj(v))
+      if(!marked[w])
 	dfs(G, w);
-      }
-    }
   }
 
   // API:
   // number of connected components:
   public int count(){return count;}
+  public int size(int v){
+    validate(v);
+    return size[id[v]];
+  }
   public boolean isConnected(){return count==1;}
   // nodes in each connected component:
   public List<List<Integer>> components() {

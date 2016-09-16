@@ -36,6 +36,7 @@ public class GraphLauncher {
     CC cc=new CC(G);
     System.out.println("is G connected? "+cc.isConnected());
     System.out.println("is 3 connect to 4 "+cc.isConnected(3,4));
+    System.out.println("Number of nodes in 2's cc: "+cc.size(2));
     System.out.println("Number of conencted components: "+cc.count());
     System.out.println("All conennted componenets are: "+cc.components());
 
