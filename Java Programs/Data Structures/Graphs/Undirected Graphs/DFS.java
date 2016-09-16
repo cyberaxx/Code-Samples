@@ -52,25 +52,13 @@ public class DFS {
     }
     // once all vertices are marked visited, the recursive algorithm terminates
   }
-    
-
-
-
-
-
-
-
-
-
-
-
 
   // API: graph processing methods for clients:
 
   // return true if the exist a path between the source vertex and v
   // true if v was reachable from the source vertex
   // false if v and the source vertex belong to two different connected components
-  public boolean hasPath(int v) {
+  public boolean hasPathTo(int v) {
     validate(v);
     return marked[v];
   }
@@ -80,6 +68,25 @@ public class DFS {
   // null, otherwise
   public Iterable<Integer> path(int v){return null;}
 
+  // return all vertices on the path from the source of
+  // the search to all vertices reachable from the source
+  public Iterable<Integer> dfsTree(){
+    // queue of vertex indeces:
+    Deque<Integer> path=new ArrayDeque<Integer>();
+    for(int v=0; v<marked.length; v++)
+      // if the vertex has been visited, it blongs to the DFS tree
+      if(marked[v])
+        path.offer(v);
+    return path;
+  }
+
+  // G is connected if the source can reach all vertices:
+  public boolean isConnected() {
+    for(int v=0; v<marked.length; v++)
+      if(marked[v]==false)
+        return false;
+    return true;
+  }
 
   // helper methods
   private void validate (int v) {
@@ -157,18 +164,6 @@ public class DFS {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
   // DFS implementation using Adjacency List representation of Graph (without using graph object)
   public static void dfs(List<Integer>[] adj, int s, boolean[] visited, int[] edgeTo) {
     if(s<0 || s>=adj.length) throw new IndexOutOfBoundsException("Source vertex is out of legal bounds");
@@ -200,5 +195,31 @@ public class DFS {
       }
     }
   }
+
+  // test client for the graph API
+  public static void main(String[] args) {
+    Graph G=new Graph(5);
+
+    G.addEdge(1, 2);
+    G.addEdge(0, 3);
+    G.addEdge(4, 1);
+    G.addEdge(4, 3);
+    G.addEdge(1, 0);
+    G.addEdge(3, 2);
+
+    for(int i=0; i<5; i++)
+      System.out.println(i+": "+G.adj(i));
+
+
+    System.out.println();
+    System.out.println();
+
+    DFS dfs=new DFS(G, 0);
+    System.out.println("Visited vertices on DFS: "+dfs.dfsTree());
+    System.out.println("is 4 connect to 0? "+dfs.hasPathTo(4));
+    System.out.println("is G connected? "+dfs.isConnected());
+
+ }   
+
 }
 

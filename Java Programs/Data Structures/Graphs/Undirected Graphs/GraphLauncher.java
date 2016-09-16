@@ -31,19 +31,6 @@ public class GraphLauncher {
     System.out.println("Average Degree: "+G.avgDegree());
     System.out.println("Number of Self Loops: "+G.selfLoopCounter());
 
-    System.out.println();
-    System.out.println();
-
-    Graph g=new Graph(G);
-    System.out.println("Degree of vertex "+4+": "+g.degree(4));
-    System.out.println("Max Degree: "+g.maxDegree());
-    System.out.println("Min Degree: "+g.minDegree());
-    System.out.println("Average Degree: "+g.avgDegree());
-    System.out.println("Number of Self Loops: "+g.selfLoopCounter());
-
-    for(int i=0; i<5; i++)
-      System.out.println(i+": "+g.adj(i));
-
 /*
     List[] adj=new List[5];
     for(int i=0; i<adj.length; i++) {
