@@ -16,6 +16,8 @@ public class DFS {
   private boolean[] marked;
   // a vertex index array to keep parent pointer (to reconstruct DFS tree)
   private int[] edgeTo;
+  // the source vertex of the search
+  private int s;
 
   // Constructor:
   // Like all other graph processing algorithm, the processing part
@@ -27,6 +29,8 @@ public class DFS {
     marked=new boolean[v]; // initially all vertices are not unvisited
     // initialze the parent poniter array
     edgeTo=new int[v];
+    // initialize the source of the search
+    this.s=s;
 
     // recursively visit all vertices REACHABLE from vertex s (source vertex)
     // that has not been visited previously:
@@ -66,7 +70,24 @@ public class DFS {
   // if there exist a simple path from the source vertex
   // to v, return vertices on such a path
   // null, otherwise
-  public Iterable<Integer> path(int v){return null;}
+  public Iterable<Integer> path(int v){
+    validate(v);
+    // check if the source has visited vertex v or not:
+    if(marked[v]==false) return null;
+
+    // Otherwise:
+    Deque<Integer> stack=new ArrayDeque<Integer>();
+    stack.push(v);
+    while(edgeTo[v]!=s) {
+      stack.push(edgeTo[v]);
+      v=edgeTo[v]; // follow the parent pointer
+    }
+    // add the source vertex to the path:
+    stack.push(s);
+
+    // return the path
+    return stack;
+  }
 
   // return all vertices on the path from the source of
   // the search to all vertices reachable from the source
@@ -177,7 +198,6 @@ public class DFS {
     // Since vertices are marked during exploration, each vertex would be visited
     // at most once, and each edge would be visited at most twice (once from each endpoint)
     dfsVisit(adj, s, visited, edgeTo); // Linear time and space complexity :O(V+2E)
-
   }
 
   private static void dfsVisit(List<Integer>[] adj, int v, boolean[] visited, int[] edgeTo) {
@@ -216,8 +236,10 @@ public class DFS {
 
     DFS dfs=new DFS(G, 0);
     System.out.println("Visited vertices on DFS: "+dfs.dfsTree());
-    System.out.println("is 4 connect to 0? "+dfs.hasPathTo(4));
+    System.out.println("is 4 connect to the source? "+dfs.hasPathTo(4));
+    System.out.println("The path to 4: "+dfs.path(4));
     System.out.println("is G connected? "+dfs.isConnected());
+
 
  }   
 
