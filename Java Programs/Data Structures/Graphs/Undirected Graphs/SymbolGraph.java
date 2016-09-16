@@ -109,7 +109,6 @@ public class SymbolGraph {
     validate(vertex);
     return vertexMap.get(vertex);
   }
-
   public String nameOf(int v) {
     validate(v);
     return vertexKeys[v];
