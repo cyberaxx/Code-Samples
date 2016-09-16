@@ -51,26 +51,18 @@ public class CC {
     validate(v);
     return size[id[v]];
   }
-  public boolean isConnected(){return count==1;}
-  // nodes in each connected component:
-  public List<List<Integer>> components() {
-    List<List<Integer>> components=new ArrayList<List<Integer>>();
-    for(int c=0; c<count; c++) {
-      List<Integer> cc=new LinkedList<Integer>();
-      for(int i=0; i<id.length; i++) {
-	if(id[i]==c)
-	  cc.add(i);
-      }
-      components.add(cc);
-    }
-    return components;
+  public int id(int v){
+    validate(v);
+    return id[v];
   }
+  public boolean isConnected(){return count==1;}
   // check v and w belongs to the same connected component (v and w are connected, or there exists a path between v and w)
   public boolean isConnected (int v, int w) {
     validate(v); validate(w);
     return id[v]==id[w];
   }
 
+  // helper method
   private void validate(int v) {
     int n=marked.length;
     if(v<0||v>=n) throw new IndexOutOfBoundsException();

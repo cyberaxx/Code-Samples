@@ -38,7 +38,19 @@ public class GraphLauncher {
     System.out.println("is 3 connect to 4 "+cc.isConnected(3,4));
     System.out.println("Number of nodes in 2's cc: "+cc.size(2));
     System.out.println("Number of conencted components: "+cc.count());
-    System.out.println("All conennted componenets are: "+cc.components());
+
+    // nodes in each connected component:
+    // array of queues:
+    Deque[] components=new Deque[cc.count()];
+    for(int c=0; c<cc.count(); c++)
+      components[c]=new ArrayDeque<Integer>();
+    for(int v=0; v<G.V(); v++)
+      components[cc.id(v)].offer(v);
+
+    System.out.println("G's conennted componenets are: ");
+    for(int c=0; c<cc.count(); c++)
+      System.out.println(components[c]);
+
 
 /*
     List[] adj=new List[5];
