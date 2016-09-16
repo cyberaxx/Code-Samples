@@ -21,9 +21,13 @@ To accommodate such applications, we define an input format with the following p
 
 public class SymbolGraph {
   // instance variables:
+/*
+  REUSE! :)
   private int V;
   private int E;
   private List<Integer>[] adj;
+*/
+  private Graph graph;
 
   // For non-integer vertices we need a Map and Map-1
   // A Map to map a non-integer vertex to an integer between 0 to V-1
@@ -58,6 +62,10 @@ public class SymbolGraph {
       }
 
       // 2. initialize graph parameters:
+      
+      /* 
+	REUSE! :)
+
       V=vertexKeys.length;
       E=0;
       adj=new List[V]; // array of linkedlists
@@ -65,12 +73,23 @@ public class SymbolGraph {
       for(int v=0; v<V; v++)
         adj[v]=new LinkedList<Integer>();// empty list of intergers (vertices are all integers)
 
+      */
+
+      int V=vertexKeys.length;
+      // instantiate an empty graph with V vertices
+      graph=new Graph(V);
+      
       // 3. read from input file and construct the graph (construct connections in the graph)
+      // reading from input file:
+      br=scan(file);
       while((line=br.readLine())!=null) {
         String[] vertices=(line.trim()).split(delimiter);
-        int i=vertexMap.get(vertices[0]);
+        int v1=vertexMap.get(vertices[0]);
         for(int v=1; v<vertices.length; v++) {
-	  addEdge(vertices[0], vertices[v]); 
+	  // 1. find the integer vertex index v:
+	  int v2=vertexMap.get(vertices[v]);
+	  // add an edge between v1 and v2
+	  graph.addEdge(v1, v2);
         }
       }
 
@@ -84,8 +103,41 @@ public class SymbolGraph {
   // API:
   
   // getter methods:
+  // returns the underlying graph with integer vertices
+  public Graph graph(){return graph;}
+  public int indexOf(String vertex) {
+    validate(vertex);
+    return vertexMap.get(vertex);
+  }
+
+  public String nameOf(int v) {
+    validate(v);
+    return vertexKeys[v];
+  }
+
+  // returns all vertices adjacent to the given vertex in string
+  public Iterable<String> adj(String vertex) {
+    // validate vertex
+    validate(vertex);
+
+    // create a list of string
+    List<String> list=new LinkedList<String>();
+    // find the integer associated to the vertex
+    int v=vertexMap.get(vertex);
+    // for each vertex adjacent to v in the underlying graph
+    for(Integer w:graph.adj(v)) {
+      // find the string value associated with w and added to the list
+      list.add(vertexKeys[w]);
+    }
+    return list;
+  }
+
+/*
+  REUSE! :)
+
   public int V(){return V;}
   public int E(){return E;}
+  
   public Iterable<String> adj(String vertex) {
     // look up the integer index associated to the vertex string
     int v=vertexMap.get(vertex);
@@ -98,8 +150,10 @@ public class SymbolGraph {
 
     return list;
   }
-    
-  // modification queries
+
+/*
+   REUSE! :)
+  
   public void addEdge(String vertex1, String vertex2) {
     // 1a. find the integer vertex index v1:
     int v1=vertexMap.get(vertex1);
@@ -115,10 +169,21 @@ public class SymbolGraph {
     E++;
   }
 
+*/
+
   private BufferedReader scan(File file) throws IOException {
     FileReader fr=new FileReader(file);
     BufferedReader br=new BufferedReader(fr);
     return br;
+  }
+
+  private void validate(int v) {
+    // if the given vertex is not in the vertexMap is invalid
+    if(v<0 || v>=graph.V()) throw new IndexOutOfBoundsException();
+  }
+  private void validate(String vertex) {
+    // if the given vertex is not in the vertexMap is invalid
+    if(!vertexMap.containsKey(vertex)) throw new IllegalArgumentException();
   }
 
 }

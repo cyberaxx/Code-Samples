@@ -2,6 +2,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Deque;
 import java.util.ArrayDeque;
+import java.io.File;
 
 public class GraphLauncher {
 
@@ -50,6 +51,23 @@ public class GraphLauncher {
     System.out.println("G's conennted componenets are: ");
     for(int c=0; c<cc.count(); c++)
       System.out.println(components[c]);
+
+    System.out.println();
+    System.out.println();
+
+    File file=new File("routes.txt");
+    SymbolGraph sbG=new SymbolGraph(file, " ");
+    Graph graph=sbG.graph();
+
+    for(int i=0; i<graph.V(); i++)
+      System.out.println(i+": "+graph.adj(i));
+
+    System.out.println();
+    System.out.println();
+
+    for(int i=0; i<graph.V(); i++)
+      System.out.println(sbG.nameOf(i)+": "+sbG.adj(sbG.nameOf(i)));
+
 
 
 /*
