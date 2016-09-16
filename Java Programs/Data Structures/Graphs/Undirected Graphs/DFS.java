@@ -230,7 +230,6 @@ public class DFS {
     for(int i=0; i<5; i++)
       System.out.println(i+": "+G.adj(i));
 
-
     System.out.println();
     System.out.println();
 
@@ -239,7 +238,6 @@ public class DFS {
     System.out.println("is 4 connect to the source? "+dfs.hasPathTo(4));
     System.out.println("The path to 4: "+dfs.path(4));
     System.out.println("is G connected? "+dfs.isConnected());
-
 
  }   
 
