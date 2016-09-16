@@ -69,6 +69,21 @@ public class GraphLauncher {
       System.out.println(sbG.nameOf(i)+": "+sbG.adj(sbG.nameOf(i)));
 
 
+    file=new File("movies.txt");
+    sbG=new SymbolGraph(file, "/");
+    graph=sbG.graph();
+
+    for(int i=0; i<graph.V(); i++)
+      System.out.println(i+": "+graph.adj(i));
+
+    System.out.println();
+    System.out.println();
+
+    for(int i=0; i<graph.V(); i++)
+      System.out.println(sbG.nameOf(i)+": "+sbG.adj(sbG.nameOf(i)));
+
+
+
 
 /*
     List[] adj=new List[5];
