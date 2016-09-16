@@ -13,8 +13,6 @@ public class GraphLauncher {
 
     Graph G=new Graph(5);
 
-    G.addEdge(0, 0);
-    G.addEdge(1, 1);
     G.addEdge(1, 2);
     G.addEdge(0, 3);
     G.addEdge(4, 1);
@@ -25,11 +23,16 @@ public class GraphLauncher {
     for(int i=0; i<5; i++)
       System.out.println(i+": "+G.adj(i));
 
-    System.out.println("Degree of vertex "+4+": "+G.degree(4));
-    System.out.println("Max Degree: "+G.maxDegree());
-    System.out.println("Min Degree: "+G.minDegree());
-    System.out.println("Average Degree: "+G.avgDegree());
-    System.out.println("Number of Self Loops: "+G.selfLoopCounter());
+
+    System.out.println();
+    System.out.println();
+
+    BFS bfs=new BFS(G, 0);
+    System.out.println("is 4 connect to the source? "+bfs.hasPathTo(4));
+    System.out.println("Degree of separation from the source: "+bfs.distTo(4));
+    System.out.println("The path to 4: "+bfs.path(4));
+    System.out.println("is G connected? "+bfs.isConnected());
+
 
 /*
     List[] adj=new List[5];
@@ -56,7 +59,6 @@ public class GraphLauncher {
 */
 
   }
-
 
   public static boolean isConnected(boolean[] visited) {
     for(int v=0; v<visited.length; v++) 
