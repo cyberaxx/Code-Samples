@@ -67,7 +67,6 @@ public class DFSIterative {
     path.push(s);
     return path;
   }
- 
   public boolean isConnected(){
     for(int v=0; v<marked.length; v++)
       if(!marked[v])
