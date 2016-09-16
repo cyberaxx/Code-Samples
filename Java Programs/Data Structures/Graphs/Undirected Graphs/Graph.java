@@ -29,6 +29,19 @@ public class Graph {
     }
   }
 
+  // Constructor:
+  // create a graph from a given graph object
+  public Graph(Graph G) {
+    // initialize instance variables:
+    this.V=G.V();
+    this.E=G.E();
+
+    // initialize the adjacency list:
+    adj=new List[V];
+    for(int v=0; v<V; v++)
+      adj[v]=new LinkedList<Integer>(G.adj(v));
+  }
+
   // API: 1. getter methods 2. modification methods 3. query methods
 
   // 1. getter methods
@@ -104,5 +117,4 @@ public class Graph {
   private void validate(int v) {
     if(v<0 || v>=V) throw new IndexOutOfBoundsException("Vertex index is out of legal bounds!");
   }
-
 }
