@@ -6,6 +6,8 @@ Devise a linear-time algorithm to count the parallel edges in a graph.
 
 Hint: maintain a boolean array of the neighbors of a vertex, and reuse this array by only reinitializing the entries as needed.
 
+
+
 Two-edge connectivity. 
 A bridge in a graph is an edge that, if removed, would separate a connected graph into two disjoint subgraphs. 
 A graph that has no bridges is said to be two-edge connected. 
