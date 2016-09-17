@@ -47,11 +47,11 @@ public class DFS {
     // that has not been visited yet:
     for(Integer w: G.adj(v)) {
       if(!marked[w]) {
-	// visit w:
-	DFSVisit(G,w);
 	// once recurrence on w unfold (completed)
         // add v-w edge to the parent pointer array:
         edgeTo[w]=v;
+	// visit w:
+	DFSVisit(G,w);
        }
     }
     // once all vertices are marked visited, the recursive algorithm terminates
