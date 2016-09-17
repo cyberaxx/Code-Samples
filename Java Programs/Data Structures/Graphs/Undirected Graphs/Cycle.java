@@ -7,6 +7,8 @@ import java.util.ArrayDeque;
   Use depth-first search to determine whether a graph has a cycle, 
   and if so return one in time proportional to V + 2E in the worst case.
 
+  NOTE: Undirected graph only has TREE EDGE and BACK EDGE
+ 
   NOTE: having a cycle is equivalent to DFS having a BACK EDGE
   BACK EDGE: an edge from a visited vertex to its visited ancestor!
 
@@ -56,7 +58,34 @@ public class Cycle {
   public Iterable<Integer> cycle(){return cycle;}
 
   // helper methods:
-  private void dfs(Graph G, int u, int v){}
+  private void dfs(Graph G, int parent, int v) {
+    // visit the vertex:
+    marked[v]=true;
+
+    // recursively visit all UNvisited vertices adjacent to v in graph G:
+    for(Integer w:G.adj(v)) {
+      // if a cycle has been already found terminate the recursion
+      if(hasCycle()) return ;
+      // if w has not been visited: normal dfs
+      // any edge from visited to unvisited node in the graph is a TREE EDGE
+      if(!marked[w]) {
+        // add v to the parent pointer of array for w
+        edgeTo[w]=v;
+        // recurse on w:
+        dfs(G, v, w); // set v as w's ancestor
+      }
+
+      // Otherwise: if w has been visited already and w is not the same node as v: 
+      // an edge between two distinct visited vertex is a back edge
+      else if(parent!=v) {
+ 	 // construct the found cycle
+	 cycle=new ArrayDeque<Integer>();
+
+      }
+
+
+    }
+  }
   private boolean hasSelfLoop(Graph G){return true;}
   private boolean hasParallelEdge(Graph G){return true;} 
 
