@@ -4,6 +4,12 @@
 import java.util.List; // List ADT specification
 import java.util.LinkedList; // List interface implementation using Doubly Linked List
 
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.IOException;
+
 public class Graph {
 
   // instance member: Graph Representation
@@ -26,6 +32,40 @@ public class Graph {
     // initialize adjacency list of each vertex v:
     for(int i=0; i<V; i++) {
       adj[i]=new LinkedList<Integer>(); // an empty linked list
+    }
+  }
+
+  // Constructor:
+  // build a graph from input file
+  public Graph(File file, String delimiter) {
+    try {
+      BufferedReader br=scan(file);
+      String line;
+
+      // first line of the file denote number of vertices:
+      this.V=Integer.parseInt(br.readLine());
+      // second line of the file denote number of edges:
+      this.E=Integer.parseInt(br.readLine());
+      // initialize the adj list:
+      adj=new List[V];
+      for(int v=0; v<V; v++)
+	adj[v]=new LinkedList<Integer>(); // empty list of integers
+      
+  
+      // read line by line from the input file
+      while((line=br.readLine())!=null) {
+        // each line of the input file is a pair of vertices separated by a delimiter:
+        String[] vertices=(line.trim()).split(delimiter);
+        int v=Integer.parseInt(vertices[0]);
+        int w=Integer.parseInt(vertices[1]);
+
+        // add an edge between given vertices:
+        addEdge(v, w);
+      }
+
+    }
+    catch(Exception e) {
+      System.out.println("Failed to initialze the graph due to: "+ e.getMessage());
     }
   }
 
@@ -116,5 +156,11 @@ public class Graph {
   // helper methods: vertex validator
   private void validate(int v) {
     if(v<0 || v>=V) throw new IndexOutOfBoundsException("Vertex index is out of legal bounds!");
+  }
+  
+  private BufferedReader scan(File file) throws IOException {
+    FileReader fr=new FileReader(file);
+    BufferedReader br=new BufferedReader(fr);
+    return br;
   }
 }

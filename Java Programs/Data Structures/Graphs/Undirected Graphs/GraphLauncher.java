@@ -25,6 +25,16 @@ public class GraphLauncher {
     System.out.println();
     System.out.println();
 
+    
+    G=new Graph(new File("tinyG.txt"), " ");
+    for(int i=0; i<5; i++)
+      System.out.println(i+": "+G.adj(i));
+
+    System.out.println();
+    System.out.println();
+
+
+
     BFS bfs=new BFS(G, 0);
     System.out.println("is 4 connect to the source? "+bfs.hasPathTo(4));
     System.out.println("Degree of separation from the source: "+bfs.distTo(4));
@@ -68,6 +78,7 @@ public class GraphLauncher {
     for(int i=0; i<graph.V(); i++)
       System.out.println(sbG.nameOf(i)+": "+sbG.adj(sbG.nameOf(i)));
 
+/*
 
     file=new File("movies.txt");
     sbG=new SymbolGraph(file, "/");
@@ -83,7 +94,7 @@ public class GraphLauncher {
       System.out.println(sbG.nameOf(i)+": "+sbG.adj(sbG.nameOf(i)));
 
 
-
+*/
 
 /*
     List[] adj=new List[5];
