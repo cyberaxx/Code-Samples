@@ -117,6 +117,41 @@ public class Cycle {
   } // O(V+2E) to go through the enitre graph representation
 
   // returns true if G has any parallel edges
-  private boolean hasParallelEdge(Graph G){return true;} 
+  private boolean hasParallelEdge(Graph G) {
+    // parallel edges from the adjacency list of vertex v:
+    // if vertex w appears more than once on v's adjacency list v-w is a parallel edge
+
+    int n=G.V();
+    // use the marked array to find out duplicates in the adjacency list:
+    marked=new boolean[n];
+
+    // for each vertex v in G:
+    for(int v=0; v<n; v++) {
+      // search the adajency list of v
+      for(Ineger w:G.adj(v)) {
+        // w has been already seen in the adjacency list
+        if(marked[w]) {
+	  // there is a parallel edge and therefore a cycle:
+          cycle=new ArrayDeque<Integer>(); // empty stack of integer
+	  cycle.push(v);
+	  cycle.push(w);
+	  cycle.push(v);
+	  return true;
+	}
+	
+	else {
+	  // marked w as visited and move forward
+          marked[w]=true;
+	}
+      }
+
+      // reset the marked array: this is more efficient that re-instantiating the marked array before the inner foreach loop
+      for(Ineger w:G.adj(v)) {
+	marked[w]=false;
+      }
+    }
+    // parallel edge has not been found
+    return false;
+  } 
 
 }
