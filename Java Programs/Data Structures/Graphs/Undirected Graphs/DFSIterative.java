@@ -26,26 +26,29 @@ public class DFSIterative {
     // Do DFS iteratively by explicitly usint stack
     Deque<Integer> stack=new ArrayDeque<Integer>();
    
-    // 1. first recursive call on the source:
+    // first recursive call on the source:
     // add the source vertex to the recursion stack
-    marked[s]=true;
     stack.push(s);
 
-    // 2. recurse until the recursion stack is empty:
+    // while recursion stack is not empty:
     while(!stack.isEmpty()) {
-      // remove the top of the recursive stack
-      int v=stack.pop();
-      // for each vertex w adjacent to v:
+      // peek from the top of the stack and visit that vertex
+      int v=stack.peek();
+      // visit v:
+      marked[v]=true;
+      boolean flag=false;
+      // push all UNvisited vertices adjacent to v in G:
       for(Integer w:G.adj(v)) {
-        // if w has not been visited yet
-        if(!marked[w]) {
-          // mark w as visited
-	  marked[w]=true;
-	  edgeTo[w]=v;
-          stack.push(w);
-        }
+	if(!marked[w]) {
+	  stack.push(w);
+	  // set the parent pointer
+ 	  edgeTo[w]=v;
+ 
+	  flag=true;
+	}
       }
-      // all vertices adjacent to v has been visited!
+      // all vertices incident to v has been visited
+      if(flag==false) stack.pop();
     }
   }
 
