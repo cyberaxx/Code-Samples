@@ -46,6 +46,7 @@ public class Cycle {
     // pass both the source vertex for searach and its visited ancestor
     // since a graph can be disconnected (have many connected components)
     for(int v=0; v<G.V(); v++) {
+      if(hasCycle()) return ;
       // if the vertex v has not been visited in previous search attempts
       if(!marked[v])
         // start the dfs search from v and set the ancestor vertex to -1
@@ -82,15 +83,18 @@ public class Cycle {
  	 // construct the found cycle
 	 cycle=new ArrayDeque<Integer>(); // empty stack
          
-         // start from the vertex w and go back to v by following parent pointers
-         cycle.push(w);
-         while(edgeTo[w]!=v) {
-  	   cycle.push(edgeTo[w]);
-	   w=edgeTo[w]; // move to the parent of w in DFS Tree
+         // start from the vertex v and go back to w by following parent pointers
+	 int x=v;
+         while(x!=w) {
+  	   cycle.push(x);
+	   x=edgeTo[x]; // move to the parent of v in DFS Tree
 	 }
-         // add v the cycle
+         // add back edge v-w to the cycle:
+         // add w the cycle
+         cycle.push(w);
+         // add v to the cycle
          cycle.push(v);
-      }
+      }      
     }
   }
 
@@ -128,7 +132,7 @@ public class Cycle {
     // for each vertex v in G:
     for(int v=0; v<n; v++) {
       // search the adajency list of v
-      for(Ineger w:G.adj(v)) {
+      for(Integer w:G.adj(v)) {
         // w has been already seen in the adjacency list
         if(marked[w]) {
 	  // there is a parallel edge and therefore a cycle:
@@ -146,7 +150,7 @@ public class Cycle {
       }
 
       // reset the marked array: this is more efficient that re-instantiating the marked array before the inner foreach loop
-      for(Ineger w:G.adj(v)) {
+      for(Integer w:G.adj(v)) {
 	marked[w]=false;
       }
     }

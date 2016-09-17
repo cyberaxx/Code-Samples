@@ -78,6 +78,56 @@ public class GraphLauncher {
     for(int i=0; i<graph.V(); i++)
       System.out.println(sbG.nameOf(i)+": "+sbG.adj(sbG.nameOf(i)));
 
+    System.out.println();
+    System.out.println();
+
+/*
+Cycle test:
+ *  % java Cycle tinyG.txt
+ *  3 4 5 3 
+ * 
+ *  % java Cycle mediumG.txt 
+ *  15 0 225 15 
+ * 
+ *  % java Cycle largeG.txt 
+ *  996673 762 840164 4619 785187 194717 996673 
+*/
+
+
+/*
+
+  Graph g2=new Graph(new File("mediumG.txt"), " ");
+  Cycle c2=new Cycle(g2);
+  System.out.println("Does medium graph have a cycle: "+ c2.hasCycle());
+  if(c2.hasCycle())
+    System.out.println("The medium graph's cycle is: "+c2.cycle());
+
+
+  Graph g3=new Graph(new File("largeG.txt"), " ");
+  Cycle c3=new Cycle(g3);
+  System.out.println("Does large graph have a cycle: "+ c3.hasCycle());
+  if(c3.hasCycle())
+    System.out.println("The large graph's cycle is: "+c3.cycle()); 
+
+    System.out.println();
+
+*/
+
+    // Graph processing api:
+    Graph g1=new Graph(new File("tinyG.txt"), " ");
+    Cycle c1=new Cycle(g1);
+    System.out.println("Does tiny graph have a cycle: "+ c1.hasCycle());
+    if(c1.hasCycle())
+      System.out.println("The tiny graph's cycle is: "+c1.cycle());      
+
+    System.out.println();
+
+
+    for(int i=0; i<g1.V(); i++)
+      System.out.println(i+": "+g1.adj(i));
+
+
+
 /*
 
     file=new File("movies.txt");
