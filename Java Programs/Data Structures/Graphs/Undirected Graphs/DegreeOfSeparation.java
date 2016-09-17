@@ -35,6 +35,11 @@ public class DegreeOfSeparation {
   }
 
   // API: methods for client queries:
+  public boolean isConnected(String name) {
+    // extract the vertex index of the given string from the SymbolGraph instance:
+    int v=symbolGraph.indexOf(name);
+    return marked[v];
+  }
   public int degreeOfSeparation(String name) {
     // extract the vertex index of the given string from the SymbolGraph instance:
     int v=symbolGraph.indexOf(name);

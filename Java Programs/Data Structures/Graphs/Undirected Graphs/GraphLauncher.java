@@ -81,6 +81,40 @@ public class GraphLauncher {
     System.out.println();
     System.out.println();
 
+
+    file=new File("movies.txt");
+    String source="Bacon, Kevin";
+    DegreeOfSeparation dos=new DegreeOfSeparation(file, "/", source);
+    String[] names=new String[]{"Kidman, Nicole", "Grant, Cary"};
+    for(String name:names) {
+      System.out.println("Is "+name+" Connected to "+source+"? \n"+dos.isConnected(name));
+      if(dos.isConnected(name)) {
+        System.out.println("The degress of separation between "+name+ " and "+source+" is: \n"+dos.degreeOfSeparation(name));
+        System.out.println("The path from "+name+ " to "+source+" is: \n"+dos.path(name));
+      }
+      System.out.println();
+    }
+
+    System.out.println();
+    System.out.println();
+
+    file=new File("routes.txt");
+    source="JFK";
+    dos=new DegreeOfSeparation(file, " ", source);
+    names=new String[]{"LAS", "DFW"};
+    for(String name:names) {
+      System.out.println("Is "+name+" Connected to "+source+"? \n"+dos.isConnected(name));
+      if(dos.isConnected(name)) {
+        System.out.println("The degress of separation between "+name+ " and "+source+" is: \n"+dos.degreeOfSeparation(name));
+        System.out.println("The path from "+name+ " to "+source+" is: \n"+dos.path(name));
+      }
+      System.out.println();
+    }
+
+
+
+
+
 /*
 Cycle test:
  *  % java Cycle tinyG.txt
