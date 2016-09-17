@@ -5,7 +5,7 @@ import java.util.ArrayDeque;
 public class DegreeOfSeparation {
   // instance variabe:
   private SymbolGraph symbolGraph;
-  private Graph graph;
+  private Graph G;
   // BFS required follwoing fields:
   // 1. vertex index array of boolean to maintain visited vertices:
   private boolean[] marked;
@@ -35,8 +35,33 @@ public class DegreeOfSeparation {
   }
 
   // API: methods for client queries:
-  public int degreeOfSeparation(String name) {return 0;}
-  public Iterable<String> path(String name) {return null;}
+  public int degreeOfSeparation(String name) {
+    // extract the vertex index of the given string from the SymbolGraph instance:
+    int v=symbolGraph.indexOf(name);
+    // if v has not been visited: -1
+    if(!marked[v]) return -1;
+    // otherwise:
+    return distTo[v];
+  }
+  public Iterable<String> path(String name) {
+    // extract the vertex index of the given string from the SymbolGraph instance:
+    int v=symbolGraph.indexOf(name);
+    // if v has not been visited return null
+    if(!marked[v]) return null;
+   
+    // Otherwise:
+    // return a bfs path from s to v by following parent pointers
+    Deque<String> path=new ArrayDeque<String>(); // empty stack
+    // starting from v going backward:
+    while(v!=s) {
+      // extraxt the string value of v and push it to the stack
+      path.push(symbolGraph.nameOf(v));
+      // move up to v's parent
+      v=edgeTo[v];
+    }
+    path.push(symbolGraph.nameOf(s));
+    return path;
+  }
 
   // helper methods
   private void bfs(Graph G, int source) {
@@ -67,5 +92,5 @@ public class DegreeOfSeparation {
       }
     }
   }
-  
+ 
 }
