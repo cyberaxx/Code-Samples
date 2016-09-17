@@ -76,27 +76,47 @@ public class Cycle {
         dfs(G, v, w); // set v as w's ancestor
       }
 
-      // Otherwise: if w has been visited already and w is not the same node as v: 
-      // an edge between two distinct visited vertex is a back edge
+      // Otherwise: if w has been visited already and w is not the same node as v's parent: 
+      // an edge between two distinct visited vertice (v and w) is a back edge
       else if(parent!=w) {
  	 // construct the found cycle
 	 cycle=new ArrayDeque<Integer>(); // empty stack
          
          // start from the vertex w and go back to v by following parent pointers
          cycle.push(w);
-         while(edgeTo[w]!=parent) {
+         while(edgeTo[w]!=v) {
   	   cycle.push(edgeTo[w]);
 	   w=edgeTo[w]; // move to the parent of w in DFS Tree
 	 }
-         // add the parent node to the cycle
-         cycle.push(parent);
+         // add v the cycle
+         cycle.push(v);
       }
     }
   }
-  private boolean hasSelfLoop(Graph G){return true;}
+
+  // returns true if G has any vertex with a selfloop
+  private boolean hasSelfLoop(Graph G) {
+    // extract the number of vertices in G
+    int n=G.V();    
+    // for each vertex in G:
+    for(int v=0; v<n; v++) {
+      // traverse the adjacency list associated to the vertex v
+      for(Integer w:G.adj(v)) {
+        // if any vertex in the list was the same as v return true
+        if(w==v) {
+	  // construct the cycle:
+	  cycle=new ArrayDeque<Integer>();
+	  cycle.push(w);
+	  cycle.push(v);
+	  // return true
+          return true;
+	}
+      } 
+    }
+    return false;
+  } // O(V+2E) to go through the enitre graph representation
+
+  // returns true if G has any parallel edges
   private boolean hasParallelEdge(Graph G){return true;} 
 
 }
-
-
-
