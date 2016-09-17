@@ -20,7 +20,7 @@ public class Cycle {
 
   // instance variables:
   // 1. a sequence of integer vertices that characterizes the cycle
-  private Iterable<Integer> cycle;
+  private Deque<Integer> cycle;
   // 2. a vertex index array of booleans to maintain which vertices has been visited so far
   private boolean[] marked;
   // 3. a vertex index array of parent pointers to reconstruct the cylce (if exist)
@@ -66,6 +66,7 @@ public class Cycle {
     for(Integer w:G.adj(v)) {
       // if a cycle has been already found terminate the recursion
       if(hasCycle()) return ;
+
       // if w has not been visited: normal dfs
       // any edge from visited to unvisited node in the graph is a TREE EDGE
       if(!marked[w]) {
@@ -77,13 +78,19 @@ public class Cycle {
 
       // Otherwise: if w has been visited already and w is not the same node as v: 
       // an edge between two distinct visited vertex is a back edge
-      else if(parent!=v) {
+      else if(parent!=w) {
  	 // construct the found cycle
-	 cycle=new ArrayDeque<Integer>();
-
+	 cycle=new ArrayDeque<Integer>(); // empty stack
+         
+         // start from the vertex w and go back to v by following parent pointers
+         cycle.push(w);
+         while(edgeTo[w]!=parent) {
+  	   cycle.push(edgeTo[w]);
+	   w=edgeTo[w]; // move to the parent of w in DFS Tree
+	 }
+         // add the parent node to the cycle
+         cycle.push(parent);
       }
-
-
     }
   }
   private boolean hasSelfLoop(Graph G){return true;}
