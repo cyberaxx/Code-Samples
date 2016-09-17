@@ -95,9 +95,8 @@ public class BFS {
     // use stack to reconstruct the path from edgeTo array
     Deque<Integer> path=new ArrayDeque<Integer>();
     // add v to the path:
-    path.push(v);
-    while(edgeTo[v]!=s) {
-      path.push(edgeTo[v]);
+    while(v!=s) {
+      path.push(v);
       v=edgeTo[v];
     }
     // add the source to the path

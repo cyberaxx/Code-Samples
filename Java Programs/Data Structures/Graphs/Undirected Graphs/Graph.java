@@ -104,10 +104,10 @@ public class Graph {
     //       in this implementation
 
     // since G is an undirected graph:
-    // 1. add v to the adj list of w
-    adj[w].add(v);
-    // 2. add w to the adj list of v
+    // 1. add w to the adj list of v
     adj[v].add(w);
+    // 2. add v to the adj list of w
+    adj[w].add(v);
 
     // increase the number of edges:
     E++;

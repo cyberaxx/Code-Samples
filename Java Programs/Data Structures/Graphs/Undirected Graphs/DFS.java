@@ -77,9 +77,8 @@ public class DFS {
 
     // Otherwise:
     Deque<Integer> stack=new ArrayDeque<Integer>();
-    stack.push(v);
-    while(edgeTo[v]!=s) {
-      stack.push(edgeTo[v]);
+    while(v!=s) {
+      stack.push(v);
       v=edgeTo[v]; // follow the parent pointer
     }
     // add the source vertex to the path:

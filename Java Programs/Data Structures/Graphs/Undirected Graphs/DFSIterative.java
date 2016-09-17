@@ -43,7 +43,7 @@ public class DFSIterative {
 	  stack.push(w);
 	  // set the parent pointer
  	  edgeTo[w]=v;
- 
+ 	  // v has unvisited vertex
 	  flag=true;
 	}
       }
@@ -61,9 +61,8 @@ public class DFSIterative {
     validate(v);
     if(!hasPathTo(v)) return null;
     Deque<Integer> path=new ArrayDeque<Integer>();
-    path.push(v);
-    while(edgeTo[v]!=s) {
-      path.push(edgeTo[v]);
+    while(v!=s) {
+      path.push(v);
       // parent pointer:
       v=edgeTo[v];
     }
