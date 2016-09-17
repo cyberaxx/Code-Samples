@@ -114,6 +114,10 @@ public class SymbolGraph {
     return vertexKeys[v];
   }
 
+  public boolean contains(String vertex) {
+    return vertexMap.containsKey(vertex);
+  }
+
   // returns all vertices adjacent to the given vertex in string
   public Iterable<String> adj(String vertex) {
     // validate vertex
