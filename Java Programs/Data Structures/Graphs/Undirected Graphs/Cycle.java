@@ -6,6 +6,10 @@ import java.util.ArrayDeque;
   Is a given graph acyclic? 
   Use depth-first search to determine whether a graph has a cycle, 
   and if so return one in time proportional to V + 2E in the worst case.
+
+  NOTE: having a cycle is equivalent to DFS having a BACK EDGE
+  BACK EDGE: an edge from a visited vertex to its visited ancestor!
+
 */
 
 public class Cycle {
@@ -32,7 +36,19 @@ public class Cycle {
     edgeTo=new int[n];
 
     // 2. processing: finding the cycle
+    // trivial cases: a. selfloop, b. parallel edges
+    if(hasSelfLoop(G)) return ; // terminate the search for the cycle
+    if(hasParallelEdge(G)) return ; // terminate the search for the cycle
 
+    // USE DFS to find cycle based on presence of a BACK EDGE
+    // pass both the source vertex for searach and its visited ancestor
+    // since a graph can be disconnected (have many connected components)
+    for(int v=0; v<G.V(); v++) {
+      // if the vertex v has not been visited in previous search attempts
+      if(!marked[v])
+        // start the dfs search from v and set the ancestor vertex to -1
+        dfs(G, -1, v);
+    } 
   }
 
   // API: processed results for client
