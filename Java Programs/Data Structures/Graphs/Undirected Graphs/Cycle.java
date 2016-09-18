@@ -50,13 +50,70 @@ public class Cycle {
       // if the vertex v has not been visited in previous search attempts
       if(!marked[v])
         // start the dfs search from v and set the ancestor vertex to -1
-        dfs(G, -1, v);
+        //dfs(G, -1, v);
+	dfsIterative(G, v);
     } 
   }
 
   // API: processed results for client
   public boolean hasCycle(){return cycle!=null;}
   public Iterable<Integer> cycle(){return cycle;}
+
+  // Iterative dfs:
+  private void dfsIterative(Graph G, int s) {
+    // s is the starting vertex for search
+
+    // add s to the recursion stack:
+    Deque<Integer> stack=new ArrayDeque<Integer>();
+    stack.push(s);
+    int parent;
+
+    // while the recursion stack is not empty (search for a back edge)
+    while(!stack.isEmpty() && !hasCycle()) {
+      // Perfom DFS:
+      // sneek peek at the top of the stack:
+      int v=stack.peek();
+      // visit the vertex v
+      marked[v]=true;
+
+      // flag to keep track of vertices with no unvisited adjacent vertex
+      boolean flag=false;
+
+      // visit all UNvisited vertices adjacent to v in G
+      for(Integer w:G.adj(v)) {
+        // if a cycle has been already found terminate the recursion
+        if(hasCycle()) return ;
+
+	// define the parent:
+        parent = (v==s) ? -1 : edgeTo[v];
+
+        if(!marked[w]) {
+	  // set the parent pointer:
+ 	  edgeTo[w]=v;
+	  // push w to the recursive stack
+ 	  stack.push(w);
+          flag=true;	
+        }
+
+        // else if w has been visited already and w is not the parent vertex of v
+        else if(w!=parent) {
+          // v-w is a back edge that connects two connected vertices and creates a cycle:
+	  cycle=new ArrayDeque<Integer>(); // empty stack of vertices
+          // starting from v follow parent pointer until reaching w
+          int x=v;
+	  while(x!=w) {
+	    cycle.push(x);
+	    x=edgeTo[x]; // x move up to it caller vertex
+	  }
+          // add edge v-w to the path
+          cycle.push(w);
+          cycle.push(v);
+	}
+      }
+      // remove the vertex v from the stack
+      if(flag==false) stack.pop();
+    }
+  }
 
   // helper methods:
   private void dfs(Graph G, int parent, int v) {

@@ -22,12 +22,17 @@ public class GraphLauncher {
     for(int i=0; i<5; i++)
       System.out.println(i+": "+G.adj(i));
 
+    
+    G=new Graph(new File("tinyCG.txt"), " ");
+    DFSIterative dfsi=new DFSIterative(G, 0);
+    System.out.println("is 4 connect to the source? "+dfsi.hasPathTo(4));
+    System.out.println("The path to 4: "+dfsi.path(4));
+    System.out.println("is G connected? "+dfsi.isConnected());
+
     System.out.println();
     System.out.println();
 
-    
-    G=new Graph(new File("tinyG.txt"), " ");
-    for(int i=0; i<5; i++)
+    for(int i=0; i<G.V(); i++)
       System.out.println(i+": "+G.adj(i));
 
     System.out.println();
@@ -111,10 +116,6 @@ public class GraphLauncher {
       System.out.println();
     }
 
-
-
-
-
 /*
 Cycle test:
  *  % java Cycle tinyG.txt
@@ -150,7 +151,6 @@ Cycle test:
     System.out.println("Does medium graph have a cycle: "+ c2.hasCycle());
     if(c2.hasCycle())
       System.out.println("The medium graph's cycle is: "+c2.cycle());
-
 
 /*
 
