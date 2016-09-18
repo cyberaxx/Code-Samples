@@ -50,6 +50,7 @@ public class Bridge {
   // API:
   public boolean isEdgeConnected(){return bridgeCount==0;}
   public int bridgeCount(){return bridgeCount;}
+  public int ccCount(){return bridgeCount+1;} 
   public Iterable<String> bridges(){
     if(bridges.isEmpty()) return null;
     return bridges;
@@ -64,7 +65,29 @@ public class Bridge {
     pre[v]=count; // setting pre[v] to number of vertices have been visited before visiting v
     low[v]=pre[v]; // initially set low[v] to pre[v]
 
+    // recursively visit nodes adjacent to v in the graph G
+    for(Integer w:G.adj(v)) {
+      // if w has not been visited already
+      if(pre[w]==-1) {
+        // recurse on w as a source vertex
+        dfs(G, v, w);
 
+        // after recursion unfolds:
+        // 1. update low of v
+        low[v]=Math.min(low[v], low[w]); // if low[w] be less than low[v] it mean v-w must be back edge
 
+        // 2. check if v-w is a bridge
+        if(pre[w]==low[w]) {
+	  bridgeCount++;
+	  bridges.offer(v+"-"+w);
+        } 
+      }
+
+      // else: if the v-w is a back edge (meaning visiting a visited vertex which is not its parent
+      else if(w!=parent) {
+        // update the low[v]
+        low[v]=Math.min(low[v], pre[w]);
+      }
+    }
   }
 }

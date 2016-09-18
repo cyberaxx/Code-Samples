@@ -21,7 +21,6 @@ public class GraphLauncher {
 
     for(int i=0; i<5; i++)
       System.out.println(i+": "+G.adj(i));
-
     
     G=new Graph(new File("tinyCG.txt"), " ");
     DFSIterative dfsi=new DFSIterative(G, 0);
@@ -38,7 +37,23 @@ public class GraphLauncher {
     System.out.println();
     System.out.println();
 
+    G=new Graph(new File("tinyG.txt"), " ");
+    Bridge bridge=new Bridge(G);
+    System.out.println("Does G have any bridge? "+!bridge.isEdgeConnected());
+    System.out.println("Is G an edge-connected graph? "+bridge.isEdgeConnected());
+    if(!bridge.isEdgeConnected()) {
+      System.out.println("Number of bridges in G: "+bridge.bridgeCount());      
+      System.out.println("Bridges in G are: "+bridge.bridges());
+    }
+      
+    System.out.println();
+    System.out.println();
 
+    for(int i=0; i<G.V(); i++)
+      System.out.println(i+": "+G.adj(i));
+
+    System.out.println();
+    System.out.println();
 
     BFS bfs=new BFS(G, 0);
     System.out.println("is 4 connect to the source? "+bfs.hasPathTo(4));
