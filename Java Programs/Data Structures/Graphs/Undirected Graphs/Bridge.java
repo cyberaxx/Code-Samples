@@ -9,11 +9,8 @@
               all edges on a simple path from DFS are bridge edges.
 */
 
-
 import java.util.Deque;
 import java.util.ArrayDeque;
-
-
 
 public class Bridge {
   private Deque<String> bridges;
@@ -26,7 +23,6 @@ public class Bridge {
   // 3. a counter that keeps track of how many vertices have been visited so far
   private int count;
  
-
   // Constructor:
   public Bridge(Graph G) {
     // extract number of vertices:
@@ -42,10 +38,14 @@ public class Bridge {
       pre[v]=-1;
       low[v]=-1;
     }
-    
+
+    // Perform DFS on all connected components of graph G to find cut edges (bridge)
+    for(int v=0; v<n; v++) {
+      // if vertex v has not been visited already
+      if(pre[v]==-1)
+        dfs(G, v, v); // run DFS from vertex v, where its parent is itself (its the source)
+    }
   }
-
-
 
   // API:
   public boolean isEdgeConnected(){return bridgeCount==0;}
@@ -53,5 +53,18 @@ public class Bridge {
   public Iterable<String> bridges(){
     if(bridges.isEmpty()) return null;
     return bridges;
+  }
+
+  // helper method: dfs
+  // similar to cycle checking implementation of DFS
+  private void dfs(Graph G, int parent, int v) {
+    // increase the number of visited vertices:
+    count++;
+    // visit vertex v:
+    pre[v]=count; // setting pre[v] to number of vertices have been visited before visiting v
+    low[v]=pre[v]; // initially set low[v] to pre[v]
+
+
+
   }
 }
