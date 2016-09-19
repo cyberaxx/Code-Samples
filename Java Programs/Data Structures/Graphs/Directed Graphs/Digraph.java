@@ -1,89 +1,153 @@
 import java.util.List;
 import java.util.LinkedList;
-import java.util.ArrayList;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 public class Digraph {
 
-  // instance variables:
-  private final int V; // number of vertices of a directed graph instance
-  private int E; // number of edges of a directed graph instance
-  private List<Integer>[] adj; // adjacency list of a directed graph instance
-  private int[] inDegree; // keep track of inDegrees' in constant time
+  // instance varibles:
+  private int V; // number of veritces
+  private int E; // number of directed edges
 
-  // Constructor:
-  public Digraph(int v){
-    if(v<0) throw new IllegalArgumentException("Number of vertices of a Digraph instance must be non-negative!");
-    // initialzie instance variables;
-    this.V=v;
-    E=0; // no edge
-    // initialize the adjacency list of a Digraph instance:
-    adj=(List<Integer>[])new List[V];// UGLY CASTING: java does not allow generic array creation
-    inDegree=new int[V]; // initialize the array of inDegrees' for all vertices
-    for(int i=0; i<V; i++)
-      adj[i]=new LinkedList<Integer>(); // list of vertices connected to the vertex v by an edge from v to them
+  // Digraph is characterize by a set of vertices (V) and their directed connections
+  // Digraph is represented in an vertex index array of adjacency list
+  private List<Integer>[] adj;
+
+  // adj only maintain the outdegree
+  // vertex index array of indegrees for each vertex:
+  private int[] indegree;
+
+  // Constructor
+  // 1. create an empty Digraph from set of V vertices:
+  public Digraph(int V) {
+    this.V=V;
+    this.E=0;
+
+    // initialize the adjacency lists:
+    adj=new List[V];
+    for(int v=0; v<V; v++)
+      adj[v]=new LinkedList<Integer>(); // empty linked list
+
+    // initialize indegree array:
+    indegree=new int[V];
   }
 
+  // 2. create a Digraph from a given Digraph
   public Digraph(Digraph G) {
     this.V=G.V();
     this.E=G.E();
-    this.inDegree=new int[V];
-    adj=(List<Integer>[])new List[V];
+
+    // initialize the adj lists:
+    adj=new List[V];
+    for(int v=0; v<V; v++)
+      adj[v]=new LinkedList<Integer>();
+
+    // initialize the indegree array
+    indegree=new int[V];
+
+    // populate the graph:
     for(int v=0; v<V; v++) {
-      adj[v]=new LinkedList<Integer>(G.adj(v));
-      inDegree[v]=G.inDegree(v);
+      for(Integer w:G.adj(v)) {
+	addEdge(v, w);
+      }
     }
   }
 
-  // instance methods:
-  public int V(){return V;} // return number of vertices in a Digraph instance
-  public int E(){return E;} // return number of directed edges in a Digraph instance
+  // 3. create a graph from an input file
+  public Digraph(File file, String delimiter) {
+  
+    try {
+      BufferedReader br=scan(file); // scan the input file
+      String line;
+      // read number of vertices and edges from input file
+      this.V=Integer.parseInt((br.readLine()).trim());
+      this.E=0;
 
-  // add an edge from vertex "from" to vertex "to"
-  public void addEdge(int from, int to){
-    validateVertex(from);
-    validateVertex(to);
+      // initialize the adj lists
+      adj=new List[V];
+      for(int v=0; v<V; v++)
+	adj[v]=new LinkedList<Integer>();
 
-    adj[from].add(to);
-    inDegree[to]++; 
-    E++;
+      // initialize the indegree (vertex index array of indegrees)
+      indegree=new int[V];
+
+      // build the graph from input file
+      while((line=br.readLine())!=null) {
+        String[] seg=(line.trim()).split(delimiter);
+        int u=Integer.parseInt(seg[0]);
+        int w=Integer.parseInt(seg[1]);
+	addEdge(u,w); // add a directed edge from u->w
+      }
+    }
+    catch(Exception e) {
+      System.out.println("Failed to build a Digraph from the input file due to "+e.getMessage());
+    }
   }
+ 
+  // API: 1. getter methods, 2. modification queries
 
-  // return a list of vertices that are directly reachable from v
-  public List<Integer> adj(int v) {
-    // validate the given vertex v:
-    validateVertex(v);
-    return adj[v];
+  // 1. getter methods:
+  public int V(){return V;} // number of vertices
+  public int E(){return E;} // number of directed edges
+  public Iterable<Integer> adj(int v) {
+    // validate v:
+    validate(v);
+    return adj[v]; // retrun the adj ist associated to vertex v
   }
-
-  // returns the number of edges coming out of vertex v
-  public int outDegree(int v){
-    // validate the given vertex v:
-    validateVertex(v);
+  // indegree and out degree of vertex v
+  public int indegree(int v) {
+    // validate v:
+    validate(v);
+    return indegree[v];
+  }
+  public int outdegree(int v) {
+    validate(v);
     return adj[v].size();
   }
 
-  public int inDegree(int v){
-    // validate the given vertex v:
-    validateVertex(v);
-    return inDegree[v];
+  // 2. modification queries:
+  public void addEdge(int v, int w) {
+    // validate v and w:
+    validate(v); validate(w);
+
+    // add a directed edge FROM v TO w by adding w to adjacency list of v
+    adj[v].add(w);
+    // increase the indegree of w
+    indegree[w]++;
+    // increase the E
+    E++;
+  }   
+
+  public static Digraph reverse(Digraph G) {
+    // extract number of vertices in
+    int n=G.V();
+
+    // construct an empty Graph with n vertices:
+    Digraph reverse=new Digraph(n);
+
+    // add all edges of G to reverse Digraph
+    for(int v=0; v<n; v++) {
+      for(Integer w:G.adj(v)) {
+	reverse.addEdge(w,v);  // reverse the directed edge v->w to w->v 
+      }
+    }
+    // return the digraph with reverse direction of edges
+    return reverse;
   }
 
-  /*
-  // returns the number of edges going into vertex v
-  public int inDegree(int w){
-    // validate the given vertex w:
-    validateVertex(w);
-    int inDegree=0;
-    for(int v=0; v<V; v++)
-      if(adj[v].contains(w))
-        inDegree++;
-    return inDegree;
+  // hepler methods:
+  private void validate(int v) {
+    if(v<0||v>=V) throw new IndexOutOfBoundsException();
   }
-  */
 
-  // helper methods:
-  // vertices must be integer within [0 V-1] range:
-  private void validateVertex(int v) {
-    if(v<0 || v>=V-1) throw new IndexOutOfBoundsException("The vertex index is out of legal bounds!");
+  // Bufferred reader:
+  private BufferedReader scan(File file) throws IOException {
+    FileReader fr=new FileReader(file);
+    BufferedReader br=new BufferedReader(fr);
+    return br;
   }
+
 }
