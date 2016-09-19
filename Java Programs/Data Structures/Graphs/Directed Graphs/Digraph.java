@@ -21,6 +21,7 @@ public class Digraph {
   // Constructor
   // 1. create an empty Digraph from set of V vertices:
   public Digraph(int V) {
+    if(V<=0) throw new IllegalArgumentException("Number of vertices in a Digraph must be a positive integer.");
     this.V=V;
     this.E=0;
 
@@ -98,6 +99,8 @@ public class Digraph {
   public int indegree(int v) {
     // validate v:
     validate(v);
+
+    if(E==0) return 0;
     return indegree[v];
   }
   public int outdegree(int v) {
@@ -117,6 +120,66 @@ public class Digraph {
     // increase the E
     E++;
   }   
+
+  // 3. query methods:
+  public int selfLoopCount() {
+    int count=0;
+    for(int v=0; v<V; v++)
+      for(Integer w:adj[v])
+	if(v==w)
+	  count++;
+    return count;// unlike undirected graphs there is not need to divide this number by 2 (because in addEdge method the directed selfLoop was only added once
+  }
+  
+  public int maxIndegree() {
+    if(E==0) return 0;
+    int max=indegree[0];
+    for(int v=1; v<V; v++)
+      if(indegree[v]>max)
+	max=indegree[v];
+    return max;
+  }
+  public int minIndegree() {
+    if(E==0) return 0;
+    int min=indegree[0];
+    for(int v=1; v<V; v++)
+      if(indegree[v]<min)
+	min=indegree[v];
+    return min;
+  }
+
+  public int maxOutdegree() {
+    if(E==0) return 0;
+    int max=adj[0].size();
+    for(int v=1; v<V; v++)
+      if(adj[v].size()>max)
+	max=adj[v].size();
+    return max;
+  }
+  public int minOutdegree() {
+    if(E==0) return 0;
+    int min=adj[0].size();
+    for(int v=1; v<V; v++)
+      if(adj[v].size()<min)
+	min=adj[v].size();
+    return min;
+  }
+
+  public int avgIndegree() {
+    if(E==0) return 0;
+    int sum=0;
+    for(int v=0; v<V; v++)
+      sum+=indegree[v];
+    return sum/V;
+  }
+
+  public int avgOutdegree() {
+    return E/V;
+  }
+  
+  public int parallelEdges() {
+    return 0;
+  }
 
   public static Digraph reverse(Digraph G) {
     // extract number of vertices in

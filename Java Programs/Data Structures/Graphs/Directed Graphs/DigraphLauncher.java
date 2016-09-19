@@ -13,10 +13,24 @@ public class DigraphLauncher {
       System.out.println(v+": "+ G.adj(v));
     System.out.println("Edges: "+ G.E());
 
+    System.out.println("Max indegree in G is: "+ G.maxIndegree());
+    System.out.println("Min indegree in G is: "+ G.minIndegree());
+    System.out.println("Max outdegree in G is: "+ G.maxOutdegree());
+    System.out.println("Min outdegree in G is: "+ G.minOutdegree());
+    System.out.println("Average indegree in G is: "+ G.avgIndegree());
+    System.out.println("Average outdegree in G is: "+ G.avgOutdegree());
+
     Digraph Gr=Digraph.reverse(G);
     for(int v=0; v<Gr.V(); v++)
       System.out.println(v+": "+ Gr.adj(v));
     System.out.println("Edges: "+ Gr.E());
+
+    System.out.println("Max indegree in Gr is: "+ Gr.maxIndegree());
+    System.out.println("Min indegree in Gr is: "+ Gr.minIndegree());
+    System.out.println("Max outdegree in Gr is: "+ Gr.maxOutdegree());
+    System.out.println("Min outdegree in Gr is: "+ Gr.minOutdegree());
+    System.out.println("Average indegree in Gr is: "+ Gr.avgIndegree());
+    System.out.println("Average outdegree in Gr is: "+ Gr.avgOutdegree());
 
   }
 
