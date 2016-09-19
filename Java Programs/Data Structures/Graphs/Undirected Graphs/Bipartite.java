@@ -88,8 +88,9 @@ public class Bipartite {
 	  // move to the parent:
  	  x=edgeTo[x];
 	}
-        // add w to the cylce
+        // add v-w to the cylce
         cycle.push(w);
+        cycle.push(v);
       }
     }
   }
