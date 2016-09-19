@@ -1,10 +1,8 @@
 import java.util.List;
 import java.util.LinkedList;
 
+import java.util.Scanner;
 import java.io.File;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.IOException;
 
 public class Digraph {
 
@@ -38,7 +36,7 @@ public class Digraph {
   // 2. create a Digraph from a given Digraph
   public Digraph(Digraph G) {
     this.V=G.V();
-    this.E=G.E();
+    this.E=0;
 
     // initialize the adj lists:
     adj=new List[V];
@@ -58,13 +56,12 @@ public class Digraph {
 
   // 3. create a graph from an input file
   public Digraph(File file, String delimiter) {
-  
     try {
-      BufferedReader br=scan(file); // scan the input file
-      String line;
+      Scanner scanner=new Scanner(file); // scan the input file
       // read number of vertices and edges from input file
-      this.V=Integer.parseInt((br.readLine()).trim());
+      this.V=scanner.nextInt();
       this.E=0;
+      int e=scanner.nextInt();
 
       // initialize the adj lists
       adj=new List[V];
@@ -75,12 +72,12 @@ public class Digraph {
       indegree=new int[V];
 
       // build the graph from input file
-      while((line=br.readLine())!=null) {
-        String[] seg=(line.trim()).split(delimiter);
-        int u=Integer.parseInt(seg[0]);
-        int w=Integer.parseInt(seg[1]);
+      while(scanner.hasNextInt()) {
+        int u=scanner.nextInt();
+        int w=scanner.nextInt();
 	addEdge(u,w); // add a directed edge from u->w
       }
+      if(e!=E) throw new RuntimeException("Failed to build the graph from input file");
     }
     catch(Exception e) {
       System.out.println("Failed to build a Digraph from the input file due to "+e.getMessage());
@@ -142,12 +139,4 @@ public class Digraph {
   private void validate(int v) {
     if(v<0||v>=V) throw new IndexOutOfBoundsException();
   }
-
-  // Bufferred reader:
-  private BufferedReader scan(File file) throws IOException {
-    FileReader fr=new FileReader(file);
-    BufferedReader br=new BufferedReader(fr);
-    return br;
-  }
-
 }
