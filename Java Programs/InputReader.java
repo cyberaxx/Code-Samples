@@ -7,21 +7,28 @@ class InputReader {
 		// open the scanner
 		Scanner scanner=new Scanner(System.in);
 
-
 	        /* -----------------------------MATRIX and ARRAY input----------------------------- */
+
+
 		// 1. LINEAR many (t) TEST CASES:
 		int num=scanner.nextInt();
-		int[][] testMatrix=matrixTestReader(scanner, num); // num is number of test cases
+		// NOTE: matrix datatype (may not be int)
+		int[][] testMatrix=matrixTestReader(scanner, num);
 
 		// 2. LINEAR one (1) test case:
 		int len=scanner.nextInt();
+		// NOTE: array datatype (may not be int)
 		int[] testArray=arrayTestReader(scanner, len);
 
- 		// 3. 1 two dimensional [,] matrix input  reader
-		//int[][] test2=matrixReader(scanner);
+ 		// 3. 2D MATRIX reader
+		int rows=scanner.nextInt();
+		int cols=scanner.nextInt();
+		// NOTE: matrix datatype (may not be int)
+		int[][] matrix=matrixReader(scanner, rows, cols);
 
 
 	        /* -----------------------------GRAPH without weight--------------------------------------- */
+
 
 		// 1. unweighted graphs using adjacency list representation
 		// Getting V and E
@@ -32,6 +39,7 @@ class InputReader {
   
 		// 2. weighted graphs using adjacency list representation
 		List[][] test5= weightedGraphReader(" ");  
+
 
 
 		// close the scanner
@@ -127,13 +135,23 @@ Sample input for unweighted GRAPH
 /*
 -----------------------------------------------MATRIX reader---------------------------------------------------------------------------
 */
-
-
-
-
-
-
-
+    private static int[][] matrixReader(Scanner scanner, int rows, int cols) {
+        // instantiate a 2d matrix:
+        int[][] matrix=new int[rows][cols];
+        
+        // populate the matrix row by row:
+        int i=0;
+        while(i<rows) {
+            int j=0;
+            while(j<cols) {
+                matrix[i][j]=scanner.nextInt();
+                j++;
+            }
+            i++;
+        }
+        
+        return matrix;
+    }
 
 /*
 -----------------------------------------------GRAPH without Weights---------------------------------------------------------------------------
