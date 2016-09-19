@@ -8,7 +8,7 @@ class InputReader {
 		Scanner scanner=new Scanner(System.in);
 
 
-	        /* MATRIX and ARRAY input */
+	        /* -----------------------------MATRIX and ARRAY input----------------------------- */
 		// 1. LINEAR many (t) TEST CASES:
 		int num=scanner.nextInt();
 		int[][] testMatrix=matrixTestReader(scanner, num); // num is number of test cases
@@ -21,7 +21,7 @@ class InputReader {
 		//int[][] test2=matrixReader(scanner);
 
 
-	        /* GRAPH without weight */
+	        /* -----------------------------GRAPH without weight--------------------------------------- */
 
 		// 1. unweighted graphs using adjacency list representation
 		// Getting V and E
@@ -30,7 +30,7 @@ class InputReader {
 		// Create an adjacency list		
 		List[] adj= unWeightedGraphReader(V, E, true, scanner, " ");
   
-		// 5. t weighted graphs using adjacency list representation
+		// 2. weighted graphs using adjacency list representation
 		List[][] test5= weightedGraphReader(" ");  
 
 
@@ -71,35 +71,6 @@ Sample input for unweighted GRAPH
 11: [12, 9]
 12: [9, 11]
 
-
-		System.out.println();
-		for(int v=0; v<adj.length; v++) 
-		    System.out.println(v+": " + adj[v]);
-		System.out.println();
-
-------------------------------------------------------------------
-
-Sample output
-for matrix of
-test cases:
-
-TEST the matrix is correctly build:
-
-
-		for(int i=0; i<test.length; i++) {
-		    for(int j=0; j<test[i].length; j++) {
-		        System.out.print(test[i][j]+"\t");
-		    }
-		    System.out.println();
-		}
-
-----------------------------------------------
-		
-		int[] testVec=vectorReader();
-		for(int i=0; i<testVec.length; i++) {
-		    System.out.print(testVec[i]+"\t");
-		}
-		System.out.println();
 */
 
 
