@@ -7,38 +7,47 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-public class BinaryTreePre {
+public class Solution {
     public List<Integer> preorderTraversal(TreeNode root) {
-        List<Integer> list = new LinkedList<Integer>();
-        // stack for recursive calls:
-        Deque<TreeNode> stack = new ArrayDeque<TreeNode>();
-        // copy of the root node:
-        TreeNode currentNode = root;
-        
-        // base case:
+	// an empty list for node keys
+        List<Integer> list=new ArrayList<Integer>(); 
+        // if tree is empty return the list
         if(root==null) return list;
+
+        // Otherwise:
+        // Recursion stack of TreeNodes
+        Deque<TreeNode> stack=new ArrayDeque<TreeNode>();
+        // A set of TreeNodes to keep track of marked nodes
+        HashSet<TreeNode> marked=new HashSet<TreeNode>();
         
-        // recursive calls:
+        // starting from the root:
+        // add root to the recursive stack (first recursive call on root)
         stack.push(root);
+        
+        // while recursive stack is not empty
         while(!stack.isEmpty()) {
-            // add the data to the list:
-            currentNode = stack.pop();
-            list.add(currentNode.val);            
+            // sneek peek at the top of the stack (color it gray)
+            TreeNode x=stack.peek();
             
-            // recursive calls:
-            // reverse the recursive calls to left and right, because 
-            // while they are poping back they would be in correct order
-            
-            // recursive call on right
-            if(currentNode.right!=null) {
-                stack.push(currentNode.right);
+	    /* D */
+            // if x has not been visited already mark x as visited
+            if(!marked.contains(x)) {
+                marked.add(x);
+                list.add(x.val);
             }
             
-            // recursive call on left
-            if(currentNode.left!=null) {
-                stack.push(currentNode.left);
-            }   
+            // recursively visite x's l and r child
+	    /* L */ //---> Deep LEFT
+            if(x.left!=null && !marked.contains(x.left)) {
+                stack.push(x.left);
+            }
+	    /* R */ //---> if not possible to go LEFT any further, then right
+            else if(x.right!=null && !marked.contains(x.right)) {
+                stack.push(x.right);
+            }
+            else stack.pop();
         }
+  
         return list;
     }
 
