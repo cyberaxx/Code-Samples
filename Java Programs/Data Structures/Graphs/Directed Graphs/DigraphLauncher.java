@@ -32,6 +32,12 @@ public class DigraphLauncher {
     System.out.println("Average indegree in Gr is: "+ Gr.avgIndegree());
     System.out.println("Average outdegree in Gr is: "+ Gr.avgOutdegree());
 
+
+    DirectedDFS ddfs=new DirectedDFS(G, 0);
+    System.out.println("Is 0 connected to 4: "+ ddfs.hasPathTo(4));
+    if(ddfs.hasPathTo(4))
+      System.out.println("The path from 0 to 4 is: "+ ddfs.pathTo(4));
+    
   }
 
 }
