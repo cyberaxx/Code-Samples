@@ -1,6 +1,6 @@
 import java.util.List;
 import java.util.LinkedList;
-
+import java.util.Arrays;
 import java.io.File;
 
 public class DigraphLauncher {
@@ -32,12 +32,18 @@ public class DigraphLauncher {
     System.out.println("Average indegree in Gr is: "+ Gr.avgIndegree());
     System.out.println("Average outdegree in Gr is: "+ Gr.avgOutdegree());
 
+   /* This test code is directly taken from:
+   http://algs4.cs.princeton.edu/42digraph/DirectedDFS.java.html */
 
-    DirectedDFS ddfs=new DirectedDFS(G, 0);
-    System.out.println("Is 0 connected to 4: "+ ddfs.hasPathTo(4));
-    if(ddfs.hasPathTo(4))
-      System.out.println("The path from 0 to 4 is: "+ ddfs.pathTo(4));
-    
+   List<Integer> sources = new LinkedList<Integer>(Arrays.asList(1,2,6));   
+
+   // multiple-source reachability
+   DirectedDFS dfs = new DirectedDFS(G, sources);
+
+   // print out vertices reachable from sources
+   for (int v = 0; v < G.V(); v++)
+     if (dfs.marked(v)) System.out.print(v + " ");
+    System.out.println();
   }
 
 }
