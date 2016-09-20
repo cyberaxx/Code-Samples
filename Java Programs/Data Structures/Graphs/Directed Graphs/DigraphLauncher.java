@@ -13,12 +13,14 @@ public class DigraphLauncher {
       System.out.println(v+": "+ G.adj(v));
     System.out.println("Edges: "+ G.E());
 
+/*
     System.out.println("Max indegree in G is: "+ G.maxIndegree());
     System.out.println("Min indegree in G is: "+ G.minIndegree());
     System.out.println("Max outdegree in G is: "+ G.maxOutdegree());
     System.out.println("Min outdegree in G is: "+ G.minOutdegree());
     System.out.println("Average indegree in G is: "+ G.avgIndegree());
     System.out.println("Average outdegree in G is: "+ G.avgOutdegree());
+
 
     Digraph Gr=Digraph.reverse(G);
     for(int v=0; v<Gr.V(); v++)
@@ -31,10 +33,13 @@ public class DigraphLauncher {
     System.out.println("Min outdegree in Gr is: "+ Gr.minOutdegree());
     System.out.println("Average indegree in Gr is: "+ Gr.avgIndegree());
     System.out.println("Average outdegree in Gr is: "+ Gr.avgOutdegree());
+*/
 
-   /* This test code is directly taken from:
-   http://algs4.cs.princeton.edu/42digraph/DirectedDFS.java.html */
+   /* These test cases are directly taken from:
+   http://algs4.cs.princeton.edu/42digraph/DirectedDFS.java.html
+   http://algs4.cs.princeton.edu/42digraph/DepthFirstDirectedPaths.java.html */
 
+/*
    List<Integer> sources = new LinkedList<Integer>(Arrays.asList(1,2,6));   
 
    // multiple-source reachability
@@ -44,6 +49,19 @@ public class DigraphLauncher {
    for (int v = 0; v < G.V(); v++)
      if (dfs.marked(v)) System.out.print(v + " ");
     System.out.println();
+*/
+
+    // use vertex 3 as a source:
+    int s=3;
+    DirectedDFSPaths ddfs = new DirectedDFSPaths(G, s);
+
+    for (int v = 0; v < G.V(); v++) {
+      System.out.print("From "+s+" to "+v+": \t");
+      if (ddfs.hasPathTo(v))  
+        System.out.println(ddfs.pathTo(v));
+      else
+         System.out.println(s+" is not connected to "+v);
+    }
   }
 
 }
