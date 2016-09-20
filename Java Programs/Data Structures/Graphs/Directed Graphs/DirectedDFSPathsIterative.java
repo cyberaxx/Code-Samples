@@ -38,8 +38,40 @@ public class DirectedDFSPathsIterative {
      and a vertex, visit the vertex and recursively explore all UNvisited vertex adjacent to it (depth-first)
   */
 
-  private void DFSVisit(Digraph G, int v) {
+  private void DFSVisit(Digraph G, int s) {
+    // use recursion stack of graph vertices (explicitly)
+    Deque<Integer> stack=new ArrayDeque<Integer>();
+    // a boolean flag to find out if a vertex is compeletely explored and has to get popped from the stack (all its adjacent vertices has been visited)
+    boolean black=true;    
 
+    // DFS:
+    // 1. add the source vertex to the recursion stack
+    stack.push(s); // equivalent to dfs(G,s) in recursive call
+
+    // 2. while recursive stack is not empty:
+    while(!stack.isEmpty()) {
+      // 3. sneek pick at the top of the stack
+      int v=stack.peek();
+      // 4. marked vertex v visited and add all unvisted (unexplored) vertices adjacent to v to the stack
+      marked[v]=true; // (color vertex v GREY)
+      // 5. boolean flag to find out if all adjacent vertices to vertex v has been visited
+      black=true;
+
+      // 6. for all vertices adjacent to v that has not been visited yet
+      for(Integer w:G.adj(v)) {
+        // if w has not been explored through previous dfs calls from other vertices of G
+        if(!marked[w]) {
+          // add a tree edge FROM v TO w:
+          edgeTo[w]=v; // v->w is a directed edge from v to w
+          // add vertex w to the recursive stack to get explored
+          stack.push(w);
+          // v is not black yet because w (adjacent to v) has not been explored yet
+          black=false;
+        }
+      }
+      // 7. Unfolding recursion: if the vertex on the top of the recursive stack is black (all its adjacent have been visited already)
+      if(black) stack.pop(); // pop that vertex out of the stack
+    }    
   }
 
   // API: Single source searchability, connectivity
