@@ -21,7 +21,7 @@ public class DirectedBFSPaths {
   // 3. a vertex index array of distances from the source vertex
   private int[] distTo;
   // 4. INFINITY: we need to initialize the distTo array to INFINITY (for vertices that are not reachable from the source)
-  private final int INFINITY=Integer.MAX_VALUE;
+  private static final int INFINITY=Integer.MAX_VALUE;
 
   /* We do NOT explicitly need have the source vertex
      the distTo array implicity characterize the source vertex
