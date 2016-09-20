@@ -57,7 +57,7 @@ public class DirectedDFSPathsIterative {
       // 5. boolean flag to find out if all adjacent vertices to vertex v has been visited
       black=true;
 
-      // 6. for all vertices adjacent to v that has not been visited yet
+      // 6. for all vertices w adjacent to v that has NOT been visited yet (WHITE vertex)
       for(Integer w:G.adj(v)) {
         // if w has not been explored through previous dfs calls from other vertices of G
         if(!marked[w]) {
