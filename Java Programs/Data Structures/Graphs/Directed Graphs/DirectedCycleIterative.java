@@ -11,7 +11,7 @@
 import java.util.Deque;
 import java.util.ArrayDeque;
 
-public class DirectedCycle {
+public class DirectedCycleIterative {
   // intance variables
   // A. For cycle itself:
   // a collection of vertices that represent a cycle
@@ -22,21 +22,14 @@ public class DirectedCycle {
   private boolean[] marked;
   // 2. vertex index array of parent pointer to reconstruct the cycle from
   private int[] edgeTo;
-  // 3. vertex index array of vertices (currently under process in recursive stack)
-  private boolean[] inStack; // undirected graph does NOT need this one (because non-tree edges were simply back edge) unlike here 
-  // we have freaking 4 different types, once we encounter a marked vertex in our search we have to find out if it is back edge or any of those
-  // other two types to identify a cycle 
 
   // Constuctor:
-  public DirectedCycle(Digraph G) {
+  public DirectedCycleIterative(Digraph G) {
     // Given an efficient representation of a Digraph (as a vertex index array of adjacency lists)
+
     // initialize the instance variables for cycle detection:
     marked=new boolean[G.V()]; // vertex index array
     edgeTo=new int[G.V()]; // vertex index array
-    inStack=new boolean[G.V()]; // vertex index array
-
-    // trivial cases: 1. selfloops and 2. parallel edges
-    if(hasSelfLoop(G)) return ;
 
     // Otherwise:
     // from one arbitary vertex start exploring the Digraph and explore all its directed CC util a cycle was found
@@ -51,49 +44,67 @@ public class DirectedCycle {
     }
   }
 
-  private void dfs(Digraph G, int v) {
-    // start exploring the vertex v:
-    // 1. mark v
-    marked[v]=true;
-    // 2. pass v to the recursive stack
-    inStack[v]=true;
+  private void dfs(Digraph G, int s) {
+    // DFS stack:
+    Deque<Integer> stack=new ArrayDeque<Integer>(); // empty stack
+    boolean[] inStack=new boolean[G.V()]; // vertex index array to keep track of nodes in the stack
+    boolean black=true; // all vertices adjacent to the top of stack has been already marked
 
-    // 3. recursively EXPLORE all vertices w adjacent to vertex v
-    for(Integer w:G.adj(v)) {
-      // if a cycle has been found
-      if(cycle!=null) return ; // terminate the loop
+    // start expolring the digraph G from vertex s:
+    // push the vertex s in to the explicit recursive stack
+    stack.push(s); // equivalent to dfs(G,s)
+    
+    while(!stack.isEmpty()) {
+      // sneak peek at the top of the recursion stack:
+      int v=stack.pop();
+      // mark v (GREY)
+      marked[v]=true;
+      // makr v in stack
+      inStack[v]=true;
 
-      // A. if w has not been marked: recursively explore w dfs
-      if(!marked[w]) {
-        // v->w edge is a tree edge, add it the parent poniters
-        edgeTo[w]=v;
-        // explore w
-	dfs(G, w);
-      }
+      // for all vertices w adjacent to v
+      for(Integer w:G.adj(v)) {
 
-      /* if w has been previously marked, unlike undirected graph, there would be 3 different possible cases:
-  	 1. Back edge (Cycle edge): w is v's anscestor, so there must be a tree path from w to v like w->......->v and because of the paranthesization rule (w must be still in the stack)
+        // if a cycle has been found
+        if(cycle!=null) return ; // terminate the loop
+
+        // if w has been NOT marked already v->w is a Tree edge
+	if(!marked[w]) {
+          edgeTo[w]=v;
+	  // push w to the stack
+	  stack.push(w);
+          // set black flag to false
+	  black=false;
+	}
+
+        /* if w has been previously marked, unlike undirected graph, there would be 3 different possible cases:
+    	 1. Back edge (Cycle edge): w is v's anscestor, so there must be a tree path from w to v like w->......->v and because of the paranthesization rule (w must be still in the stack)
 	    while we are exploring v.
          2. Forward edge: if w is a descendant of v (so it has been already visited and get popped out of the recursive stack)
          3. Cross Edge: if w has been visited from other directed CC of a graph or from its sibilings
-      */
-      else if(inStack[w]) {
-        // v->w is a back edge so it's participating in a cycle:
-        cycle=new ArrayDeque<Integer>();
-        // starting from w follow parent pointers backward to reach v
-	int x=v;
-        while(x!=w) {
-	  cycle.push(x);
-	  x=edgeTo[x];
-	}
-	// add egde v->w to the cycle
-        cycle.push(w);
-        cycle.push(v);
+        */
+        else if(inStack[w]) {
+	  // w is an ancestor of of v so v->w is a back edge
+	  cycle=new ArrayDeque<Integer>();
+
+          // start from v follow parent pointer backward to reach w:
+	  int x=v;
+	  while(x!=w) {
+	    cycle.push(x);
+	    // follow parent pointers
+	    x=edgeTo[x];
+	  }
+	  // add edge v->w to the cycle:
+          cycle.push(w);
+          cycle.push(v);
+        }
+      }
+      
+      // if all adjacent's of vertex v has been explored: pop it from the recursion stack
+      if(black) {
+	inStack[stack.pop()]=false; // pop the vertex from the recursion stack
       }
     }
-
-    // v is fully explored and ready to get popped out of the stack
-    inStack[v]=false;
   }
 
   // API: 
@@ -105,23 +116,4 @@ public class DirectedCycle {
     return cycle;
   }
 
-  // O(V+E)
-  private boolean hasSelfLoop(Digraph G) {
-    // for all vertices in G check their corresponding adj list
-    for(int v=0; v<G.V(); v++) {
-      // for all vertices w adjacent to v
-      for(Integer w:G.adj(v)) {
-        // if v==w : selfloop
-        if(v==w) {
-          // build the cycle:
-          cycle=new ArrayDeque<Integer>();
- 	  cycle.push(v);
- 	  cycle.push(w);
-	  // it has a selfloop
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 }

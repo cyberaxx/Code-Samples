@@ -68,7 +68,8 @@ public class DigraphLauncher {
 
 */
 //    DirectedCycle finder = new DirectedCycle(G);
-    ShortestDirectedCycle finder = new ShortestDirectedCycle(G);
+//    ShortestDirectedCycle finder = new ShortestDirectedCycle(G);
+    DirectedCycleIterative finder = new DirectedCycleIterative(G);
     if (finder.hasCycle()) {
       System.out.println("Directed cycle: \t"+ finder.cycle());
       System.out.println();
