@@ -181,16 +181,13 @@ public class Digraph {
     return 0;
   }
 
-  public static Digraph reverse(Digraph G) {
-    // extract number of vertices in
-    int n=G.V();
-
-    // construct an empty Graph with n vertices:
-    Digraph reverse=new Digraph(n);
+  public Digraph reverse() {
+    // construct an empty Graph with V vertices:
+    Digraph reverse=new Digraph(V);
 
     // add all edges of G to reverse Digraph
-    for(int v=0; v<n; v++) {
-      for(Integer w:G.adj(v)) {
+    for(int v=0; v<V; v++) {
+      for(Integer w:adj[v]) {
 	reverse.addEdge(w,v);  // reverse the directed edge v->w to w->v 
       }
     }

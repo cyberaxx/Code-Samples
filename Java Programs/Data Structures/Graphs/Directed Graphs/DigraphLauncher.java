@@ -37,7 +37,8 @@ public class DigraphLauncher {
 
    /* These test cases are directly taken from:
    http://algs4.cs.princeton.edu/42digraph/DirectedDFS.java.html
-   http://algs4.cs.princeton.edu/42digraph/DepthFirstDirectedPaths.java.html */
+   http://algs4.cs.princeton.edu/42digraph/DepthFirstDirectedPaths.java.html 
+   http://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/DirectedCycle.java.html  */
 
 /*
    List<Integer> sources = new LinkedList<Integer>(Arrays.asList(1,2,6));   
@@ -49,19 +50,31 @@ public class DigraphLauncher {
    for (int v = 0; v < G.V(); v++)
      if (dfs.marked(v)) System.out.print(v + " ");
     System.out.println();
-*/
+
 
     // use vertex 3 as a source:
     int s=3;
-    DirectedDFSPaths ddfs = new DirectedDFSPaths(G, s);
-
+//    DirectedDFSPaths ddfs = new DirectedDFSPaths(G, s);
+//    DirectedDFSPathsIterative ddfs = new DirectedDFSPathsIterative(G, s);
+//    DirectedBFSPaths bfs = new DirectedBFSPaths(G, s);
+    DirectedBFSPaths bfs = new DirectedBFSPaths(G, Arrays.asList(3));
     for (int v = 0; v < G.V(); v++) {
       System.out.print("From "+s+" to "+v+": \t");
-      if (ddfs.hasPathTo(v))  
-        System.out.println(ddfs.pathTo(v));
+      if (bfs.hasPathTo(v))  
+        System.out.println(bfs.pathTo(v)+"\t distance: "+bfs.distTo(v));
       else
          System.out.println(s+" is not connected to "+v);
     }
-  }
 
+*/
+//    DirectedCycle finder = new DirectedCycle(G);
+    ShortestDirectedCycle finder = new ShortestDirectedCycle(G);
+    if (finder.hasCycle()) {
+      System.out.println("Directed cycle: \t"+ finder.cycle());
+      System.out.println();
+    }
+    else {
+      System.out.println("No directed cycle");
+    }
+  }
 }
