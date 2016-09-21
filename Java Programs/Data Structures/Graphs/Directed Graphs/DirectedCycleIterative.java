@@ -62,6 +62,7 @@ public class DirectedCycleIterative {
       // makr v in stack
       inStack[v]=true;
 
+      black=true;
       // for all vertices w adjacent to v
       for(Integer w:G.adj(v)) {
 
