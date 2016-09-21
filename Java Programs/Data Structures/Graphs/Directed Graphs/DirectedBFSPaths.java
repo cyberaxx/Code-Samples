@@ -32,8 +32,6 @@ public class DirectedBFSPaths {
 
   // Constructor: Single source shortest path (BFS)
   public DirectedBFSPaths(Digraph G, int s) {
-    validate(s); // validate if the s is a valid source vertex
-
     // initialize the visited array and the edgeTo array
     marked=new boolean[G.V()]; // vertex index array of booleans
     edgeTo=new int[G.V()]; // vertex index array of vertices (vertex indexes)
@@ -42,6 +40,8 @@ public class DirectedBFSPaths {
     // initlialize the distTo array
     for(int v=0; v<G.V(); v++)
       distTo[v]=INFINITY;
+
+    validate(s); // validate if the s is a valid source vertex
 
     // run on pass of DFS from the source vertex
     bfs(G, s);
