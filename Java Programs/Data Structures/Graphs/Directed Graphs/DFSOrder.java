@@ -13,7 +13,6 @@ public class DFSOrder {
   // instance variables:
   private Deque<Integer> pre; // q of visited vertices
   private Deque<Integer> post; // q of visited vertices
-  private Deque<Integer> reversePost; // stack of visited vertices
 
   // to perform dfs in Digraph:
   // vertex index array of boolean to keep track of visited vertices
@@ -24,7 +23,6 @@ public class DFSOrder {
     marked=new boolean[G.V()]; // vertex index array
     pre=new ArrayDeque<Integer>(); // an empty q for vertices
     post=new ArrayDeque<Integer>(); // an empty q for vertices
-    reversePost=new ArrayDeque<Integer>(); // an empty stack for vertices
 
     // going over all directed connected components of G
     for(int v=0; v<G.V(); v++)
@@ -71,7 +69,6 @@ public class DFSOrder {
       if(isBlack) {
         int u=stack.pop();
         post.offer(u);
-        reversePost.push(u);
       }
     }
   }
@@ -94,10 +91,9 @@ public class DFSOrder {
     }
     // now that all adjacent vertices to v has been marked
     post.offer(v);
-    reversePost.push(v);
   }
 
   public Iterable<Integer> pre() {return pre;}
   public Iterable<Integer> post() {return post;}
-  public Iterable<Integer> reversePost() {return reversePost;}
+  public Iterable<Integer> reversePost() {return null;}
 }
