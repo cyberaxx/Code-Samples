@@ -72,8 +72,20 @@ public class LCS {
 
     // path reconstruction
     int r=N; int c=M; int count=0;
+    StringBuilder s=new StringBuilder();
+    while(r>0 && c>0) { // while both x and y sequences are non-empty
+      if(lcs[r-1][c-1]<lcs[r-1][c]+1 && lcs[r-1][c-1]<lcs[r][c-1]+1) {
+	count++;
+	s.append(x.charAt(r-1));
+	r--; c--;
+      }
+      else if(lcs[r-1][c]+1<lcs[r-1][c-1] && lcs[r-1][c]<lcs[r][c-1])
+	r--;
+      else
+	c--;
+    }
 
-
+    str=new String(s.reverse());
     return count;
   }
 
