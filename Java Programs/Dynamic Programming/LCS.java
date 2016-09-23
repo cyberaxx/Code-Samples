@@ -43,15 +43,15 @@ public class LCS {
 
     // 1. Intialize the source state
     lcs[0][0]=0;
+    for(int i=1; i<=N; i++) lcs[i][0]=0; // lcs with an empty sequence y
+    for(int j=1; j<=M; j++) lcs[0][j]=0; // lcs with an empty sequence x
 
     // 2. Recurrence:
-    // 	  Among all possible alignments of subsequences x and y where they both are non-empty:
-    // 	  find the min number of gaps required to be inserted into one or another to get them align
     for(int i=1; i<=N; i++) {
       for(int j=1; j<=M; j++) {
 	// if x(i) matches y(j)
         if(x.charAt(i-1)==y.charAt(j-1))
-          // 3 possible choices (implicit transition edges)
+          // Only one possible choice:
           lcs[i][j]=lcs[i-1][j-1]+1;
 	else 
           // 2 possible choices (implicit transition edges)
