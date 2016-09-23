@@ -91,6 +91,12 @@ public class SCC {
   public int sccCount(){return scc;}
   // if a digraph  instance is strongly connected: it has only one connected commponent
   public boolean isStronglyConnected() {return scc==1;}
+  // check if vertex v and vertex w are strongly connected (they belogns to the same directed cycle)
+  public boolean isStronglyConnected(int v, int w) {
+    validate(v);
+    validate(w);
+  return id[v]==id[w];
+  }
 
   // helper methods:
   private void validate(int v) {
