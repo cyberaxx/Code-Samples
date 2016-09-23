@@ -90,6 +90,5 @@ public class LCS {
     lcs=new ArrayDeque<Character>();// empty stack of Character
     System.out.println("The minimum number of gap insertions required for alignment is: "+ lcs(x.toLowerCase(), y.toLowerCase(), lcs));
     System.out.println("The LCS is : "+ lcs);
-
   }
 }
