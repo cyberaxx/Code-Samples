@@ -13,7 +13,7 @@ public class SymbolDigraph {
   // 2. Symbol table that maps string vertices into integer vertices
   private HashMap<String, Integer> st;
   // 3. A vertex index array of Strings that inverse-map integer vertices into string vertices
-  private String[] dic;
+  private String[] stringKeys;
 
   // Constructor:
   public SymbolDigraph(File file, String delimiter) {	
@@ -39,12 +39,12 @@ public class SymbolDigraph {
       scanner.close();
 
       // create the vertex index array of Strings from vertices of digraph
-      dic=new String[V]; // a vertex index array
+      stringKeys=new String[V]; // a vertex index array
       // Iterate over symbol table keys
       for(String key:st.keySet()) {
 	// extract the integer vertex associated with String key
         int v=st.get(key);
-	dic[v]=key;
+	stringKeys[v]=key;
       }
 
       // Now we have all vertices lets build the underlying digraph
@@ -69,7 +69,31 @@ public class SymbolDigraph {
     } catch(Exception e) {
         System.out.println("Failed to read from input file " + e.getMessage());
     }
-
   }
 
+  // API:
+  // return a vertex value associated with the string key
+  public int indexOf(String vertex) {
+   validate(vertex);
+   return st.get(vertex); 
+  }
+  // return a string value of vertex associated with a given integer
+  public String nameOf(int v) {
+    validate(v);
+    return stringKeys[v];
+  }
+  // returns an underlying digraph:
+  public Digraph graph() {
+    return G;
+  }
+
+  // helper methods:
+  private void validate(String vertex) {
+    if(!st.containsKey(vertex))
+      throw new IllegalArgumentException(); 
+  }
+  private void validate(int v) {
+    int V=stringKeys.length;
+    if(v<0 || v>=V) throw new IndexOutOfBoundsException();
+  }
 }
