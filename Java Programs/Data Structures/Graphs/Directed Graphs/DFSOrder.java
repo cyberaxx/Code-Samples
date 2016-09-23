@@ -30,8 +30,52 @@ public class DFSOrder {
     for(int v=0; v<G.V(); v++)
       // if vertex v has not explored yet
       if(!marked[v]) 
-        dfs(G, v);
+        dfsIterative(G, v);
+	// dfs(G,v);
   }
+
+  private void dfsIterative(Digraph G, int s) {
+    // explict stack of vertices:
+    Deque<Integer> stack=new ArrayDeque<Integer>();
+    boolean isBlack=true;
+    // add the source to the stack
+    stack.push(s);
+
+    // recursive call stack:
+    while(!stack.isEmpty()) {
+      // sneak peek at the top of the call stack
+      int v=stack.peek();
+
+      // if vertex v has not been marked visited already
+      if(!marked[v]) {
+        // mark v visited
+        marked[v]=true;
+        // add it to pre q
+      	pre.offer(v);
+      }
+    
+      // set isBlack to true
+      isBlack=true;
+      // recursively push all UNvisited vertices w adjacent to v into the stack
+      for(Integer w:G.adj(v)) {
+        // if w has not been visited from other DFS calls from other vertices of G:
+        if(!marked[w]) {
+          // add w to the call stack
+          stack.push(w);
+	  // v is not black yet
+          isBlack=false;
+        }
+      } 
+      // UnFOLD recursive call:
+      // if all adjacent of v has been visited already pop it out of the stack
+      if(isBlack) {
+        int u=stack.pop();
+        post.offer(u);
+        reversePost.push(u);
+      }
+    }
+  }
+
 
   // recursive dfs visit:
   private void dfs(Digraph G, int v) {

@@ -77,5 +77,13 @@ public class DigraphLauncher {
     else {
       System.out.println("No directed cycle");
     }
+
+    Digraph dag=new Digraph(new File("tinyDAG.txt"), " ");
+    DFSOrder dfs=new DFSOrder(dag);
+    System.out.println("pre:\t"+ dfs.pre());
+    System.out.println("post:\t"+ dfs.post());
+    System.out.println("reversePost:\t"+ dfs.reversePost());
+
+
   }
 }
