@@ -45,6 +45,14 @@ public class EditDist {
 	      sp[i][0]=i 	(two sequence will be transform to one and nother by inserting i gaps into x) OPTIMAL
 	      sp[0][j]=j   	(two sequence will be transform to one and nother by inserting j gaps into y) OPTIMAL
  
+      3b. Recurrence (edge relaxation relation similar to the shortest path problem in DAG)
+	CAVEAT: Make sure all subproblems getting solved in their corresponding topological order of their dependencies DAG
+        The shortest path from the start state [0][0] to state [i][j]
+        sp[i][j]=min{sp[i][j-1]+1, sp[i-1][j]+1, sp[i-1][j-1]}
+
+      4. Solve the shortest path problem to find the shortest path from [0][0] to [n][m] (systematically fill up the memo table following topological order of OPsubstructure dependencies)
+      5. report the value of the shortest path
+      6. reconstruct the path
     */
   }
 }
