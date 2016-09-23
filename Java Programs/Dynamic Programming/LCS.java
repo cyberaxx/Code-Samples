@@ -38,13 +38,32 @@ public class LCS {
 	sp[i][j]=min{sp[i-1][j-1], sp[i][j-1]+1, sp[i-1][j]+1}
 
       Solve all subproblems in TOPOLOGICAL order of their corresponding depency (Bottom-up systematic for loop):
-	Smaller size subproblem MUST get solved first, and cached 
+	Smaller size subproblem MUST get solved first, and cached the solution in memeo table
         then combine them to get the solution to larger subproblems
     */
 
     // consider two strings of input as two sequences of characters
     int N=x.length();
     int M=y.length();
+
+    // memo table is 2D because the state space is 2D (each matrix entry represent an state in optimal substructure dependency DAG)
+    int[][]lcs=new int[N+1][M+1]; // +1 for adding gap to both input sequences
+
+    // 1. Intialize the source state
+    memo[0][0]=0;
+    // Optimal value for states with only one options
+    for(int i=1; i<=N; i++)  memo[i][0]=i; // insert gaps into y (equivalently it means to delete i chars from x)
+    for(int j=1; j<=M; j++)  memo[0][j]=j; // insert gaps into x (equivalently it means to delete j chars from y)
+
+    // 2. Recurrence:
+    // 	  Among all possible alignments of subsequences x and y where they both are non-empty:
+    // 	  find the min number of gaps required to be inserted into one or another to get them align
+    for(int i=1; i<=N; i++) {
+      for(int j=1; j<=M; j++) {
+
+
+      }
+    }
 
     return 0;
   }
