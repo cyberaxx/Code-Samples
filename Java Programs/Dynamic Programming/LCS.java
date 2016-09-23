@@ -62,11 +62,11 @@ public class LCS {
     // path reconstruction
     int r=N; int c=M;
     while(r>0 && c>0) { // while both x and y sequences are non-empty
-      if(lcs[r-1][c-1]+1>lcs[r][c-1] && lcs[r-1][c-1]+1>lcs[r-1][c]){
+      if(x.charAt(r-1)==y.charAt(c-1)){
 	path.push(x.charAt(r-1));
 	r--; c--;
       }
-      else if(lcs[r-1][c]>1+lcs[r-1][c-1] && lcs[r-1][c]>lcs[r][c-1])
+      else if(lcs[r-1][c]>lcs[r][c-1])
 	r--;
       else
 	c--;
