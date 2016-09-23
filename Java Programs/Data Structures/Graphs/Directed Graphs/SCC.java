@@ -27,6 +27,9 @@ public class SCC {
     scc=0; // number of scc
     id=new int[G.V()]; // vertex index array
     size=new int[G.V()];
+
+    // initialize the marked array:
+    marked=new boolean[G.V()]; // vertex index array of booleans
     
     // 1. compute dfs on G's reverese graph and compute its reverse post order traversal of it vertices 
     Digraph Gr=G.reverse();
@@ -65,17 +68,6 @@ public class SCC {
   }
   
   // API:
-  // return an Iterable collection of all vertices in scc with id "sccId"
-  public Iterable<Integer> scc(int sccId) {
-    // a queue of vertices that belong to a same scc:
-    Deque<Integer> q=new ArrayDeque<Integer>(); // empty q
-    // iterates over the vertex index array of scc ids:
-    for(Integer v:id) {
-      if(id[v]==sccId)
-        q.offer(v);
-    }
-    return q;
-  }
   // given a vertex v returns a scc id that vertex v belongs to:
   public int id(int v) {
     validate(v);
@@ -86,7 +78,6 @@ public class SCC {
     validate(v);
     return size[id[v]];
   }
-
   // number of scc in a given digraph instance:
   public int sccCount(){return scc;}
   // if a digraph  instance is strongly connected: it has only one connected commponent

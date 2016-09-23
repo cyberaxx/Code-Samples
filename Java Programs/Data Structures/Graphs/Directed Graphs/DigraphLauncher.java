@@ -38,7 +38,8 @@ public class DigraphLauncher {
    /* These test cases are directly taken from:
    http://algs4.cs.princeton.edu/42digraph/DirectedDFS.java.html
    http://algs4.cs.princeton.edu/42digraph/DepthFirstDirectedPaths.java.html 
-   http://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/DirectedCycle.java.html  */
+   http://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/DirectedCycle.java.html 
+   http://algs4.cs.princeton.edu/42digraph/KosarajuSharirSCC.java.html */
 
 /*
    List<Integer> sources = new LinkedList<Integer>(Arrays.asList(1,2,6));   
@@ -66,7 +67,7 @@ public class DigraphLauncher {
          System.out.println(s+" is not connected to "+v);
     }
 
-*/
+
 //    DirectedCycle finder = new DirectedCycle(G);
 //    ShortestDirectedCycle finder = new ShortestDirectedCycle(G);
     DirectedCycleIterative finder = new DirectedCycleIterative(G);
@@ -83,7 +84,40 @@ public class DigraphLauncher {
     System.out.println("pre:\t"+ dfs.pre());
     System.out.println("post:\t"+ dfs.post());
     System.out.println("reversePost:\t"+ dfs.reversePost());
+*/
 
+    // Topological sort:
+    SymbolDigraph symbolDigraph=new SymbolDigraph(new File("jobs.txt"), "/");
+    Digraph digraph=symbolDigraph.graph();
+    // topological sort G (if G was acyclic)
+    TopologicalSort dfs=new TopologicalSort(digraph);
+    if(!dfs.hasOrder())  System.out.println("The input graph is not a DAG! No Topological sort!");
+    else {
+      // for each vertex in G's topological order (reverse DFS postorder)
+      for(Integer v:dfs.order()) {
+        System.out.println(symbolDigraph.nameOf(v));
+      }
+    }
 
+    System.out.println();
+    System.out.println("SCC:");
+
+    G = new Digraph(new File("mediumDG.txt"), " ");
+    SCC scc=new SCC(G);
+    // number of connected components
+    int n = scc.sccCount();
+    System.out.println(n + " components");
+    // compute list of vertices in each strong component
+    List[] components=new List[n]; // array of Lists
+    for(int i=0; i<n; i++)
+      components[i]=new LinkedList<Integer>(); // an empty linked list
+
+    // for each vertex in G, add it to its corresponding connected component list
+    for(int v=0; v<G.V(); v++) {
+      int id=scc.id(v); // find v's scc id
+      components[id].add(v); // add v to the list of vertices in its scc
+    }
+    for(int i=0; i<n; i++)
+      System.out.println("Component "+i+": "+components[i]);
   }
 }
