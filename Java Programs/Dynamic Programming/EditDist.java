@@ -8,7 +8,7 @@ import java.util.ArrayDeque;
 public class EditDist {
   // this method compute the minimum number of operation ("gap" insertion) required to
   // transform x string to y
-  public static int optimalAlignment(String x, String y) {
+  public static int optimalAlignment(String x, String y, Deque<Character> alignX, Deque<Character> alignY) {
     /* Problem formulation:
        What is the alignment of x and y that requires min number of operations?
        I DON'T KNOW!!
@@ -58,7 +58,7 @@ public class EditDist {
     // memo table which caches all states of DAG of optimal substructure and their value.
     // How many state do we need for all possible alignment? N*M
     // Implict edges transitioning from one state to another and constitute a simple path that represent an alginment 
-    int[][] memo=new int[n+1][m+1]; // all characters in x and y + gaps
+    int[][] memo=new int[N+1][M+1]; // all characters in x and y + gaps
 
     // 3a. Initialization:
     memo[0][0]=0; // optimal number of operations to algin gaps in x and y
@@ -68,9 +68,25 @@ public class EditDist {
     for(int j=1; j<=M, i++) memo[0][j]=j;
 
 
-    // 3b. Recurrence: carefully search all possible alginment for the one with minimal number of operations required
-    for(int i=1
-
-
+    // 3b. Recurrence: carefully search all possible alginments of x and y to find the one with minimal number of operations required
+    for(int i=1; i<=N; i++) {
+      for(int j=1; j<=M; j++) {
+        // if x[i]==y[j]: matching is one the possible choice to consider:
+        if(x.charAT(i-1)==y.charAt(j-1)) {
+          // the shortest path to state [i][j] is min of following paths:
+	  // 1. The shortest path from [0][0] to state [i-1][j] + cost of transition to [i][j] (+1 inserting a gap to y)
+	  // 2. The shortest path from [0][0] to state [i][j-1] + cost of transition to [i][j] (+1 inserting a gap to x)
+	  // 3. The shortest path from [0][0] to state [i-1][j-1] + cost of transition to [i][j] (0: matching x[i] and y[j])
+          memo[i][j]=Math.min(Math.min(memo[i][j-1]+1, memo[i-1][j]+1), memo[i-1][j-1]);
+        }
+        // in case of mismatches we have to find out what is the optimal gap insertion strategy into x and y
+        else {
+          // the shortest path to state [i][j] is min of following paths:
+	  // 1. The shortest path from [0][0] to state [i-1][j] + cost of transition to [i][j] (+1 inserting a gap to y)
+	  // 2. The shortest path from [0][0] to state [i][j-1] + cost of transition to [i][j] (+1 inserting a gap to x)
+          memo[i][j]=Math.min(memo[i][j-1]+1, memo[i-1][j]+1);
+        }
+      }
+    }
   }
 }
