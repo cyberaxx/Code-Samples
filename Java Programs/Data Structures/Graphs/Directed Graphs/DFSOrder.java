@@ -34,7 +34,7 @@ public class DFSOrder {
       // if vertex v has not explored yet
       if(!marked[v]) 
         dfsIterative(G, v);
-	// dfs(G,v);
+	//dfs(G,v);
   }
 
   private void dfsIterative(Digraph G, int s) {

@@ -9,29 +9,29 @@ public class SymbolDigraph {
 
   // instance variables
   // 1. underlying Digraph wth integer vertices
-  private Digraph G;
+  private Digraph digraph;
   // 2. Symbol table that maps string vertices into integer vertices
-  private HashMap<String, Integer> st;
+  private HashMap<String, Integer> vertexMap;
   // 3. A vertex index array of Strings that inverse-map integer vertices into string vertices
-  private String[] stringKeys;
+  private String[] vertexKeys;
 
   // Constructor:
   public SymbolDigraph(File file, String delimiter) {	
     // creat a hash table:
-    st=new HashMap<String, Integer>(); // an empty hash table
+    vertexMap=new HashMap<String, Integer>(); // an empty hash table
     try{
       // create a Scanner object to read from the given file
       Scanner scanner=new Scanner(file);
       int V=0;
-      // 1. One pass over the entire file to populate the st map and String array of vertices:
+      // 1. One pass over the entire file to populate the vertex map and String array of vertices:
       while(scanner.hasNextLine()) {
 	String line=scanner.nextLine();
         String[] segs=(line.trim()).split(delimiter);
         for(String str:segs) {
           // check if the current string has been already inserted into the symbol table
-          if(!st.containsKey(str)) {
+          if(!vertexMap.containsKey(str)) {
             // put the new key value pair into the symbol table:
-            st.put(str, V);
+            vertexMap.put(str, V);
 	    V++; // increase the vertex counter
           }
         }
@@ -39,16 +39,16 @@ public class SymbolDigraph {
       scanner.close();
 
       // create the vertex index array of Strings from vertices of digraph
-      stringKeys=new String[V]; // a vertex index array
+      vertexKeys=new String[V]; // a vertex index array
       // Iterate over symbol table keys
-      for(String key:st.keySet()) {
+      for(String key:vertexMap.keySet()) {
 	// extract the integer vertex associated with String key
-        int v=st.get(key);
-	stringKeys[v]=key;
+        int v=vertexMap.get(key);
+	vertexKeys[v]=key;
       }
 
       // Now we have all vertices lets build the underlying digraph
-      Digraph G=new Digraph(V); // an empty graph with V vertices and 0 edge
+      digraph=new Digraph(V); // an empty graph with V vertices and 0 edge
     
       // 2. Run a second pass over the input file to add edges into the underlying digraph
       scanner=new Scanner(file);
@@ -58,10 +58,10 @@ public class SymbolDigraph {
         String[] segs=(line.trim()).split(delimiter);
         // first string is a vertex and all the rest are vertices adjacent to it
         String vertex=segs[0];
-	int v=st.get(vertex);
+	int v=vertexMap.get(vertex);
 	for(int i=1; i<segs.length; i++) {
 	  // add a directed edge from v to i
-	  G.addEdge(v, st.get(segs[i]));
+	  digraph.addEdge(v, vertexMap.get(segs[i]));
         }
       }
       scanner.close();
@@ -75,25 +75,25 @@ public class SymbolDigraph {
   // return a vertex value associated with the string key
   public int indexOf(String vertex) {
    validate(vertex);
-   return st.get(vertex); 
+   return vertexMap.get(vertex); 
   }
   // return a string value of vertex associated with a given integer
   public String nameOf(int v) {
     validate(v);
-    return stringKeys[v];
+    return vertexKeys[v];
   }
   // returns an underlying digraph:
   public Digraph graph() {
-    return G;
+    return digraph;
   }
 
   // helper methods:
   private void validate(String vertex) {
-    if(!st.containsKey(vertex))
+    if(!vertexMap.containsKey(vertex))
       throw new IllegalArgumentException(); 
   }
   private void validate(int v) {
-    int V=stringKeys.length;
+    int V=vertexKeys.length;
     if(v<0 || v>=V) throw new IndexOutOfBoundsException();
   }
 }
