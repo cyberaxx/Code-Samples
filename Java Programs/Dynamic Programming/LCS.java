@@ -50,22 +50,31 @@ public class LCS {
     int[][]lcs=new int[N+1][M+1]; // +1 for adding gap to both input sequences
 
     // 1. Intialize the source state
-    memo[0][0]=0;
+    lcs[0][0]=0;
     // Optimal value for states with only one options
-    for(int i=1; i<=N; i++)  memo[i][0]=i; // insert gaps into y (equivalently it means to delete i chars from x)
-    for(int j=1; j<=M; j++)  memo[0][j]=j; // insert gaps into x (equivalently it means to delete j chars from y)
+    for(int i=1; i<=N; i++)  lcs[i][0]=i; // insert gaps into y (equivalently it means to delete i chars from x)
+    for(int j=1; j<=M; j++)  lcs[0][j]=j; // insert gaps into x (equivalently it means to delete j chars from y)
 
     // 2. Recurrence:
     // 	  Among all possible alignments of subsequences x and y where they both are non-empty:
     // 	  find the min number of gaps required to be inserted into one or another to get them align
     for(int i=1; i<=N; i++) {
       for(int j=1; j<=M; j++) {
-
-
+	// if x(i) matches y(j)
+        if(x.charAt(i)==y.charAt(j))
+          // 3 possible choices (implicit transition edges)
+          lcs[i][j]=Math.min(Math.min(lcs[i][j-1]+1, lcs[i-1][j]+1), lcs[i-1][j-1]); // pick the minimal OPTIMAL substructure value to assign it to state [i][j]  
+	else 
+          // 2 possible choices (implicit transition edges)
+          lcs[i][j]=1+Math.min(lcs[i][j-1], lcs[i-1][j]); // pick the minimal OPTIMAL substructure value to assign it to state [i][j]
       }
     }
 
-    return 0;
+    // path reconstruction
+    int r=N; int c=M; int count=0;
+
+
+    return count;
   }
 
   public static void main(String[] args) {
