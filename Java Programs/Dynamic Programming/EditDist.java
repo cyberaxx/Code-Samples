@@ -63,16 +63,16 @@ public class EditDist {
     // 3a. Initialization:
     memo[0][0]=0; // optimal number of operations to algin gaps in x and y
     // 2. Optimal number of operations to algin any subsequence of x with a gap in y
-    for(int i=1; i<=N, i++) memo[i][0]=i;
+    for(int i=1; i<=N; i++) memo[i][0]=i;
     // 3. Optimal number of operations to algin any subsequence of y with a gap in x
-    for(int j=1; j<=M, i++) memo[0][j]=j;
+    for(int j=1; j<=M; j++) memo[0][j]=j;
 
 
     // 3b. Recurrence: carefully search all possible alginments of x and y to find the one with minimal number of operations required
     for(int i=1; i<=N; i++) {
       for(int j=1; j<=M; j++) {
         // if x[i]==y[j]: matching is one the possible choice to consider:
-        if(x.charAT(i-1)==y.charAt(j-1)) {
+        if(x.charAt(i-1)==y.charAt(j-1)) {
           // the shortest path to state [i][j] is min of following paths:
 	  // 1. The shortest path from [0][0] to state [i-1][j] + cost of transition to [i][j] (+1 inserting a gap to y)
 	  // 2. The shortest path from [0][0] to state [i][j-1] + cost of transition to [i][j] (+1 inserting a gap to x)
@@ -84,9 +84,64 @@ public class EditDist {
           // the shortest path to state [i][j] is min of following paths:
 	  // 1. The shortest path from [0][0] to state [i-1][j] + cost of transition to [i][j] (+1 inserting a gap to y)
 	  // 2. The shortest path from [0][0] to state [i][j-1] + cost of transition to [i][j] (+1 inserting a gap to x)
-          memo[i][j]=Math.min(memo[i][j-1]+1, memo[i-1][j]+1);
+	  // 3. The shortest path from [0][0] to state [i-1][j-1] + cost of transition to [i][j] (1: missmatch x[i] and y[j])
+          memo[i][j]=Math.min(Math.min(memo[i][j-1]+1, memo[i-1][j]+1), memo[i-1][j-1]+1);
         }
       }
     }
+
+    // path reconstruction:
+    // look up the memo table and reconstruct the alignments:
+    int r=N; int c=M;
+    while(r>0 && c>0) {
+      if(x.charAt(r-1)==y.charAt(c-1)) {
+        if(memo[r-1][c-1]<memo[r][c-1] && memo[r-1][c-1]<memo[r-1][c]) {
+	  alignX.push(x.charAt(r-1));
+	  alignY.push(y.charAt(c-1));
+	  r--; c--;
+        }
+        else if(memo[r][c-1]<memo[r-1][c]) {
+	  alignX.push('_');
+	  alignY.push(y.charAt(c-1));
+	  c--;
+        }
+        else {
+   	  alignX.push(x.charAt(r-1));
+	  alignY.push('_');
+	  r--;
+        }
+      }
+      else {
+        if(memo[r-1][c-1]+1<memo[r][c-1] && memo[r-1][c-1]+1<memo[r-1][c]) {
+	  alignX.push(x.charAt(r-1));
+	  alignY.push(y.charAt(c-1));
+	  r--; c--;
+        }
+        else if(memo[r][c-1]<memo[r-1][c]) {
+  	  alignX.push('_');
+	  alignY.push(y.charAt(c-1));
+	  c--;
+        }
+        else {
+	  alignX.push(x.charAt(r-1));
+	  alignY.push('_');
+	  r--;
+        }
+      }
+    }
+
+   // The value of the shortest path from [0][0] state to the target state [N][M]:
+   // the minimum number of operations required to algin x and y is
+   return memo[N][M]; 
+  }
+
+  public static void main(String[] args) {
+    String x="snowy";
+    String y="sunny";
+    Deque<Character> alignX=new ArrayDeque<Character>();
+    Deque<Character> alignY=new ArrayDeque<Character>();
+    System.out.println("The minimum number of operations required for alignment is: "+ optimalAlignment(x.toLowerCase(), y.toLowerCase(), alignX, alignY));
+    System.out.println("X alignment is: "+ alignX);
+    System.out.println("Y alignment is: "+ alignY);
   }
 }
