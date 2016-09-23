@@ -21,8 +21,12 @@ public class TransitiveClosure {
     tc=new boolean[G.V()][G.V()];  // // vertex index matrix
     // instantiate find all vertices of G
     for(int v=0; v<G.V(); v++) {
+
+      // reset the marked array
+      marked=new boolean[G.V()];
       // run dfs from v to find all vertices w reachable from v
       dfs(G, v);
+
       for(int w=0; w<G.V(); w++) {
         if(marked[w]) {
           // add an edge between v and w
@@ -31,8 +35,6 @@ public class TransitiveClosure {
       }
       // add a column to tc matrix:
       tc[v]=marked; // all vertices that have been explored from source vertex v
-      // reset the marked array
-      marked=new boolean[G.V()];
     }
   } // Complexity O(VE+V^2), Space complexity (V^2 + V + E)
 
