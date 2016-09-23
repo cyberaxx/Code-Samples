@@ -63,11 +63,9 @@ public class EditDist {
 
     // 3a. Initialization:
     memo[0][0]=0; // optimal number of operations to algin gaps in x and y
-    // 2. Optimal number of operations to algin any subsequence of x with a gap in y
-    for(int i=1; i<=N; i++) memo[i][0]=i;
-    // 3. Optimal number of operations to algin any subsequence of y with a gap in x
-    for(int j=1; j<=M; j++) memo[0][j]=j;
-
+    // Optimal value for states with only one options
+    for(int i=1; i<=N; i++)  memo[i][0]=i; // insert gaps into y (equivalently it means to delete i chars from x)
+    for(int j=1; j<=M; j++)  memo[0][j]=j; // insert gaps into x (equivalently it means to delete j chars from y)
 
     // 3b. Recurrence: carefully search all possible alginments of x and y to find the one with minimal number of operations required
     for(int i=1; i<=N; i++) {
