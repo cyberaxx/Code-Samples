@@ -8,6 +8,8 @@ public class TransitiveClosure {
 
   // instance variables:
   private Digraph digraph;
+  private boolean[][] tc;
+
   // a vertex index array of booleans
   private boolean[] marked;
 
@@ -15,8 +17,8 @@ public class TransitiveClosure {
   public TransitiveClosure(Digraph G) {
     // initialize instance variables:
     digraph=new Digraph(G.V()); // an empty digraph with G.V() vertices and 0 edge
-    marked=new boolean[G.V()];
-
+    marked=new boolean[G.V()]; // vertex index array
+    tc=new boolean[G.V()][G.V()];  // // vertex index matrix
     // instantiate find all vertices of G
     for(int v=0; v<G.V(); v++) {
       // run dfs from v to find all vertices w reachable from v
@@ -27,10 +29,12 @@ public class TransitiveClosure {
 	  digraph.addEdge(v,w);
         }
       }
+      // add a column to tc matrix:
+      tc[v]=marked; // all vertices that have been explored from source vertex v
       // reset the marked array
       marked=new boolean[G.V()];
     }
-  } // Complexity O(VE+V^2)
+  } // Complexity O(VE+V^2), Space complexity (V^2 + V + E)
 
   private void dfs(Digraph G, int v) {
     // mark v visited:
@@ -47,4 +51,15 @@ public class TransitiveClosure {
 
   // API: 
   public Digraph digraph(){return digraph;}
+  public boolean reachable(int v, int w) {
+    validate(v);
+    validate(w);
+    return tc[v][w];
+  }
+
+  // helper method
+  private void validate(int v) {
+    int V=marked.length;
+    if(v<0||v>=V) throw new IndexOutOfBoundsException();
+  }
 }
