@@ -28,7 +28,8 @@ public class EditDist {
        2. Choices at each state (implicit edges into each DAG state)
           a. insert a gap into x: 	+1 (number of operation required) 
           b. insert a gap into y: 	+1 
-          c. if x[i] == y[j]: 		+0 
+          c. if x[i] != y[j]: 		+1 (mismatch) 
+          d. if x[i] == y[j]: 		+0 (match)
 
        3a. Initialization (similar to shortest path in a DAG):
 	   OPTIMAL solutions for trivial subproblems:
@@ -43,7 +44,7 @@ public class EditDist {
       3b. Recurrence (edge relaxation relation similar to the shortest path problem in DAG)
 	CAVEAT: Make sure all subproblems getting solved in their corresponding topological order of their dependencies DAG
         The shortest path from the start state [0][0] to state [i][j]
-        sp[i][j]=min{sp[i][j-1]+1, sp[i-1][j]+1, sp[i-1][j-1]}
+        sp[i][j]=min{sp[i][j-1]+1, sp[i-1][j]+1, sp[i-1][j-1] or sp[i-1][j-1]+1 }
 
       4. Solve the shortest path problem to find the shortest path from [0][0] to [n][m] (systematically fill up the memo table following topological order of OPsubstructure dependencies)
       5. report the value of the shortest path
