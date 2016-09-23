@@ -39,7 +39,8 @@ public class DigraphLauncher {
    http://algs4.cs.princeton.edu/42digraph/DirectedDFS.java.html
    http://algs4.cs.princeton.edu/42digraph/DepthFirstDirectedPaths.java.html 
    http://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/DirectedCycle.java.html 
-   http://algs4.cs.princeton.edu/42digraph/KosarajuSharirSCC.java.html */
+   http://algs4.cs.princeton.edu/42digraph/KosarajuSharirSCC.java.html 
+   http://algs4.cs.princeton.edu/42digraph/TransitiveClosure.java.html */
 
 /*
    List<Integer> sources = new LinkedList<Integer>(Arrays.asList(1,2,6));   
@@ -119,5 +120,25 @@ public class DigraphLauncher {
     }
     for(int i=0; i<n; i++)
       System.out.println("Component "+i+": "+components[i]);
+
+    System.out.println();
+    System.out.println("Transitive Closure:");
+
+    G = new Digraph(new File("tinyDG.txt"), " ");
+    TransitiveClosure tc = new TransitiveClosure(G);
+    for (int v=0; v<G.V();v++)
+      System.out.print(v+"  ");
+    System.out.println();
+    System.out.println("--------------------------------------------");
+
+    // print transitive closure
+    for (int v = 0; v < G.V(); v++) {
+      System.out.print(v+": ");
+      for (int w = 0; w < G.V(); w++) {
+        if (tc.reachable(v, w)) System.out.print(" T");
+        else System.out.print("  ");
+      }
+      System.out.println();
+    }
   }
 }
