@@ -95,7 +95,7 @@ public class EditDist {
     int r=N; int c=M;
     while(r>0 && c>0) {
       if(x.charAt(r-1)==y.charAt(c-1)) {
-        if(memo[r-1][c-1]<memo[r][c-1]+1 && memo[r-1][c-1]<memo[r-1][c]+1) {
+        if(memo[r-1][c-1]<=memo[r][c-1]+1 && memo[r-1][c-1]<=memo[r-1][c]+1) {
 	  alignX.push(x.charAt(r-1));
 	  alignY.push(y.charAt(c-1));
 	  r--; c--;
@@ -155,15 +155,5 @@ public class EditDist {
     System.out.println("X alignment is: "+ alignX);
     System.out.println("Y alignment is: "+ alignY);
 
-    System.out.println();
-    System.out.println();
-
-    x="Shervin";
-    y="Hooshang";
-    alignX=new ArrayDeque<Character>();
-    alignY=new ArrayDeque<Character>();
-    System.out.println("The minimum number of operations required for alignment is: "+ optimalAlignment(x.toLowerCase(), y.toLowerCase(), alignX, alignY));
-    System.out.println("X alignment is: "+ alignX);
-    System.out.println("Y alignment is: "+ alignY);
   }
 }
