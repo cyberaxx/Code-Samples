@@ -20,10 +20,6 @@ public class LCS {
 
   // return the length of lcs and reconstruct the lcs as well
   public static int lcs(String x, String y, String str) {
-    // consider two strings of input as two sequences of characters
-    int N=x.length();
-    int M=y.length();
-
     /*
       Subproblems (state space): 
 	prefixes of x and y (optimal substructure would be lcs of all possible subsequences of x and y)
@@ -38,9 +34,17 @@ public class LCS {
 	2. Shortest path from [0][0] to [i][0]: i (only one option: inserting gas into x)
 	3. Shortest path from [0][0] to [0][j]: j (only one option: inserting gas into y)
 
-      Recurrence:
+      Recurrence (shortest path recurrence from source [0][0] to each possible state[i][j] (edge relaxation)):
+	sp[i][j]=min{sp[i-1][j-1], sp[i][j-1]+1, sp[i-1][j]+1}
 
+      Solve all subproblems in TOPOLOGICAL order of their corresponding depency (Bottom-up systematic for loop):
+	Smaller size subproblem MUST get solved first, and cached 
+        then combine them to get the solution to larger subproblems
     */
+
+    // consider two strings of input as two sequences of characters
+    int N=x.length();
+    int M=y.length();
 
     return 0;
   }
