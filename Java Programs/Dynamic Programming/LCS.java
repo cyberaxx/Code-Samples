@@ -43,8 +43,8 @@ public class LCS {
 
     // 1. Intialize the source state
     lcs[0][0]=0;
-    for(int i=1; i<=N; i++) lcs[i][0]=0; // lcs with an empty sequence y
-    for(int j=1; j<=M; j++) lcs[0][j]=0; // lcs with an empty sequence x
+    for(int i=1; i<=N; i++) lcs[i][0]=0; // lcs x with an empty sequence y
+    for(int j=1; j<=M; j++) lcs[0][j]=0; // lcs y with an empty sequence x
 
     // 2. Recurrence:
     for(int i=1; i<=N; i++) {
