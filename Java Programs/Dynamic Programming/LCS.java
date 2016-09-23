@@ -31,6 +31,15 @@ public class LCS {
       	1. insert a gap into x (+1)
       	2. insert a gap into y (+1)
       	3. match (if possible) (0)
+
+      Initialization (initialize state values (d[v]'s)):
+	Optimal value of trivial substructures:
+	1. Source state value: 0
+	2. Shortest path from [0][0] to [i][0]: i (only one option: inserting gas into x)
+	3. Shortest path from [0][0] to [0][j]: j (only one option: inserting gas into y)
+
+      Recurrence:
+
     */
 
     return 0;
