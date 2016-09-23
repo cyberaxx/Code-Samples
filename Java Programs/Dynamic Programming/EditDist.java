@@ -85,7 +85,7 @@ public class EditDist {
 	  // 1. The shortest path from [0][0] to state [i-1][j] + cost of transition to [i][j] (+1 inserting a gap to y)
 	  // 2. The shortest path from [0][0] to state [i][j-1] + cost of transition to [i][j] (+1 inserting a gap to x)
 	  // 3. The shortest path from [0][0] to state [i-1][j-1] + cost of transition to [i][j] (1: missmatch x[i] and y[j])
-          memo[i][j]=Math.min(Math.min(memo[i][j-1]+1, memo[i-1][j]+1), memo[i-1][j-1]+1);
+          memo[i][j]=1+Math.min(Math.min(memo[i][j-1], memo[i-1][j]), memo[i-1][j-1]);
         }
       }
     }
@@ -95,12 +95,12 @@ public class EditDist {
     int r=N; int c=M;
     while(r>0 && c>0) {
       if(x.charAt(r-1)==y.charAt(c-1)) {
-        if(memo[r-1][c-1]<memo[r][c-1] && memo[r-1][c-1]<memo[r-1][c]) {
+        if(memo[r-1][c-1]<memo[r][c-1]+1 && memo[r-1][c-1]<memo[r-1][c]+1) {
 	  alignX.push(x.charAt(r-1));
 	  alignY.push(y.charAt(c-1));
 	  r--; c--;
         }
-        else if(memo[r][c-1]<memo[r-1][c]) {
+        else if(1+memo[r][c-1]<1+memo[r-1][c] && 1+memo[r][c-1]<memo[r-1][c-1]) {
 	  alignX.push('_');
 	  alignY.push(y.charAt(c-1));
 	  c--;
@@ -112,12 +112,12 @@ public class EditDist {
         }
       }
       else {
-        if(memo[r-1][c-1]+1<memo[r][c-1] && memo[r-1][c-1]+1<memo[r-1][c]) {
+        if(1+memo[r-1][c-1]<1+memo[r][c-1] && 1+memo[r-1][c-1]<1+memo[r-1][c]) {
 	  alignX.push(x.charAt(r-1));
 	  alignY.push(y.charAt(c-1));
 	  r--; c--;
         }
-        else if(memo[r][c-1]<memo[r-1][c]) {
+        else if(1+memo[r][c-1]<1+memo[r-1][c] && 1+memo[r][c-1]<1+memo[r-1][c-1]) {
   	  alignX.push('_');
 	  alignY.push(y.charAt(c-1));
 	  c--;
@@ -140,6 +140,28 @@ public class EditDist {
     String y="sunny";
     Deque<Character> alignX=new ArrayDeque<Character>();
     Deque<Character> alignY=new ArrayDeque<Character>();
+    System.out.println("The minimum number of operations required for alignment is: "+ optimalAlignment(x.toLowerCase(), y.toLowerCase(), alignX, alignY));
+    System.out.println("X alignment is: "+ alignX);
+    System.out.println("Y alignment is: "+ alignY);
+
+    System.out.println();
+    System.out.println();
+
+    x="EXPONENTIAL";
+    y="POLYNOMIAL";
+    alignX=new ArrayDeque<Character>();
+    alignY=new ArrayDeque<Character>();
+    System.out.println("The minimum number of operations required for alignment is: "+ optimalAlignment(x.toLowerCase(), y.toLowerCase(), alignX, alignY));
+    System.out.println("X alignment is: "+ alignX);
+    System.out.println("Y alignment is: "+ alignY);
+
+    System.out.println();
+    System.out.println();
+
+    x="Shervin";
+    y="Hooshang";
+    alignX=new ArrayDeque<Character>();
+    alignY=new ArrayDeque<Character>();
     System.out.println("The minimum number of operations required for alignment is: "+ optimalAlignment(x.toLowerCase(), y.toLowerCase(), alignX, alignY));
     System.out.println("X alignment is: "+ alignX);
     System.out.println("Y alignment is: "+ alignY);
