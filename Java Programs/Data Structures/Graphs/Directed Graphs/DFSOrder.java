@@ -13,6 +13,9 @@ public class DFSOrder {
   // instance variables:
   private Deque<Integer> pre; // q of visited vertices
   private Deque<Integer> post; // q of visited vertices
+  // vertex index array of intergers to maintain number visited vertex visited before v (rank of v)
+  private int[] preRank;
+  private int[] postRank;
 
   // to perform dfs in Digraph:
   // vertex index array of boolean to keep track of visited vertices
@@ -21,6 +24,8 @@ public class DFSOrder {
   // Constructor:
   public DFSOrder(Digraph G) {
     marked=new boolean[G.V()]; // vertex index array
+    preRank=new int[G.V()]; // vertex index array
+    postRank=new int[G.V()]; // vertex index array
     pre=new ArrayDeque<Integer>(); // an empty q for vertices
     post=new ArrayDeque<Integer>(); // an empty q for vertices
 
@@ -50,6 +55,7 @@ public class DFSOrder {
         marked[v]=true;
         // add it to pre q
       	pre.offer(v);
+	preRank[v]++;
       }
     
       // set isBlack to true
@@ -69,10 +75,10 @@ public class DFSOrder {
       if(isBlack) {
         int u=stack.pop();
         post.offer(u);
+	postRank[u]++;
       }
     }
   }
-
 
   // recursive dfs visit:
   private void dfs(Digraph G, int v) {
@@ -93,7 +99,25 @@ public class DFSOrder {
     post.offer(v);
   }
 
+  public int preRank(int v) {
+    validate(v);
+    return preRank[v];
+  }
+  public int postRank(int v) {
+    validate(v);
+    return postRank[v];
+  }
   public Iterable<Integer> pre() {return pre;}
   public Iterable<Integer> post() {return post;}
-  public Iterable<Integer> reversePost() {return null;}
+  public Iterable<Integer> reversePost() {
+    Deque<Integer> reversePost=new ArrayDeque<Integer>(); //an empty stack  
+    for(Integer vertex:post)
+      reversePost.push(vertex);
+    return reversePost;
+  }
+
+  private void validate(int v) {
+    int V=marked.length;
+    if(v<0||v>=V) throw new IndexOutOfBoundsException();
+  }
 }
