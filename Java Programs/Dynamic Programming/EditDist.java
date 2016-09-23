@@ -9,11 +9,6 @@ public class EditDist {
   // this method compute the minimum number of operation ("gap" insertion) required to
   // transform x string to y
   public static int optimalAlignment(String x, String y) {
-    // 1st input sequence:
-    int N=x.length();
-    // 2nd input sequence:
-    int M=y.length();
-
     /* Problem formulation:
        What is the alignment of x and y that requires min number of operations?
        I DON'T KNOW!!
@@ -54,5 +49,28 @@ public class EditDist {
       5. report the value of the shortest path
       6. reconstruct the path
     */
+
+    // 1st input sequence:
+    int N=x.length();
+    // 2nd input sequence:
+    int M=y.length();
+
+    // memo table which caches all states of DAG of optimal substructure and their value.
+    // How many state do we need for all possible alignment? N*M
+    // Implict edges transitioning from one state to another and constitute a simple path that represent an alginment 
+    int[][] memo=new int[n+1][m+1]; // all characters in x and y + gaps
+
+    // 3a. Initialization:
+    memo[0][0]=0; // optimal number of operations to algin gaps in x and y
+    // 2. Optimal number of operations to algin any subsequence of x with a gap in y
+    for(int i=1; i<=N, i++) memo[i][0]=i;
+    // 3. Optimal number of operations to algin any subsequence of y with a gap in x
+    for(int j=1; j<=M, i++) memo[0][j]=j;
+
+
+    // 3b. Recurrence: carefully search all possible alginment for the one with minimal number of operations required
+    for(int i=1
+
+
   }
 }
