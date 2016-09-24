@@ -109,43 +109,42 @@ public class WordLadder {
     }
   }
 
-   // bfs:
-   private static void bfs(List<Integer>[] adj, int s, boolean[] marked, int[] edgeTo, int[] distTo) {
-     // bfs processing q:
-     Deque<Integer> q=new ArrayDeque<Integer>(); // empty q of integer vertices
+  // bfs:
+  private static void bfs(List<Integer>[] adj, int s, boolean[] marked, int[] edgeTo, int[] distTo) {
+    // bfs processing q:
+    Deque<Integer> q=new ArrayDeque<Integer>(); // empty q of integer vertices
+ 
+    // visite the source index:
+    marked[s]=true;
+    // set the distance from the source to 0
+    distTo[s]=0;
+    // put the vertex in q
+    q.offer(s);
+    // while the processin q is not empty:
+    while(!q.isEmpty()) {
+      // 1. remove form the head of the queue:
+      int v=q.poll();
 
-     // visite the source index:
-     marked[s]=true;
-     // set the distance from the source to 0
-     distTo[s]=0;
-     // put the vertex in q
-     q.offer(s);
-
-     // while the processin q is not empty:
-     while(!q.isEmpty()) {
-       // 1. remove form the head of the queue:
-       int v=q.poll();
-
-       // 2. for all vertices w adjacent to v:
-       for(Integer w:adj[v]) {
-         // 3. if w has not been visited already
- 	 if(!marked[w]) {
-  	   // visit w:
-	   marked[w]=true;
-	   // set its distance to the source
-	   distTo[w]=distTo[v]+1;
-           // set its parent pointer
-	   edgeTo[w]=v;
-	   // add it to the tail of the processing q
-	   q.offer(w);
-         }
-       }
-     }
-   }
+      // 2. for all vertices w adjacent to v:
+      for(Integer w:adj[v]) {
+        // 3. if w has not been visited already
+        if(!marked[w]) {
+    	  // visit w:
+	  marked[w]=true;
+          // set its distance to the source
+	  distTo[w]=distTo[v]+1;
+          // set its parent pointer
+	  edgeTo[w]=v;
+	  // add it to the tail of the processing q
+	  q.offer(w);
+        }
+      }
+    }
+  }
   
   // compare two strings character by character and return true if
   // they only differ in one character
   private static boolean isAdjacent(String w1, String w2) {
-    return false;
+    // check if the length of w1 and w2 is equal
   }
 }
