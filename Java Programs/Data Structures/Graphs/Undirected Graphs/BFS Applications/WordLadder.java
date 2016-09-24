@@ -101,7 +101,9 @@ public class WordLadder {
         // move to the parent pointer of t in BFS tree
         t=edgeTo[t];
       }
-      System.out.println("The word latter: ");
+      // add the source to the path
+      path.push(source);
+      System.out.println("The Word Ladder: ");
       System.out.println(path);
     }
     else {
