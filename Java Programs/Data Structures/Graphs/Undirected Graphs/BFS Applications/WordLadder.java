@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.Scanner;
-
+import java.util.Arrays;
 public class WordLadder {
 
   public static void main(String[] args) {
@@ -72,10 +72,33 @@ public class WordLadder {
     for(int i=0; i<V; i++)
       adj[i]=new LinkedList<Integer>(); // an empty list on integers
 
-
     // Build the underlying graph
+    for(int i=0; i<V; i++) {
+      for(int j=i+1; j<V; j++) {
+        if(isAdjacent(vertexArray[i], vertexArray[j])) {
+	  // add an edge between i and j
+          adj[i].add(j);
+          adj[j].add(i);
+        }
+      }
+    }
+
+    // run bfs on the graph from the source vertex:
+    boolean[] marked=new boolean[V];
+    int[] edgeTo=new int[V];
+    int[] distTo=new int[V];
+    
+    bfs(adj, marked, edgeto, distTo);
+    
+    
     System.out.println(vertexMap);
     System.out.println();
 
+  }
+
+  // compare two strings character by character and return true if
+  // they only differ in one character
+  private static boolean isAdjacent(String w1, String w2) {
+    
   }
 }
