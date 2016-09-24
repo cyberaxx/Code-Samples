@@ -146,5 +146,15 @@ public class WordLadder {
   // they only differ in one character
   private static boolean isAdjacent(String w1, String w2) {
     // check if the length of w1 and w2 is equal
+    if(w1.length()!=w2.length()) throw new RuntimeException("Word length must be equal!");
+    // number of different chars between two words
+    int diff=0;
+    for(int i=0; i<w1.length(); i++) {
+      if(w1.charAt(i)!=w2.charAt(i))
+	diff++;
+      if(diff>1) return false;
+    }
+    // otherwise:
+    return true;
   }
 }
