@@ -21,44 +21,52 @@ import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.Scanner;
 import java.util.Arrays;
+
+import java.io.File;
+
 public class WordLadder {
 
   public static void main(String[] args) {
-
     // the source and target of bfs seach
-    String source=args[0];
-    String target=args[1];
+    String fileName=args[0];
+    String source=args[1];
+    String target=args[2];
 
-    // read from stdin
-    Scanner scanner=new Scanner(System.in);
-    int num=scanner.nextInt(); // number of string to be read from stdin
-    // num of vertices:
-    int V=num+2;
     // vertex index
-    int v=0;
+    int V=0;
 
     // a symbol table with String keys and Integer values
     HashMap<String, Integer> vertexMap=new HashMap<String, Integer>();
+
+    // add the source vertex to the vertexMap
+    vertexMap.put(source, V++);
+
+    // read from file
+    try {
+      File file=new File(fileName);
+      Scanner scanner=new Scanner(file);
+
+      while(scanner.hasNextLine()) {
+	String vertex=scanner.nextLine().trim();
+        // if the given string has not been already inserted to the vertexMap
+        if(!vertexMap.containsKey(vertex))
+	  vertexMap.put(vertex, V++);
+      }
+
+      // close the scanner
+      scanner.close();
+
+    } catch(Exception e) {
+        System.out.println("Failed to read from the file due to " + e.getMessage());
+    }
+
+    // add the target vertex to the vertexMap
+    if(!vertexMap.containsKey(target))
+      vertexMap.put(target, V++);
+
     // a vertex index array of String values of vertices
     String[] vertexArray=new String[V];
    
-    // add the source vertex to the vertexMap
-    vertexMap.put(source, v++);
-
-    while(num>0) {
-	String vertex=scanner.next();
-        // if the given string has not been already inserted to the vertexMap
-        if(!vertexMap.containsKey(vertex))
-	  vertexMap.put(vertex, v++);
-	num--;
-    }
-    // close the scanner
-    scanner.close();
-
-    // add the target vertex to the vertexMap
-    vertexMap.put(target, v);
-    assert v==V-1;
-
     // populate the vertexArray (vertex index array of Strings (vertex values)
     for(String key:vertexMap.keySet()) {
       // extract the vertex index associated with the vertex string key in the vertexMap
@@ -96,13 +104,16 @@ public class WordLadder {
       // reconstruct the BFS path from the source to the target:
       Deque<String> path=new ArrayDeque<String>(); // an empty q
       // reconstruct the path from parent pointers
-      while(distTo[t]!=0) {
-        path.push(vertexArray[t]); // add String value of the vertex to the path
+      int x=t;
+      while(distTo[x]!=0) {
+        path.push(vertexArray[x]); // add String value of the vertex to the path
         // move to the parent pointer of t in BFS tree
-        t=edgeTo[t];
+        x=edgeTo[x];
       }
       // add the source to the path
       path.push(source);
+      System.out.println("Length of The Word Ladder: ");
+      System.out.println(distTo[t]);
       System.out.println("The Word Ladder: ");
       System.out.println(path);
     }
