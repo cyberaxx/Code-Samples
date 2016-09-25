@@ -283,7 +283,6 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     else if(cmp<0) 
       // if the search key is less than the key associated to x recursively search for a node on x's left subtree
       return floor(x.left, key);
-
     else {
       // if the search key is greater than the key associated with x:
       // 1. x itself is a candidate to be the floor of the search key
