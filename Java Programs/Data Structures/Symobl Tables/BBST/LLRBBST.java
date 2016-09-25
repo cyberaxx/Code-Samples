@@ -73,50 +73,7 @@
   that N can be divided by 2). Not only the height of the BST becomes logarithmic, for each node in the tree number of the hobs to from the node to its relative min and max are equal (Duh! definition of 
   the middle) and more generally any simple path from root of the BST to all nodes at leaves
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  
-  
   price to pay: in order to provide efficient iteration over keys in SORTED order (similar to binary search array)
   	 	keys must be maintained in a symmetirc order andnot o
 */
@@ -126,9 +83,7 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   private static final boolean RED=false;
 
   // a BST is always characterized by a reference to its root
-  private Node root;
-
-
+  private Node root=null;
 
   // API: 1. Basic ST behaviours 2. Ordered key operations
 
@@ -141,24 +96,21 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   public boolean isEmpty(){return false;}
   public Iterable<Key> keys(){return null;}
 
-
+  // Rotations:
 
   // 2. Ordered key operations
+  public Key min(){return null;}
+  public Key max(){return null;}
+  public Key floor(Key key){return null;}
+  public Key ceiling(Key key){return null;}
+  public Key select(int k){return null;}
+  public int rank(Key key){return 0;}
+  public int rangeCount(Key lo, Key hi){return 0;}
+  public void delMin(){}
+  public void delMax(){}
+  public Iterable<Key> keys(Key lo, Key hi){return null;}
 
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
+  // Helper Methods:
 
 
 
@@ -178,7 +130,8 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
 
 
-  // helper nested static class:
+
+  // Helper nested static class:
   private static class Node<Key, Value> {
     // instance fields:
     private Key key;
@@ -198,61 +151,4 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
       this.color=RED;
     }
   }
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
