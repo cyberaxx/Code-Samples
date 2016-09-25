@@ -108,7 +108,29 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   private Node put(Node x, Key key, Value value) {
     // Base Case: search miss -> rigthtful position of key on bst
     if(x==null) return new Node(key, value, RED);
-    return null;
+    
+    // RECURRENCE: search for the given key in the bst rooted at x
+    int cmp=key.compareTo(x.key);
+
+    // if the given key already exists in the bst
+    if(cmp==0)  x.value=value; // update the value associated with x with the new given value
+    // search left or right subtrees of x according to the comparison result
+    else if(cmp<0)
+      // new node must get inserted to the left subtree of x and all changes must be propagated back up to the root of x's left subtree:
+      x.left=put(x.left, key, value);
+    else
+      // new node must get inserted to the right subtree of x and all changes must be propagated back up to the root of x's right subtree:
+      x.right=put(x.right, key, value);
+
+     // update the count field of x: 1+number of nodes on its left and right subtrees
+     x.count=1+size(x.left)+size(x.right);
+
+     // recover the balance of the bst after insertion:
+     if(isRed(x.right))  x=rotateLeft(x); // rotate the right leaning red link to the left
+     if(x.left!=null && isRed(x.left.left))  x=rotateRight(x); // if two red links where incident to a node, put the node with median key as a root
+     if(isRed(x.left) && isRed(x.right))  colorFlip(x); // split a tem 4-node to  two 2-node and move the middle node to the parent level
+
+     return x; 
   }
  
   public void delete(Key key){}
@@ -124,7 +146,7 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   // 1. Rotate a left leaning red link to right
   private Node rotateRight(Node x){return null;}
   // 2. Rotate a right leaning red link to left
-  private Node rotateleft(Node x){return null;}
+  private Node rotateLeft(Node x){return null;}
   // 3. flip color (equivalent to splittin temp 4-node in 2-3 trees)
   private void colorFlip(Node x){}
   // helper method:
@@ -147,7 +169,10 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   public Iterable<Key> keys(Key lo, Key hi){return null;}
 
   // Helper Methods:
-
+  private int size(Node x) {
+    if(x==null) return 0;
+    return x.count;
+  }
 
 
 
