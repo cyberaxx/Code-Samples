@@ -261,9 +261,45 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     return max(x.right);
   }
 
-  public Key floor(Key key){return null;}
-  public Key ceiling(Key key){return null;}
+  public Key floor(Key key){
+    if(isEmpty()) throw new NoSuchElementException();
+    
+    // in a bst root at node root, recursively search for a node with the key associated to it being the
+    // LARGEST key LESS THAN or EQUAL to the given key, null otherwise (search miss)
+    Node x=floor(root, key);
+    if(x==null) return null; // search miss
+    return x.key; // search hit
+  }
+  // private recursive helper method to search in bst rooted at node x to find a node with key associated to it
+  // be a floor of the given key:
+  private Node floor(Node x, Key key) {
+    // Base case: search miss
+    if(x==null) return null; // hitting the null node before finding the proper node to return
+
+    // Recurrence: guid the search using the comparsion between the key associated with node x and the given key
+    int cmp=key.compareTo(x.key);
+
+    if(cmp==0) return x; // search hit (there is no tighter floor than equal!)
+    else if(cmp<0) 
+      // if the search key is less than the key associated to x recursively search for a node on x's left subtree
+      return floor(x.left, key);
+
+    else {
+      // if the search key is greater than the key associated with x:
+      // 1. x itself is a candidate to be the floor of the search key
+      // 2. there might be a tighter floor on x's right subtree
+      Node t=floor(x.right, key);
+      if(t!=null) return t;
+      else return x;
+    }
+  }
+
+  public Key ceiling(Key key) {
+  }
+
+
   public Key select(int k){return null;}
+
   public int rank(Key key){return 0;}
 
   public int rangeCount(Key lo, Key hi){return 0;}
