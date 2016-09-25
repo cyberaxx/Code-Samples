@@ -138,6 +138,8 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   }
  
   public void delete(Key key){}
+  public void delMin(){}
+  public void delMax(){}
 
   // Rotations:
   // 1. Rotate a left leaning red link to right
@@ -196,7 +198,7 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     if(x==null) return null;
     return x.value;
   }
-  
+
   // private helper search method:
   // search in the bst rooted at node x, for a node with key associated to it equal to the given key
   // search hit: return the node. search miss: return null
@@ -227,15 +229,44 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   public Iterable<Key> keys(){return null;}
 
   // 2. Ordered key operations
-  public Key min(){return null;}
-  public Key max(){return null;}
+  public Key min(){
+    if(isEmpty()) throw new NoSuchElementException();
+    
+    // search in the bst rooted at node root, for the node which the key associated with it is the least among all
+    // nodes in the tree (the left most node), if exists such a node, null otherwise (null case cannot happen because we have already checked for
+    // tree not being empty)
+    Node x=min(root);
+
+    // return the key associated with such a node:
+    return x.key; 
+  }
+  // recursive helper method:
+  // find a node with min key in a bst rooted at node x
+  private Node min(Node x) {
+    // Base Case: stop recursion if x itself is the left most node in bst rooted at x
+    if(x.left==null) return x;
+    
+    // otherwise: keep moving to the left and search for the min on the left subtrees
+    return min(x.left);
+  }
+  public Key max(){
+    if(isEmpty()) throw new NoSuchElementException();
+    Node x=max(root);
+    return x.key; 
+  }
+  // recursive helper method:
+  // find a node with max key in a bst rooted at node x
+  private Node max(Node x) {
+    if(x.right==null) return x;
+    return max(x.right);
+  }
+
   public Key floor(Key key){return null;}
   public Key ceiling(Key key){return null;}
   public Key select(int k){return null;}
   public int rank(Key key){return 0;}
+
   public int rangeCount(Key lo, Key hi){return 0;}
-  public void delMin(){}
-  public void delMax(){}
   public Iterable<Key> keys(Key lo, Key hi){return null;}
 
   // Helper Methods:
