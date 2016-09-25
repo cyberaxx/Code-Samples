@@ -16,14 +16,24 @@
 
 */
 
-
-
 public class CatalanNumbers {
 
   // DP implementation of Catalan recurrence (Similar to Fibonacci)
   private static int catalan(int n) {
+    int[] c=new int[n+1];
 
+    // base case: c[0]=1;
+    c[0]=1;
+    c[1]=1;
 
+    // iterate over all possible n's strating from n+1
+    for(int j=2; j<=n; j++) {
+      // sum formulations
+      for(int i=0; i<=j-1; i++) {
+	c[j]=c[j]+c[i]*c[j-i-1];
+      }
+    }
+    return c[n];
   }
 
   public static void main(String[] args) {
