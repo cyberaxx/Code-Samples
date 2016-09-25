@@ -133,10 +133,36 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
   // Rotations:
   // 1. Rotate a left leaning red link to right
-  private Node rotateRight(Node x) {}
+  private Node rotateRight(Node x) {
+    // x.left link is red, so:
+    // 1. pointer rewiring
+    Node t=x.left; // copy a reference to x.left node
+    x.left=t.right; // move the link to node in between x and t from t's right to x's left around the node in between
+    t.right=x; // make x as a right child of t
+
+    // 2. set t and x colors:
+    t.color=x.color;
+    // set x color RED
+    x.color=RED;
+
+    // return t:
+    return t;
+  }
 
   // 2. Rotate a right leaning red link to left
-  private Node rotateLeft(Node x) {}
+  private Node rotateLeft(Node x) {
+    // x.right link is red
+    // 1. rewiring pointers:
+    Node t=x.right;
+    x.right=t.left;
+    t.left=x;
+
+    // colors
+    t.color=x.color;
+    x.color=RED;
+
+    return t;
+  }
 
   // 3. flip color (equivalent to splittin temp 4-node in 2-3 trees)
   private void colorFlip(Node x) {
