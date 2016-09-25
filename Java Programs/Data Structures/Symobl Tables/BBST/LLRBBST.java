@@ -345,12 +345,12 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   }
   // private recursive helper method, that search in bst rooted at node x for a node with a key associated to it
   // is kth smallest key among all keys in the bst
-  private Node rank(Node x, int k) {
+  private Node select(Node x, int k) {
     // if number of nodes with keys associated to them less than the node x is ke
     // then x would be the k-th smallest node
     if(size(x.left)==k)  return x;
-    else if(k<size(x.left) return select(x.left, k);
-    else return select(x.right, k-1-size(x.left))
+    else if(k<size(x.left)) return select(x.left, k);
+    else return select(x.right, k-1-size(x.left));
   }
 
   public int rank(Key key) {
