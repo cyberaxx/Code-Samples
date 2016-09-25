@@ -73,9 +73,6 @@
   that N can be divided by 2). Not only the height of the BST becomes logarithmic, for each node in the tree number of the hobs to from the node to its relative min and max are equal (Duh! definition of 
   the middle) and more generally any simple path from root of the BST to all nodes at leaves
 
- 
-  price to pay: in order to provide efficient iteration over keys in SORTED order (similar to binary search array)
-  	 	keys must be maintained in a symmetirc order andnot o
 */
 public class LLRBBST<Key extends Comparable<Key>, Value> {
   // Nodes colors:
@@ -91,8 +88,32 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   // API: 1. Basic ST behaviours 2. Ordered key operations
 
   // 1. Basic ST behaviours
-  public void put(Key key, Value value){}
+  public void put(Key key, Value value) {
+    // check if key is not null:
+    if(key==null) throw new NullPointerException("BST keys cannot be null!");
+
+    // if value is null it means delete:
+    if(value==null) { delete(key); return ;} // delete the key-value pair associated with the given key
+ 
+    // bst is characterized by the reference to its root node
+    // recursively add a new node to bst rooted at root and propagate the modification all the way 
+    // back to the root
+    root=put(root, key, value);
+    // root must be alway black
+    if(isRed(root))
+      root.color=BLACK;
+  }
+  // recursive helper method:
+  // put method returns a link to the modified subtree after insertion
+  private Node put(Node x, Key key, Value value) {
+    // Base Case: search miss -> rigthtful position of key on bst
+    if(x==null) return new Node(key, value, RED);
+    return null;
+  }
+ 
   public void delete(Key key){}
+
+  // Search for the given key
   public Value get(Key key){return null;}
   public boolean contains(Key key) {return false;}
   public int size(){return 0;}
@@ -100,6 +121,18 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   public Iterable<Key> keys(){return null;}
 
   // Rotations:
+  // 1. Rotate a left leaning red link to right
+  private Node rotateRight(Node x){return null;}
+  // 2. Rotate a right leaning red link to left
+  private Node rotateleft(Node x){return null;}
+  // 3. flip color (equivalent to splittin temp 4-node in 2-3 trees)
+  private void colorFlip(Node x){}
+  // helper method:
+  private boolean isRed(Node x) {
+    // null links are black (no red null link dangling)
+    if(x==null) return false;
+    return x.color==RED;
+  }
 
   // 2. Ordered key operations
   public Key min(){return null;}
