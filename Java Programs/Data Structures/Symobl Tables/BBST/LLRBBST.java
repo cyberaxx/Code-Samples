@@ -51,11 +51,6 @@
   2,3. get, contains
   4. deletion
   
-  BST:
-  Binary Tree data structure with Symmetric keys condition enables us to maintain a DYNAMIC collection of (key,value) pairs
-  in a tree structure that preserves the ordering among keys, and enable clients to iterate over the associative array instance (key,value)
-  pairs in the SORTED order of keys (simialr to simple arrays).
-
   While BSTs, improve the efficiency of insertion and deletion compare to associative array implementation using parallel arrays (Sorted array of keys, and an array
   for values) on average, in thw worst case BST can get even worst than an Binary Search Array, where BST degenerates to a SORTED LinkedList (where keys come in and
   inserted to the tree in ascending or descending SORTED order). In that case the height of the BST become Linear proportional to number of nodes (items in the associative array instance)
@@ -65,13 +60,13 @@
   How to fix?!
   For each node in the BST, NOT ONLY make sure that each node is GREATER than all nodes on its LEFT subtree and LESS than all nodes on its right subtree (so it lies
   in between nodes on its left and right), BUT ALSO, make sure that each node is exactly the middle node among all nodes in its left and right subtree (including itself)
-  that's where Binary Search gets its efficiency: by repeatedly searching the middle of array and its subarray, each time it halves the size of subproblem and it does the
+  that's where Binary Search gets its efficiency: by repeatedly searching the middle of array and its subarrays respectively, each time it halves the size of subproblem and it does the
   seach in logN time (where keys are in a sorted order).
 
   Now, where each node in the BST is GREATER than nodes on its LEFT and LESS than nodes on its RIGHT and also it is a MEDIAN (middle node of all nodes [leftmost  rightmost]) number of
   nodes on its left and right subtree are equal, and since BST is Binary, at each level n/2 of nodes will go to each subtree and worst case height of the tree would be logN (number of time
   that N can be divided by 2). Not only the height of the BST becomes logarithmic, for each node in the tree number of the hobs to from the node to its relative min and max are equal (Duh! definition of 
-  the middle) and more generally any simple path from root of the BST to all nodes at leaves
+  the middle) and more generally any simple path from root of the BST to all nodes at leaves has equal length of logN.
 
 */
 public class LLRBBST<Key extends Comparable<Key>, Value> {
@@ -103,6 +98,7 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     if(isRed(root))
       root.color=BLACK;
   }
+
   // recursive helper method:
   // put method returns a link to the modified subtree after insertion
   private Node put(Node x, Key key, Value value) {
@@ -135,26 +131,33 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
  
   public void delete(Key key){}
 
-  // Search for the given key
-  public Value get(Key key){return null;}
-  public boolean contains(Key key) {return false;}
-  public int size(){return 0;}
-  public boolean isEmpty(){return false;}
-  public Iterable<Key> keys(){return null;}
-
   // Rotations:
   // 1. Rotate a left leaning red link to right
-  private Node rotateRight(Node x){return null;}
+  private Node rotateRight(Node x) {}
+
   // 2. Rotate a right leaning red link to left
-  private Node rotateLeft(Node x){return null;}
+  private Node rotateLeft(Node x) {}
+
   // 3. flip color (equivalent to splittin temp 4-node in 2-3 trees)
-  private void colorFlip(Node x){}
+  private void colorFlip(Node x) {
+    x.right=BLACK;
+    x.left=BLACK;
+    x.color=RED;
+  }
+
   // helper method:
   private boolean isRed(Node x) {
     // null links are black (no red null link dangling)
     if(x==null) return false;
     return x.color==RED;
   }
+
+  // Search for the given key
+  public Value get(Key key){return null;}
+  public boolean contains(Key key) {return false;}
+  public int size(){return 0;}
+  public boolean isEmpty(){return false;}
+  public Iterable<Key> keys(){return null;}
 
   // 2. Ordered key operations
   public Key min(){return null;}
@@ -173,24 +176,6 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     if(x==null) return 0;
     return x.count;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // Helper inner class:
   private class Node {
