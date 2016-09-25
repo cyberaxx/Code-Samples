@@ -69,6 +69,13 @@
   the middle) and more generally any simple path from root of the BST to all nodes at leaves has equal length of logN.
 
 */
+import java.util.Collection;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Deque;
+import java.util.ArrayDeque;
+import java.util.NoSuchElementException;
+
 public class LLRBBST<Key extends Comparable<Key>, Value> {
   // Nodes colors:
   private static final boolean BLACK=true;
@@ -180,9 +187,12 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
   // Search for the given key
   public Value get(Key key){return null;}
-  public boolean contains(Key key) {return false;}
-  public int size(){return 0;}
-  public boolean isEmpty(){return false;}
+  public boolean contains(Key key) {
+    if(isEmpty()) throw new NoSuchElementException();
+    return get(key)!=null;
+  }
+  public int size(){return size(root);}
+  public boolean isEmpty(){return root==null;}
   public Iterable<Key> keys(){return null;}
 
   // 2. Ordered key operations
