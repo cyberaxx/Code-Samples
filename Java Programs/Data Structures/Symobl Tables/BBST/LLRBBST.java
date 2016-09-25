@@ -79,17 +79,20 @@
 */
 public class LLRBBST<Key extends Comparable<Key>, Value> {
   // Nodes colors:
-  private static final boolean black=true;
+  private static final boolean BLACK=true;
   private static final boolean RED=false;
 
   // a BST is always characterized by a reference to its root
-  private Node root=null;
+  private Node root;
+
+  // Constructor:
+  public LLRBBST(){}
 
   // API: 1. Basic ST behaviours 2. Ordered key operations
 
   // 1. Basic ST behaviours
   public void put(Key key, Value value){}
-  public void delete(Keye key){}
+  public void delete(Key key){}
   public Value get(Key key){return null;}
   public boolean contains(Key key) {return false;}
   public int size(){return 0;}
@@ -131,12 +134,11 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
 
 
-  // Helper nested static class:
-  private static class Node<Key, Value> {
+  // Helper inner class:
+  private class Node {
     // instance fields:
     private Key key;
     private Value value;
-    private int h;
     private int count;
     private boolean color;
    
@@ -145,10 +147,10 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
     // Constructors:
     public Node(){}
-    public Node(Key key, Value value) {
+    public Node(Key key, Value value, boolean color) {
       this.key=key;
       this.value=value;
-      this.color=RED;
+      this.color=this.color;
     }
   }
 }
