@@ -295,8 +295,39 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   }
 
   public Key ceiling(Key key) {
+    if(isEmpty()) throw new NoSuchElementException();
+    
+    // in a bst rooted at node root, recursively search for a node with key associated to it being
+    // a ceiling to the given key, null otherwirse
+    Node x=ceiling(root, key);
+    if(x==null) return null; // search miss
+    return x.key; // search hit: return the key associated to the found node
   }
+  // private helper method:
+  // recursively search in a bst rooted at x for a node with a key associated to it being 
+  // ceiling to the given key:
+  private Node ceiling(Node x, Key key) {
+    // Base case: search miss
+    if(x==null) return null; // if search hits a null node before finding a node with desired properties
+    
+    // Recurrence:
+    // guided search through the bst rooted at x, using comparsion between the given key and 
+    // the key associated wtih the nodex:
+    int cmp=key.compareTo(x.key);
 
+    // search hit:
+    if(cmp==0) return x;
+    // if the given ley is greater than the key associated with the node x, search for the desired node with theceiling key on x's right subtree
+    else if(cmp>0) return ceiling(x.right, key);
+    else {
+      // if the given key is less than the key associated to x:
+      // 1. x itselft is a candidate to be the desired node with the ceiling key
+      // 2. there might be a tighter candidate on x's left subtree
+      Node t=ceiling(x.left, key);
+      if(t!=null) return t;
+      else return x;
+    }
+  }
 
   public Key select(int k){return null;}
 
