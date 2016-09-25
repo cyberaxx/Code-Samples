@@ -136,10 +136,6 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
      return x; 
   }
- 
-  public void delete(Key key){}
-  public void delMin(){}
-  public void delMax(){}
 
   // Rotations:
   // 1. Rotate a left leaning red link to right
@@ -227,6 +223,47 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   }
   public int size(){return size(root);}
   public boolean isEmpty(){return root==null;}
+
+  /*
+    NOTE: All these delete methods are suitable for BST and they are not LLRBBST delete methods!!!
+          This means these deletion methods do NOT preserve:
+	  1. The perfect black balance of bst, 
+	  2. Red links always leaning left
+	  3. No node has two red links connected to it
+
+    Red Black Tree deletion such that preserve all llrbbst invariants would be implemented later this week.
+  */
+  public void delete(Key key){}
+  public void delMin() {
+    if(isEmpty()) throw new NoSuchElementException();
+    // delete the node with key associated to it was the min key among all keys in the bst rooted at node "root"
+    // return the link (a reference to a node) to the modified node (deleted node) back up to its parent and so forth recursively
+    root=delMin(root);
+  }
+  // recursively search in a bst rooted at node x, for a node with a min key, return the link to its right subtree (it's min, so it has no left chid)
+  private Node delMin(Node x) {
+    // Base case: a node with no left child
+    if(x.left==null) return x.right;
+    
+    // if x has a left subtree, the node with the min key must be on x's left subtree, and so x's left link must get modifed
+    x.left=delMin(x.left);
+    return x; // propagate the modification back up to the root of the bst 
+  }
+  public void delMin() {
+    if(isEmpty()) throw new NoSuchElementException();
+    // delete the node with key associated to it was the min key among all keys in the bst rooted at node "root"
+    // return the link (a reference to a node) to the modified node (deleted node) back up to its parent and so forth recursively
+    root=delMin(root);
+  }
+  // recursively search in a bst rooted at node x, for a node with a min key, return the link to its right subtree (it's min, so it has no left chid)
+  private Node delMin(Node x) {
+    // Base case: a node with no left child
+    if(x.left==null) return x.right;
+    
+    // if x has a left subtree, the node with the min key must be on x's left subtree, and so x's left link must get modifed
+    x.left=delMin(x.left);
+    return x; // propagate the modification back up to the root of the bst 
+  }
 
   // 2. Ordered key operations
   public Key min(){
