@@ -69,6 +69,7 @@
   the middle) and more generally any simple path from root of the BST to all nodes at leaves has equal length of logN.
 
 */
+
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
@@ -186,13 +187,43 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   }
 
   // Search for the given key
-  public Value get(Key key){return null;}
+  public Value get(Key key) {
+    if(isEmpty()) throw new NoSuchElementException();
+    
+    // recursively search the bst, rooted at the node "root":
+    // return a Node with a key associated to it equals the given key, null otherwise:
+    Node x=get(root, key);
+    if(x==null) return null;
+    return x.value;
+  }
+  
+  // private helper search method:
+  // search in the bst rooted at node x, for a node with key associated to it equal to the given key
+  // search hit: return the node. search miss: return null
+  private Node get(Node x, Key key) {
+    // Base Case: search termination by a hiting null node (empty subtree) 
+    if(x==null) return null; // search miss
+    
+    // Recurrence: directed search using compareTo method
+    int cmp=key.compareTo(x.key);
+    
+    if (cmp==0) return x; // search hit (a node with a key associated to it equal to the given key was found)
+    else if (cmp<0) 
+      // search for the given key on the tree rooted at x.left (left subree of x). A bst with all nodes in it, have keys
+      // associated to them less than the key associated to x
+      return get(x.left, key);
+    else 
+      // resume the recursive search on bst rooted at x.right (right subtree of x)
+      return get(x.right, key);
+  }
+
   public boolean contains(Key key) {
     if(isEmpty()) throw new NoSuchElementException();
     return get(key)!=null;
   }
   public int size(){return size(root);}
   public boolean isEmpty(){return root==null;}
+
   public Iterable<Key> keys(){return null;}
 
   // 2. Ordered key operations
