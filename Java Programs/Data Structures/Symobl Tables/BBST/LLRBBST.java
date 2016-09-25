@@ -166,8 +166,8 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
   // 3. flip color (equivalent to splittin temp 4-node in 2-3 trees)
   private void colorFlip(Node x) {
-    x.right=BLACK;
-    x.left=BLACK;
+    x.right.color=BLACK;
+    x.left.color=BLACK;
     x.color=RED;
   }
 
