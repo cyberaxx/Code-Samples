@@ -120,4 +120,117 @@
   price to pay: in order to provide efficient iteration over keys in SORTED order (similar to binary search array)
   	 	keys must be maintained in a symmetirc order andnot o
 */
-public class LLR
+public class LLRBBST<Key extends Comparable<Key>, Value> {
+  // Nodes colors:
+  private static final boolean black=true;
+  private static final boolean RED=false;
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // helper nested static class:
+  private static class Node<Key, Value> {
+    // instance fields:
+    private Key key;
+    private Value value;
+    private int h;
+    private int count;
+    private boolean color;
+   
+    // reference to left and right subtrees
+    private Node left, right;
+
+    // Constructors:
+    public Node(){}
+    public Node(Key key, Value value) {
+      this.key=key;
+      this.value=value
+      this.color=RED;
+    }
+  }
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
