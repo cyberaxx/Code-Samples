@@ -93,7 +93,7 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   // 1. Basic ST behaviours
   public void put(Key key, Value value) {
     // check if key is not null:
-    if(key==null) throw new NullPointerException("BST keys cannot be null!");
+    if(key==null) throw new NullPointerException("Key cannot be null!");
 
     // if value is null it means delete:
     if(value==null) { delete(key); return ;} // delete the key-value pair associated with the given key
@@ -191,6 +191,8 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   // Search for the given key
   public Value get(Key key) {
     if(isEmpty()) throw new NoSuchElementException();
+    // check if key is not null:
+    if(key==null) throw new NullPointerException("Key cannot be null!");
     
     // recursively search the bst, rooted at the node "root":
     // return a Node with a key associated to it equals the given key, null otherwise:
@@ -263,6 +265,8 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
   public Key floor(Key key){
     if(isEmpty()) throw new NoSuchElementException();
+    // check if key is not null:
+    if(key==null) throw new NullPointerException("Key cannot be null!");
     
     // in a bst root at node root, recursively search for a node with the key associated to it being the
     // LARGEST key LESS THAN or EQUAL to the given key, null otherwise (search miss)
@@ -295,6 +299,8 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
   public Key ceiling(Key key) {
     if(isEmpty()) throw new NoSuchElementException();
+    // check if key is not null:
+    if(key==null) throw new NullPointerException("Key cannot be null!");
     
     // in a bst rooted at node root, recursively search for a node with key associated to it being
     // a ceiling to the given key, null otherwirse
@@ -328,7 +334,15 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     }
   }
 
-  public Key select(int k){return null;}
+  public Key select(int k){
+    if(isEmpty()) throw new NoSuchElementException();
+    // check if key is not null:
+    if(key==null) throw new NullPointerException("Key cannot be null!");
+
+    // in a bst rooted at node "root", recursively search for a node with key associated to it
+    // being the k-th smallest key among all nodes in the bst
+    Node x 
+  }
 
   public int rank(Key key){return 0;}
 
