@@ -228,8 +228,6 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   public int size(){return size(root);}
   public boolean isEmpty(){return root==null;}
 
-  public Iterable<Key> keys(){return null;}
-
   // 2. Ordered key operations
   public Key min(){
     if(isEmpty()) throw new NoSuchElementException();
@@ -336,18 +334,47 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
   public Key select(int k){
     if(isEmpty()) throw new NoSuchElementException();
-    // check if key is not null:
-    if(key==null) throw new NullPointerException("Key cannot be null!");
+    // check if k is a valid number:
+    if(k<0||k>=size()) throw new NoSuchElementException();
 
     // in a bst rooted at node "root", recursively search for a node with key associated to it
     // being the k-th smallest key among all nodes in the bst
-    Node x 
+    Node x=select(root, k);
+    // return that key
+    return x.key;
+  }
+  // private recursive helper method, that search in bst rooted at node x for a node with a key associated to it
+  // is kth smallest key among all keys in the bst
+  private Node rank(Node x, int k) {
+    // if number of nodes with keys associated to them less than the node x is ke
+    // then x would be the k-th smallest node
+    if(size(x.left)==k)  return x;
+    else if(k<size(x.left) return select(x.left, k);
+    else return select(x.right, k-1-size(x.left))
   }
 
-  public int rank(Key key){return 0;}
+  public int rank(Key key) {
+    if(isEmpty()) throw new NoSuchElementException();
+    // check if key is not null:
+    if(key==null) throw new NullPointerException("Key cannot be null!");
+    
+    // in a bst rooted at node root, find the number of nodes with keys associated to them less than the given key
+    int rank=rank(root, key);
+    return rank;  
+  }
+  // private recursive helper method: in bst rooted at node x, find the number of nodes with keys associated to them less than the given key
+  private int rank(Node x, Key key) {
+    // compare the given key with the key at the node x
+    int cmp=key.compareTo(x.key);
+    if(cmp==0) return size(x.left); // number of nodes in x's left subtree
+    else if(cmp<0) return rank(x.left, key);
+    // if the given key is greater than x, it's also greater than all nodes on x's left subtree
+    else return 1+size(x.left)+rank(x.right, key);
+  }
 
   public int rangeCount(Key lo, Key hi){return 0;}
   public Iterable<Key> keys(Key lo, Key hi){return null;}
+  public Iterable<Key> keys(){return null;}
 
   // Helper Methods:
   private int size(Node x) {
