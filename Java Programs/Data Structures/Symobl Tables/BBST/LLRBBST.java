@@ -285,6 +285,8 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     
     // if x has a left subtree, the node with the min key must be on x's left subtree, and so x's left link must get modifed
     x.left=delMin(x.left);
+    // update the count:
+    x.count=1+size(x.left)+size(x.right);
     return x; // propagate the modification back up to the root of the bst 
   }
   public void delMax() {
@@ -295,6 +297,8 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     // Base case: a node with no right child
     if(x.right==null) return x.right;
     x.right=delMax(x.right);
+    // update the count:
+    x.count=1+size(x.left)+size(x.right);
     return x; // propagate the modification back up to the root of the bst 
   }
 
@@ -434,6 +438,8 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   }
   // private recursive helper method: in bst rooted at node x, find the number of nodes with keys associated to them less than the given key
   private int rank(Node x, Key key) {
+    // Base case: search hit the null node before find any node with key associated to it less than the given key (the key was less than the min key in bst rooted at x) 
+    if(x==null) return 0;
     // compare the given key with the key at the node x
     int cmp=key.compareTo(x.key);
     if(cmp==0) return size(x.left); // number of nodes in x's left subtree
@@ -442,7 +448,22 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     else return 1+size(x.left)+rank(x.right, key);
   }
 
-  public int rangeCount(Key lo, Key hi){return 0;}
+  // returns the number of nodes in the bst rooted at node "root" such that
+  // the key associated to them lies within the range of given keys
+  public int rangeCount(Key lo, Key hi) {
+    if(isEmpty()) throw new NoSuchElementException();
+    if(lo==null) throw new NullPointerException("Key cannot be null!");
+    if(hi==null) throw new NullPointerException("Key cannot be null!");
+
+    // compare the endpoints of the range:
+    if(hi.compareTo(lo)<0)  return 0;
+    // 1. find the rank of lo: number of nodes in bst rooted at node "root" with key associated to them less than the lo key
+    // 2. find the rank of hi: number of nodes in bst rooted at node "root" with key associated to them less than the hi key
+    // 3. number of nodes in bst rooted at the node "root" with keys within inclusive range[lo, hi]
+    if(contains(hi)) return rank(hi)-rank(lo)+1;
+    else return rank(hi)-rank(lo);
+  }
+
   public Iterable<Key> keys(Key lo, Key hi){return null;}
   public Iterable<Key> keys(){return null;}
 
@@ -451,6 +472,12 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     if(x==null) return 0;
     return x.count;
   }
+
+  // check if a bst rooted at the node root is bst (all keys associated to its nodes preserve search tree properties)
+  private boolean isBST() {return true;}
+  // a linear time algorithm to check if a bst rooted at node "root" is a perfectly balanced bst
+  private boolean isBalanced() {return true;}
+     
 
   // Helper inner class:
   private class Node {
