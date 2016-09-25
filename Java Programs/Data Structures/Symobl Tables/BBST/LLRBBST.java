@@ -233,7 +233,45 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
     Red Black Tree deletion such that preserve all llrbbst invariants would be implemented later this week.
   */
-  public void delete(Key key){}
+
+  // Hibbard Deletion for bsts
+  public void delete(Key key) {
+    if(isEmpty()) throw new NoSuchElementException();
+    // check if key is not null:
+    if(key==null) throw new NullPointerException("Key cannot be null!");
+
+    //  delete a node with key associated to it equals to the given key from the bst rooted at the node "root"
+    // update all links on the way from the deleted node to the root:
+    root=delete(root, key);
+  }
+  // recursively search in bst rooted at node x for a node with a key associated to it, equals the given key
+  // delete that node, update the links all the way back to the root of bst at x
+  private Node delete(Node x, Key key) {
+    // if the search hits the null node before finding any node with a key associated to them equal to the given key
+    if(x==null) throw new NoSuchElementException();
+
+    // directed search using comparison between the key associated with the node x and the given key
+    int cmp=key.compareTo(x.key);
+    if(cmp<0)  x.left=delete(x.left, key); // the node to be deleted must be on x's left subtree, and so x's left link is going to get modified
+    else if(cmp>0) x.right=delete(x.right, key); // the node to be deleted must be on the x's right subtree, and so x's link to it right subtree must get modified
+    else {
+      // the node with the key associated to it equal the given key is hit:
+      // 1. case 0, 1: check if node x has 0 or 1 child
+      if(x.left==null) return x.right; // return a link to x's child -> x's caller would NOT refere to x no more, x would be collected by garbage collector
+      if(x.right==null) return x.left; // return a link to x's child -> x's caller would NOT refere to x no more, x would be collected by garbage collector
+
+      // if x has both left and right children:
+      // replace it with its successor (min of its right subtree)
+      Node t=x; // copy a reference to node x
+      x=min(x.right); // search on bst rooted at x.right, to find a node with key associated with it is min among all node in that bst
+      x.left=t.left; // left does not change
+      x.right=delMin(t.right); // delete the node with the min key in right subtree of t, and return the link to modified t.right to assign to x.right 
+    }
+ 
+    // update the count:
+    x.count=1+size(x.left)+size(x.right);
+    return x;
+  }
   public void delMin() {
     if(isEmpty()) throw new NoSuchElementException();
     // delete the node with key associated to it was the min key among all keys in the bst rooted at node "root"
@@ -249,19 +287,14 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     x.left=delMin(x.left);
     return x; // propagate the modification back up to the root of the bst 
   }
-  public void delMin() {
+  public void delMax() {
     if(isEmpty()) throw new NoSuchElementException();
-    // delete the node with key associated to it was the min key among all keys in the bst rooted at node "root"
-    // return the link (a reference to a node) to the modified node (deleted node) back up to its parent and so forth recursively
-    root=delMin(root);
+    root=delMax(root);
   }
-  // recursively search in a bst rooted at node x, for a node with a min key, return the link to its right subtree (it's min, so it has no left chid)
-  private Node delMin(Node x) {
-    // Base case: a node with no left child
-    if(x.left==null) return x.right;
-    
-    // if x has a left subtree, the node with the min key must be on x's left subtree, and so x's left link must get modifed
-    x.left=delMin(x.left);
+  private Node delMax(Node x) {
+    // Base case: a node with no right child
+    if(x.right==null) return x.right;
+    x.right=delMax(x.right);
     return x; // propagate the modification back up to the root of the bst 
   }
 
