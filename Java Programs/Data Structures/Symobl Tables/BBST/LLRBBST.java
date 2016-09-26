@@ -464,8 +464,32 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     else return rank(hi)-rank(lo);
   }
 
+  // Iterating over symbol table keys (basic st operation that has been specified in st interface)
+  public Iterable<Key> keys(){
+    if(isEmpty()) throw new NoSuchElementException();
+    // instantiate a queue of Key objects
+    Deque<Key> keys=new ArrayDeque<Key>(); // an empty q
+
+    // pass the q to the recursive method that traverse the bst rooted at the node "root" from the root to its leaves
+    // copy the node's key to and add them to the q
+    inorder(root, keys);
+    return keys;
+  }
+  
+  private void inorder(Node x, Deque<Key> keys) {
+    // if null node got hit return ;
+    if(x==null) return ; // the traversal reaches the leaf node
+    
+    // Recurrence: 
+    // traverse x's left subtree until there no more node remaining on the left
+    inorder(x.left, keys);
+    // add the key associated with the x to the q:
+    keys.offer(x.key);
+    // then traverse x's right subtree (all node with key associated to them greater than x's key)
+    inorder(x.right, keys);
+  }
+
   public Iterable<Key> keys(Key lo, Key hi){return null;}
-  public Iterable<Key> keys(){return null;}
 
   // Helper Methods:
   private int size(Node x) {
