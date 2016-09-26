@@ -67,7 +67,6 @@
   nodes on its left and right subtree are equal, and since BST is Binary, at each level n/2 of nodes will go to each subtree and worst case height of the tree would be logN (number of time
   that N can be divided by 2). Not only the height of the BST becomes logarithmic, for each node in the tree number of the hobs to from the node to its relative min and max are equal (Duh! definition of 
   the middle) and more generally any simple path from root of the BST to all nodes at leaves has equal length of logN.
-
 */
 
 import java.util.Collection;
@@ -498,11 +497,24 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   }
 
   // check if a bst rooted at the node root is bst (all keys associated to its nodes preserve search tree properties)
-  private boolean isBST() {return true;}
+  private boolean isBST() {
+     // check if the binary tree rooted at the node "root" is bst by examining all its nodes and check if satisfy binary search property (left < root < right)
+     // starting from the root node, examing all node reachable from the root
+     return isBST(root, null, null); // since root node can have any key and there is no range bound imposed to the root node, set min and max range to null
+  }
+  // check if the node x falls within the legal range, if so check then recursively check nodes on its left and right subtrees
+  private isBST(Node x, Key min, Key max) {
+    // Base Case: an empty tree is a bst
+    if(x==null) return true; // if search hits a leaf without violated the key range boundaries, the subtree rooted at x is a legal bst
+    
+    // Recurrence:
+    
+
+  }
+   
   // a linear time algorithm to check if a bst rooted at node "root" is a perfectly balanced bst
   private boolean isBalanced() {return true;}
-     
-
+  
   // Helper inner class:
   private class Node {
     // instance fields:
