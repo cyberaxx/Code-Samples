@@ -508,8 +508,11 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     if(x==null) return true; // if search hits a leaf without violated the key range boundaries, the subtree rooted at x is a legal bst
     
     // Recurrence:
-    
+    if(x.key.compareTo(min)<=0 && min!=null) return false; // node x has key associated to it out of legal range (violates bst property of binary tree)
+    if(x.key.compareTo(max)>=0 && max!=null) return false; // node x has key associated to it out of legal range (violates bst property of binary tree)
 
+    // now node x fulfilled the constrint of being within legal range, now all nodes on its subtrees must be checked:
+    return isBST(x.left, min, x.key) && isBST(x.right, x.key, max); 
   }
    
   // a linear time algorithm to check if a bst rooted at node "root" is a perfectly balanced bst
