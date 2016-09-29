@@ -607,7 +607,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     // 2a. hit: if such key is already in the BST (ST), update its value
     
     // copy a reference to the root node:
-    Node x=root; Node parent;
+    Node x=root; Node parent=null;
     while(x!=null) {
       // keep the reference to x
       parent=x;
@@ -743,53 +743,4 @@ public class BST<Key extends Comparable<Key>, Value> {
     // 3. Recurse on right subtree of x:
     preOrder(x.right, list); // R
   }
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
 }
