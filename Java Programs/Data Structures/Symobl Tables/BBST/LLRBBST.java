@@ -533,12 +533,26 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     return isBST(x.left, min, x.key) && isBST(x.right, x.key, max); 
   }
    
-  // a linear time algorithm to check if a bst rooted at node "root" is a perfectly balanced bst
-  private boolean isPbbst() {return isPbbst(root);}
-  private boolean isPbbst(Node x) {
-    return false;
+  // check if llrbbst is perfectly black balanced:
+  private boolean isBalanced() {return isBalanced(root);}
+  private boolean isBalanced(Node x) {
+    // count the number of black edges in one arbitary route from the root to a leaf node (null node)
+    int black=0;
+    while(x!=null) {
+      if(!isRed(x.left)) black++;
+      x=x.left;
+    }
+    return isBalanced(root, black);
   }
-  // check if bst rooted at node "root" is a height balanced bst:
+
+  // traverse another arbitary root to leaf path and check if all black edges have been consumed
+  private boolean isBalanced(Node x, int black) {
+    if(x==null) return black==0; // reaching the null node, all black edges must have been processed, otherwise llrbbst is not in perfect black balanced
+    if(!isRed(x.left)) black--;
+    return isBalanced(x.left, black);
+  }
+
+  // a linear time algorithm to check if a bst rooted at node "root" is a "height" balanced bst
   // Hint: using a same function that recursively computed the height of bst
   private boolean isHbbst() {return h(root)!=Integer.MIN_VALUE;}
   private int h(Node x) {
