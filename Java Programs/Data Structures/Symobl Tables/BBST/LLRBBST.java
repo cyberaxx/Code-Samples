@@ -503,7 +503,7 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
      return isBST(root, null, null); // since root node can have any key and there is no range bound imposed to the root node, set min and max range to null
   }
   // check if the node x falls within the legal range, if so check then recursively check nodes on its left and right subtrees
-  private isBST(Node x, Key min, Key max) {
+  private boolean isBST(Node x, Key min, Key max) {
     // Base Case: an empty tree is a bst
     if(x==null) return true; // if search hits a leaf without violated the key range boundaries, the subtree rooted at x is a legal bst
     
@@ -517,7 +517,30 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
    
   // a linear time algorithm to check if a bst rooted at node "root" is a perfectly balanced bst
   private boolean isBalanced() {return true;}
-  
+
+  // iterative methods for get, and keys (iterative in order traversal of bst)
+  public Value iGet(Key key) {
+    if(isEmpty()) throw new NoSuchElementException();
+    if(key==null) throw new NullPointerException("Key cannot be null!");
+    
+    // search for the given key in a bst rooted at node root
+    Node x=iGet(root, key);
+    // search miss:
+    if(x==null) return null;
+    return x.value;
+  }
+  private Node iGet(Node x, Key key) {
+    while(x!=null) {
+      // compare the key associated with the node x with then given key:
+      int cmp=key.compareTo(x.key);
+      if(cmp==0) return x; // node x is found with key associated to it equal to the given key
+      else if(cmp<0) x=x.left;
+      else x=x.right;
+    }
+    return x;
+  }
+
+
   // Helper inner class:
   private class Node {
     // instance fields:
