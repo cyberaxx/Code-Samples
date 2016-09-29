@@ -539,17 +539,17 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     // count the number of black edges in one arbitary route from the root to a leaf node (null node)
     int black=0;
     while(x!=null) {
-      if(!isRed(x.left)) black++;
+      if(!isRed(x)) black++;
       x=x.left;
     }
     return isBalanced(root, black);
   }
 
-  // traverse another arbitary root to leaf path and check if all black edges have been consumed
+  // traverse ALL root to leaf paths and check if all are black balanced.
   private boolean isBalanced(Node x, int black) {
     if(x==null) return black==0; // reaching the null node, all black edges must have been processed, otherwise llrbbst is not in perfect black balanced
-    if(!isRed(x.left)) black--;
-    return isBalanced(x.left, black);
+    if(!isRed(x)) black--;
+    return isBalanced(x.left, black) && isBalanced(x.right, black);
   }
 
   // a linear time algorithm to check if a bst rooted at node "root" is a "height" balanced bst
