@@ -598,50 +598,35 @@ public class BST<Key extends Comparable<Key>, Value> {
     if (value==null) {delete(key); return ;}
 
     // insert the key at its rightful position in the BST
-    // 1. SEARCH: if such key is already in the BST (ST), update its value
-    // 2. INSERT: add a new node with containing the given key-value pair to BST and update its structure (size, height, links on the path)
-    root=iPut(root, key, value);
-  }
-  private Node iPut(Node x, Key key, Value value) {
-    boolean valUpdate=false;
-    Node r=x; // take a copy of root node
-
-    // empty tree:
-    if(r==null) return new Node(key, value);
-
-    // check if the key is already in the ST
-    if(contains(key)) valUpdate=true;
-
-    // Search BST
-    while(r!=null) {
-      // compare the given key with node x's key to find the rightful position of new key-value pair
-      int cmp=key.compareTo(r.key);
-      if(cmp>0) {
-	if(!valUpdate) {
-	  // the size and height of tree rooted at x has to be updated (structural changes)
-          r.count++;
-          // x.h++; Not Neccessarily
-        }
-	r=r.right;
-      }
-      else if(cmp<0) {
-	if(!valUpdate) {
-	  // the size and height of tree rooted at x has to be updated (structural changes)
-          r.count++;
-          // x.h++; Not Neccessarily
-        }
-	r=r.left;
-      }
+    // 1. Triavial case: if bst is empty
+    if(root==null) {
+      root=new Node(key, value);
+      return;
+    }
+    // 2. SEARCH: 
+    // 2a. hit: if such key is already in the BST (ST), update its value
+    
+    // copy a reference to the root node:
+    Node x=root; Node parent;
+    while(x!=null) {
+      // keep the reference to x
+      parent=x;
+      // search for the given key in the bst rooted at node x
+      int cmp=key.compareTo(x.key);
+      if(cmp<0) x=x.left;
+      else if(cmp>0) x=x.right;
       else {
-        r.value=value; // no structural change
+        x.value=value; // update the value of the node associated to the key "key"
+        return ;
       }
     }
-
-    // search miss: add the new key-valu pair
-    r=new Node(key, value);
-    r.count++;
-
-    return x; // return the reference to the root node
+     
+    // 2b. miss: failed to find a node with key associaed to it equals to the given key, so, insert a new node containing the given key-value pair to BST
+    Node node=new Node(key, value);
+    if(key.compareTo(parent.key)<0)
+      parent.left=node;
+    else 
+      parent.right=node;
   }
 
   // Iterative approach to create an Iterable collection from keys in the ST (in SORTED order)
