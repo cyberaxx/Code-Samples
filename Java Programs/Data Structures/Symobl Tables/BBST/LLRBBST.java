@@ -488,7 +488,25 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     inorder(x.right, keys);
   }
 
-  public Iterable<Key> keys(Key lo, Key hi){return null;}
+  public Iterable<Key> keys(Key lo, Key hi){
+    if(isEmpty()) throw new NoSuchElementException();
+    if(lo==null) throw new NullPointerException("Key cannot be null!");
+    if(hi==null) throw new NullPointerException("Key cannot be null!");
+
+    // compare the endpoints of the range:
+    List<Key> list=new LinkedList<Key>(); // an empty collection of keys
+    if(hi.compareTo(lo)<0)  return list;
+
+    // in a bst rooted at node "root", find all nodes with keys associated to them lies within
+    // the given range [lo hi], add their corresponding key to the list
+    keys(root, lo, hi, list);
+    return list;
+  }
+
+  private void keys(Node x, Key lo, Key hi, List<Key> list) {
+    // termination conditions:
+    if(x==null) return ;
+  }
 
   // Helper Methods:
   private int size(Node x) {
@@ -516,7 +534,32 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
   }
    
   // a linear time algorithm to check if a bst rooted at node "root" is a perfectly balanced bst
-  private boolean isBalanced() {return true;}
+  private boolean isPbbst() {return isPbbst(root);}
+  private boolean isPbbst(Node x) {
+    return false;
+  }
+  // check if bst rooted at node "root" is a height balanced bst:
+  // Hint: using a same function that recursively computed the height of bst
+  private boolean isHbbst() {return h(root)!=Integer.MIN_VALUE;}
+  private int h(Node x) {
+    if(x==null) return -1; // to get 0 height for a single node bst
+    
+    // in order to compute the h of x, we require to compute the h of its subtrees:
+    int l=h(x.left);
+    // if subtree rooted at x.left is not height balanced:
+    if(l==Integer.MIN_VALUE) return Integer.MIN_VALUE; // bst rooted ax x is not balanced
+    
+    // do the same computation on x's right subtree
+    int r=h(x.right);
+    // if subtree rooted at x.right is not height balanced:
+    if(r==Integer.MIN_VALUE) return Integer.MIN_VALUE; // bst rooted ax x is not balanced
+
+    // before computing the height of x, check if the height of its left and right subtree makes x a height balanced bst
+    // 1. compare the height of x's left subtree and x's right subtree
+    if(Math.abs(l-r)>1) return Integer.MIN_VALUE;
+    // 2. compute the height of node x in terms of height of its subtree
+    return 1+Math.max(l, r);
+  }
 
   // iterative methods for get, and keys (iterative in order traversal of bst)
   public Value iGet(Key key) {
@@ -540,6 +583,8 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     return x;
   }
 
+  // 1. iterative inorder, preorder traversal
+  // 2. level order traversal of bbst
 
   // Helper inner class:
   private class Node {
