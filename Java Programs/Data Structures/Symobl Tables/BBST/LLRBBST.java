@@ -498,14 +498,30 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     if(hi.compareTo(lo)<0)  return list;
 
     // in a bst rooted at node "root", find all nodes with keys associated to them lies within
-    // the given range [lo hi], add their corresponding key to the list
+    // the given range [lo hi], add their corresponding key to the list in sorted order
     keys(root, lo, hi, list);
     return list;
   }
-
+  
+  // the idea behid range search is similar to a combination of inorder traversal of bst (to get keys in sorted order) and key search
+  // to determine how far inorder traversal must go before falling out of the [lo hi] range
   private void keys(Node x, Key lo, Key hi, List<Key> list) {
-    // termination conditions:
+    // termination conditions: hitting the null node
     if(x==null) return ;
+
+    // compare the boundaries of the range with the key associated with the node x (to direct search and terminate traversal)
+    // a. compare lo key with the key associated to node x:
+    int cmpLo=lo.compareTo(x.key); // for any node x with key associated to it less than the lo key, we have to only worry about its right subtree (if at all)
+    // b. compare hi key with the key associated to node x:
+    int cmpHi=hi.compareTo(x.key); // for any node x with key associated to it greater than the hi key, we have to only worry about its left subtree (if at all)
+
+    // Traverse the bst in LDR order (inorder traversal) if left and right moves were valid (wrt range bounds)
+    // L: check if its valid to go left: if lo key is less than the current node:
+    if(cmpLo<0) keys(x.left, lo, hi, list);
+    // D: check if the key associated with the node x lies within the given range, if so, add it to the collection
+    if(cmpLo<=0 && cmpHi>=0) list.add(x.key);
+    // R: check if move right is a valid move, the hi key is greater than the key associated with a node x, then move right
+    if(cmpHi>=0) keys(x.right, lo, hi, list);
   }
 
   // Helper Methods:
@@ -597,8 +613,31 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
     return x;
   }
 
-  // 1. iterative inorder, preorder traversal
-  // 2. level order traversal of bbst
+  // iterative inorder traversal
+  private void iInorder(Node x, Deque<Key> keys) { }
+
+  // iterative preorder traversal
+  private void iPreorder(Node x, Deque<Key> keys) { }
+
+  // level order traversal of bbst
+  private Iterable<Key> levelOrder() {
+    // Starting from the root node, traversing the bbst level by level and add keys associated to nodes at each level to the key queue
+    Deque<Key> keys=new ArrayDeque<Key>(); // empty queue of keys
+    Deque<Node> nodes=new ArrayDeque<Node>(); // empty queue of nodes
+
+    // if bbst is empty
+    if(root==null) return keys;
+    keys.offer(root.key);
+    nodes.offer(root);
+    while(!nodes.isEmpty()) {
+      // remove nodes from the head of queue
+      Node x=nodes.poll();
+      // process all of its childrens
+      if(x.left!=null) {keys.offer(x.left.key); nodes.offer(x.left);}
+      if(x.right!=null) {keys.offer(x.right.key); nodes.offer(x.right);}
+    }
+    return keys;
+  }
 
   // Helper inner class:
   private class Node {
