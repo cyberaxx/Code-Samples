@@ -615,9 +615,51 @@ public class LLRBBST<Key extends Comparable<Key>, Value> {
 
   // iterative inorder traversal
   private void iInorder(Node x, Deque<Key> keys) { }
+    Deque<Node> nodes=new ArrayDeque<Node>(); // an empty stack of nodes (explicit recursion stack)
+    Deque<Key> keys=new ArrayDeque<Keys>(); // an empty q of keys
+    
+    // add the node x to the stack:
+    nodes.push(x);
+    while(x=!null || !nodes.isEmpty()) {
+      if(x!=null) {
+	// Move to the left, as far as not hitting null
+	nodes.push(x);
+        x=x.left; // L
+      }
+      else {
+ 	// backtrack to the caller
+	x=stack.pop();
+        // add the x's key to the list:
+	keys.add(x.key); // D
+	x=x.right; // move to the right R
+      }
+    }
+    return keys;
+  }
 
   // iterative preorder traversal
-  private void iPreorder(Node x, Deque<Key> keys) { }
+  private void iPreorder(Node x) {
+    Deque<Node> nodes=new ArrayDeque<Node>(); // an empty stack of nodes (explicit recursion stack)
+    Deque<Key> keys=new ArrayDeque<Keys>(); // an empty q of keys
+    
+    // add the node x to the stack:
+    nodes.push(x);
+    while(x=!null || !nodes.isEmpty()) {
+      if(x!=null) {
+	// Move to the left, as far as not hitting null
+	nodes.push(x);
+        // add the x's key to the list:
+	keys.add(x.key); // D
+        x=x.left; // L
+      }
+      else {
+ 	// backtrack to the caller
+	x=stack.pop();
+	x=x.right; // move to the right
+      }
+    }
+    return keys;
+  }
 
   // level order traversal of bbst
   private Iterable<Key> levelOrder() {
