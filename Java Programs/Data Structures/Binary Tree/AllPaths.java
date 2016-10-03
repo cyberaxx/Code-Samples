@@ -15,7 +15,6 @@ public class AllPaths {
     }
   }
 
-  // return a link to the root of the doubleTree
   private static <Key> void allPaths(Node<Key> x, Deque<Key> path, List<List<Key>> list) {
     // termination condition:
     if(x==null) return ; // hitting the null node
