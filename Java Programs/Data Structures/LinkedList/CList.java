@@ -10,13 +10,26 @@ import java.util.*;
 public class CList<Item> {
   // instance field: a reference to a sentinel node:
   private Node<Item> sentinel;
+  private int size;
 
   // Constructor:
   public CList() {
      sentinel=new Node<Item>();
      sentinel.next=sentinel.prev;
      sentinel.prev=sentinel.next;
+     size=0;
   }
+
+  // API: behaviours (addFirst, addLast, removeFirst, removeLast, contains, remove, size, isEmpty) 
+  public int size(){return size;}
+  public boolean isEmpty(){return sentinel.next==sentinel.prev;}
+  public void addFirst(Item item){}
+  public void addLast(Item item){}
+  public void removeFirst(Item item){}
+  public void removeLast(Item item){}
+
+  public boolean contains(Item item){return false;}
+  public void remove(Item item){}
 
   // Node of CList:
   private static class Node<Item> {
