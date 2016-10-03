@@ -17,10 +17,10 @@ public class Solution {
         if(root==p || root==q) return root;
 
 	// 2. otherwise search for lca of p and q on root's subtree(s)
+	// 2a. root has only one subtree
         if(root.left==null) return lowestCommonAncestor(root.right, p,q);
         if(root.right==null) return lowestCommonAncestor(root.left, p,q);
-
-	// if root has both left and right subtree, root itself is candidate of being
+	// 2b. if root has both left and right subtree, root itself is candidate of being
  	// the lca:
         TreeNode l=lowestCommonAncestor(root.left, p,q);
         TreeNode r=lowestCommonAncestor(root.right, p,q);
