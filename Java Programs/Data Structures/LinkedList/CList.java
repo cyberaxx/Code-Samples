@@ -16,15 +16,32 @@ public class CList<Item> {
   public CList() {
      sentinel=new Node<Item>();
      sentinel.next=sentinel.prev;
-     sentinel.prev=sentinel.next;
+     sentinel.prev=sentinel;
      size=0;
   }
 
   // API: behaviours (addFirst, addLast, removeFirst, removeLast, contains, remove, size, isEmpty) 
   public int size(){return size;}
   public boolean isEmpty(){return sentinel.next==sentinel.prev;}
-  public void addFirst(Item item){}
-  public void addLast(Item item){}
+  public void addFirst(Item item) {
+    // Create a new node with the given item:
+    Node<Item> node=new Node<Item>(item);
+
+    // 1. check if the CList instance is empty:
+    if(isEmpty()) {
+    }
+    // 2. if not:
+    // copy a reference to the current first:
+    Node<Item> oldFirst=sentinel.next;
+  }
+
+  public void addLast(Item item){
+    // Create a new node with the given item:
+    Node<Item> node=new Node<Item>(item);
+    // 1. check if the CList instance is empty: 
+    if(isEmpty()) {addFirst(item);} // addFirst and addLast are the same for the empty list
+      
+  }
   public void removeFirst(Item item){}
   public void removeLast(Item item){}
 
@@ -43,6 +60,11 @@ public class CList<Item> {
       // set the item field to the given item
       this.item=item;
     }
+  }
+
+  public static void main(String[] args) {
+    CList<Integer> l=new CList<Integer>();
+    l.addFirst(5); 
   }
 }
 
