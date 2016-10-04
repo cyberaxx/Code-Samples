@@ -45,4 +45,21 @@ public class Solution {
         if(fast==slow) return fast; // loop!
         return loop(fast, slow);
     }
+
+    // finding middle of a singly linked list
+    private ListNode mid(ListNode head, ListNode tail) {
+        // take two pointer both starting at the head of SList
+        ListNode mid=head;
+        ListNode last=head;
+        
+        // move last twice faster than mid, once, last reaches the end of the list, mid would be in the middle
+        while(last!=tail) {
+            last=last.next;
+            if(last==tail) return mid;
+        
+            last=last.next;
+            mid=mid.next;
+        }
+        return mid;
+    }
 }
