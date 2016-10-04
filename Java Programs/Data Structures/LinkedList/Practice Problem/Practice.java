@@ -36,13 +36,8 @@ public class Practice {
   private static <Item> Node<Item> deleteList(Node<Item> x) {
     // termination condition: hitting end of the list:
     if(x==null) return x;
-
-    // for all non-null nodes:
-    // 1. set x to its next node:
-    x=x.next;
-    // 2. from the new list starting at the new x, remove nodes and send back a reference to x
-    x=deleteList(x);
-
+    // for all non-null node x:
+    x=deleteList(x.next);
     return x;
   }
 
