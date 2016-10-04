@@ -84,24 +84,38 @@ public class Practice {
     }
     return x;
   }
-  
+
+  /*6. Write an Append() function that takes two lists, 'a' and 'b', appends 'b' onto the end of 'a',
+       and then sets 'b' to NULL: return a reference to the head of a:  */
+  private static <Item> Node<Item> append(Node<Item> x1, Node<Item> x2) {
+    // termination condition:
+    if(x1==null) {
+      return x2;
+    }
+    // Otherwise:
+    x1.next=append(x1.next, x2);
+    return x1;
+  }
 
   public static void main(String[] args){
-    Node<Integer> head=null;
+    Node<Integer> head1=null;
+    Node<Integer> head2=null;
     Random random=new Random();
 
     // insert 6 random keys to the list:
     int items=6;
     for(int i=0; i<items; i++)
-      head=insertNth(head, random.nextInt(), 0);
+      head1=insertNth(head1, random.nextInt(), 0);
 
     for(int i=0; i<items; i++)
-      System.out.println(getNth(head, i).item());
+      head2=insertNth(head2, random.nextInt(), 0);
 
-
- 
-    head=deleteList(head);
-    System.out.println(head);
+   System.out.println("head1:");
+    for(int i=0; i<items; i++)
+      System.out.println(getNth(head1, i).item());
+   System.out.println("head2:");
+    for(int i=0; i<items; i++)
+      System.out.println(getNth(head2, i).item());
   }
 
 }
