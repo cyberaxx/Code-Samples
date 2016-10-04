@@ -87,36 +87,19 @@ public class Practice {
   
 
   public static void main(String[] args){
-    int item=0;
-    Node<Integer> x1=new Node<Integer>(item++);
-    Node<Integer> x2=new Node<Integer>(item++);
-    Node<Integer> x3=new Node<Integer>(item++);
-    Node<Integer> x4=new Node<Integer>(item++);
-    Node<Integer> x5=new Node<Integer>(item++);
-    x1.next=x2;
-    x2.next=x3;
-    x3.next=x4;
-    x4.next=x5;
-    Node<Integer> head=x1;
+    Node<Integer> head=null;
+    Random random=new Random();
 
-    System.out.println("Before:");
-    for(int i=0; i<item; i++)
+    // insert 6 random keys to the list:
+    int items=6;
+    for(int i=0; i<items; i++)
+      head=insertNth(head, random.nextInt(), 0);
+
+    for(int i=0; i<items; i++)
       System.out.println(getNth(head, i).item());
 
-    head=insertNth(head, 0, 0); item++;
-    head=insertNth(head, 4, 6); item++;
-    head=insertNth(head, 5, 7); item++;
 
-    head=sortedInsert(head, new Node<Integer>(12)); item++;
-    head=sortedInsert(head, new Node<Integer>(-3)); item++;
-    head=sortedInsert(head, new Node<Integer>(8)); item++;
-    head=sortedInsert(head, new Node<Integer>(6)); item++;
-    head=sortedInsert(head, new Node<Integer>(6)); item++;
-
-    System.out.println("After:");
-    for(int i=0; i<item; i++)
-      System.out.println(getNth(head, i).item());
-
+ 
     head=deleteList(head);
     System.out.println(head);
   }
