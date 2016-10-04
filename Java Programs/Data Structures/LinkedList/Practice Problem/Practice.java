@@ -96,8 +96,23 @@ public class Practice {
     x1.next=append(x1.next, x2);
     return x1;
   }
+ 
+  /* FrontBackSplit()
+    Given a list, split it into two sublists — one for the front half, and one for the back half. */
+  private static <Key> Node<Key> FrontBackSplit(Node<Key> fast, Node<Key> slow) {
+    // termination condition: if the fast pointer reaches the end of the list, the slow would be in the middle:
+    if(fast==null) return slow;
+    // Otherwise:
+    // advance the fast pointer by one:
+    fast=fast.next;
+    // check if fast reaches the end of the list:
+    if(fast==null) return slow;
+    // otherwise advance then both
+    return FrontBackSplit(fast.next, slow.next);
+  } 
 
   public static void main(String[] args){
+  /*
     Node<Integer> head1=null;
     Node<Integer> head2=null;
     Random random=new Random();
@@ -116,6 +131,18 @@ public class Practice {
    System.out.println("head2:");
     for(int i=0; i<items; i++)
       System.out.println(getNth(head2, i).item());
-  }
 
+   head1=append(head1, head2);
+   System.out.println("head1 append heade2:");
+    for(int i=0; i<items*2; i++)
+      System.out.println(getNth(head1, i).item());
+
+   Node<Integer> slow=head1;
+   Node<Integer> fast=head1;
+   slow=FrontBackSplit(fast, slow);
+   System.out.println("slow:"+slow.item());
+   System.out.println("slow.next:"+slow.next.item());
+   System.out.println("fast:"+fast.item());
+  */
+  }
 }
