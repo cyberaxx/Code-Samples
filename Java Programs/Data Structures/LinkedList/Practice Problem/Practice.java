@@ -31,8 +31,28 @@ public class Practice {
     if(n==0) return x;
     return getNth(x.next, --n);
   }
+   
+  // 3. InsertNth: insert to the Nth place in the list (assuming N is within the legal range): returns a reference to the head of modified List
+  private static <Item> Node<Item> insertNth(Node<Item> x, Item item, int n) {
+    // termination condition:
+    if(n==0) {
+      // if list is empty: x==null
+      if(x==null) return new Node<Item>(item);
 
-  // 3. deleteList: delete the entire SList: returns a reference to the head of the modified list
+      // Otherwise:
+      // create a new node with the given x's item:
+      Node<Item> node=new Node<Item>(x.item());
+      node.next=x.next;
+      x.next=node;
+      x.item=item;
+      return x;
+    }
+
+    // advance x by one node, x.next link would be pointing to a modified list (after insertion)
+    x.next=insertNth(x.next, item, --n);
+    return x;
+  }
+  // 4. deleteList: delete the entire SList: returns a reference to the head of the modified list
   private static <Item> Node<Item> deleteList(Node<Item> x) {
     // termination condition: hitting end of the list:
     if(x==null) return x;
@@ -47,14 +67,33 @@ public class Practice {
     Node<Integer> x3=new Node<Integer>(3);
     Node<Integer> x4=new Node<Integer>(4);
     Node<Integer> x5=new Node<Integer>(5);
-
     x1.next=x2;
     x2.next=x3;
     x3.next=x4;
     x4.next=x5;
-
     Node<Integer> head=x1;
-    System.out.println(head);
+
+    System.out.println("Before:");
+    System.out.println(getNth(head, 0).item());
+    System.out.println(getNth(head, 1).item());
+    System.out.println(getNth(head, 2).item());
+    System.out.println(getNth(head, 3).item());
+    System.out.println(getNth(head, 4).item());
+
+    head=insertNth(head, 0, 0);
+    head=insertNth(head, 4, 5);
+    head=insertNth(head, 5, 5);
+
+    System.out.println("After:");
+    System.out.println(getNth(head, 0).item());
+    System.out.println(getNth(head, 1).item());
+    System.out.println(getNth(head, 2).item());
+    System.out.println(getNth(head, 3).item());
+    System.out.println(getNth(head, 4).item());
+    System.out.println(getNth(head, 5).item());
+    System.out.println(getNth(head, 6).item());
+    System.out.println(getNth(head, 7).item());
+
     head=deleteList(head);
     System.out.println(head);
   }
