@@ -61,12 +61,38 @@ public class Practice {
     return x;
   }
 
+  // 5. SortedInsert: insert into node at its rightful position in a sorted list: return a reference to the modified list:
+  private static Node<Integer> sortedInsert(Node<Integer> x, Node<Integer> node) {
+    // termination condition: search miss:
+    if(x==null) return node;
+
+    // Otherwise:
+    // Compare the new node with the current head of the sublist x:
+    if(node.item()>x.item())
+      // new has to be inserted to the list headed at x.next (x.next link is going to get modified):
+      x.next=sortedInsert(x.next, node);
+    else {
+      // if the item associated to the new node is less than or equal to the current head node x:
+      // add the new node before node x (with no need to have a pointer to the previous node):
+      // 1. copy x's value to the new node
+      int item=node.item();
+      node.item=x.item();
+      // insert the new node after node x:
+      node.next=x.next;
+      x.item=item;
+      x.next=node;
+    }
+    return x;
+  }
+  
+
   public static void main(String[] args){
-    Node<Integer> x1=new Node<Integer>(1);
-    Node<Integer> x2=new Node<Integer>(2);
-    Node<Integer> x3=new Node<Integer>(3);
-    Node<Integer> x4=new Node<Integer>(4);
-    Node<Integer> x5=new Node<Integer>(5);
+    int item=0;
+    Node<Integer> x1=new Node<Integer>(item++);
+    Node<Integer> x2=new Node<Integer>(item++);
+    Node<Integer> x3=new Node<Integer>(item++);
+    Node<Integer> x4=new Node<Integer>(item++);
+    Node<Integer> x5=new Node<Integer>(item++);
     x1.next=x2;
     x2.next=x3;
     x3.next=x4;
@@ -74,25 +100,22 @@ public class Practice {
     Node<Integer> head=x1;
 
     System.out.println("Before:");
-    System.out.println(getNth(head, 0).item());
-    System.out.println(getNth(head, 1).item());
-    System.out.println(getNth(head, 2).item());
-    System.out.println(getNth(head, 3).item());
-    System.out.println(getNth(head, 4).item());
+    for(int i=0; i<item; i++)
+      System.out.println(getNth(head, i).item());
 
-    head=insertNth(head, 0, 0);
-    head=insertNth(head, 4, 5);
-    head=insertNth(head, 5, 5);
+    head=insertNth(head, 0, 0); item++;
+    head=insertNth(head, 4, 6); item++;
+    head=insertNth(head, 5, 7); item++;
+
+    head=sortedInsert(head, new Node<Integer>(12)); item++;
+    head=sortedInsert(head, new Node<Integer>(-3)); item++;
+    head=sortedInsert(head, new Node<Integer>(8)); item++;
+    head=sortedInsert(head, new Node<Integer>(6)); item++;
+    head=sortedInsert(head, new Node<Integer>(6)); item++;
 
     System.out.println("After:");
-    System.out.println(getNth(head, 0).item());
-    System.out.println(getNth(head, 1).item());
-    System.out.println(getNth(head, 2).item());
-    System.out.println(getNth(head, 3).item());
-    System.out.println(getNth(head, 4).item());
-    System.out.println(getNth(head, 5).item());
-    System.out.println(getNth(head, 6).item());
-    System.out.println(getNth(head, 7).item());
+    for(int i=0; i<item; i++)
+      System.out.println(getNth(head, i).item());
 
     head=deleteList(head);
     System.out.println(head);
