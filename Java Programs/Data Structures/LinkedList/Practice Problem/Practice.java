@@ -40,7 +40,7 @@ public class Practice {
     // for all non-null nodes:
     // 1. set x to its next node:
     x=x.next;
-    // from the new list starting at the new x, remove nodes and send back a reference to x
+    // 2. from the new list starting at the new x, remove nodes and send back a reference to x
     x=deleteList(x);
 
     return x;
