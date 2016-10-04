@@ -41,10 +41,22 @@ public class Practice {
     return x;
   }
 
-   
-
   public static void main(String[] args){
+    Node<Integer> x1=new Node<Integer>(1);
+    Node<Integer> x2=new Node<Integer>(2);
+    Node<Integer> x3=new Node<Integer>(3);
+    Node<Integer> x4=new Node<Integer>(4);
+    Node<Integer> x5=new Node<Integer>(5);
 
+    x1.next=x2;
+    x2.next=x3;
+    x3.next=x4;
+    x4.next=x5;
+
+    Node<Integer> head=x1;
+    System.out.println(head);
+    head=deleteList(head);
+    System.out.println(head);
   }
 
 }
