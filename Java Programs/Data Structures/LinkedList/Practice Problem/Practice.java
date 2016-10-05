@@ -164,45 +164,5 @@ public class Practice {
   }
 
   public static void main(String[] args){
-
-    Node<Integer> head1=null;
-    Node<Integer> head2=null;
-    Random random=new Random();
-
-    // insert 6 random keys to the list:
-    int items=6;
-    for(int i=0; i<items; i++)
-      head1=insertNth(head1, random.nextInt(), 0);
-
-    for(int i=0; i<items; i++)
-      head2=insertNth(head2, random.nextInt(), 0);
-
-    System.out.println("head1:");
-    for(int i=0; i<items; i++)
-      System.out.println(getNth(head1, i).item());
-
-    System.out.println();
-
-    System.out.println("head2:");
-    for(int i=0; i<items; i++)
-      System.out.println(getNth(head2, i).item());
-
-    System.out.println();
-
-    System.out.println("Move Node:");
-    head1=moveNode(head1, head2);
-
-    System.out.println("head1:");
-    for(int i=0; i<items; i++)
-      System.out.println(getNth(head1, i).item());
-
-    System.out.println();	
-
-    System.out.println("head2:");
-    for(int i=0; i<items; i++)
-      System.out.println(getNth(head2, i).item());
-
-
-
   }
 }
