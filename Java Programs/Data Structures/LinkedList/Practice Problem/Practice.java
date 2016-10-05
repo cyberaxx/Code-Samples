@@ -160,16 +160,5 @@ public class Practice {
 */
 
   public static void main(String[] args){
-
-    Node<Integer> head1=null;
-    Node<Integer> head2=null;
-    Random random=new Random();
-
-    // insert 6 random keys to the list:
-    int items=6;
-    for(int i=0; i<items; i++)
-      head1=insertNth(head1, random.nextInt(), 0);
-    for(int i=0; i<items; i++)
-      head2=insertNth(head2, random.nextInt(), 0);
   }
 }
