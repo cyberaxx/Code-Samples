@@ -97,7 +97,7 @@ public class Practice {
     return x1;
   }
  
-  /* FrontBackSplit()
+  /*7. FrontBackSplit()
     Given a list, split it into two sublists — one for the front half, and one for the back half. */
   private static <Key> Node<Key> FrontBackSplit(Node<Key> fast, Node<Key> slow) {
     // termination condition: if the fast pointer reaches the end of the list, the slow would be in the middle:
@@ -111,8 +111,60 @@ public class Practice {
     return FrontBackSplit(fast.next, slow.next);
   } 
 
+  /* 11 — MoveNode()
+     This is a variant on Push(). 
+     Instead of creating a new node and pushing it onto the given
+     list, MoveNode() takes two lists, removes the front node from the second list and pushes
+     it onto the front of the first. */
+  private static <Key> Node<Key> moveNode(Node<Key> x1, Node<Key> x2) {
+    // x1 is a reference to the head of the first list
+    // x2 is a reference to the head of the second list
+    if(x2==null) return x1;// if the second list is empty: do nothing
+
+    // Otherwise: pointer rewiring:
+    // Invariant to maintain: x1 and x2 must remain as pointers to the head of first and second lists
+    Node<Key> temp=x2; // copy a reference to the head of the second list
+    // advance the x2 pointer the the next node:
+    x2=x2.next; // now x2 is pointing the second node in the second list (we're done with the second list and second list is NOT modified)
+
+    // set the temp to point to the x1:
+    temp.next=x1;
+    // set the x1 pointer, now point to temp:
+    x1=temp;
+    
+    // Done!
+    return x1;
+  }
+
+  /* 12 — AlternatingSplit()
+   Write a function AlternatingSplit() that takes one list and divides up its nodes to make
+   two smaller lists. The sublists should be made from alternating elements in the original
+   list. So if the original list is {a, b, a, b, a}, then one sublist should be {a, a, a} and the
+   other should be {b, b}. You may want to use MoveNode() as a helper. The elements in
+   the new lists may be in any order
+ */
+  private static <Key> void alternatingSplit(Node<Key> x) {
+    // declare two reference to head of two list that are going to be constructed from x
+    Node<Key> x1=null;
+    Node<Key> x2=null;
+  
+    // iterate over the x list from the head to the tail:
+    while(x!=null) {
+      // add nodes the head of x1 and x2 alternatively without destructing the structure of x
+      x1=moveNode(x1, x);
+      // advance the pointer on the x list:
+      x=x.next;
+      // check if x has been reached the tail of the list:
+      if(x==null) break;
+      // otherwise:
+      x2=moveNode(x2,x);
+      // advance the x pointer:
+      x=x.next;
+    }
+  }
+
   public static void main(String[] args){
-  /*
+
     Node<Integer> head1=null;
     Node<Integer> head2=null;
     Random random=new Random();
@@ -125,24 +177,32 @@ public class Practice {
     for(int i=0; i<items; i++)
       head2=insertNth(head2, random.nextInt(), 0);
 
-   System.out.println("head1:");
+    System.out.println("head1:");
     for(int i=0; i<items; i++)
       System.out.println(getNth(head1, i).item());
-   System.out.println("head2:");
+
+    System.out.println();
+
+    System.out.println("head2:");
     for(int i=0; i<items; i++)
       System.out.println(getNth(head2, i).item());
 
-   head1=append(head1, head2);
-   System.out.println("head1 append heade2:");
-    for(int i=0; i<items*2; i++)
+    System.out.println();
+
+    System.out.println("Move Node:");
+    head1=moveNode(head1, head2);
+
+    System.out.println("head1:");
+    for(int i=0; i<items; i++)
       System.out.println(getNth(head1, i).item());
 
-   Node<Integer> slow=head1;
-   Node<Integer> fast=head1;
-   slow=FrontBackSplit(fast, slow);
-   System.out.println("slow:"+slow.item());
-   System.out.println("slow.next:"+slow.next.item());
-   System.out.println("fast:"+fast.item());
-  */
+    System.out.println();	
+
+    System.out.println("head2:");
+    for(int i=0; i<items; i++)
+      System.out.println(getNth(head2, i).item());
+
+
+
   }
 }
