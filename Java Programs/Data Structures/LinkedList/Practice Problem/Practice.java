@@ -115,54 +115,61 @@ public class Practice {
      This is a variant on Push(). 
      Instead of creating a new node and pushing it onto the given
      list, MoveNode() takes two lists, removes the front node from the second list and pushes
-     it onto the front of the first. */
-  private static <Key> Node<Key> moveNode(Node<Key> x1, Node<Key> x2) {
-    // x1 is a reference to the head of the first list
-    // x2 is a reference to the head of the second list
-    if(x2==null) return x1;// if the second list is empty: do nothing
+     it onto the front of the first. 
+  private static <Key> void moveNode(Node<Key> dest, Node<Key> source) {
+    // dest is a reference to the head of the first list
+    // source is a reference to the head of the second list
+    if(source==null) return ;// if the second list is empty: do nothing
 
     // Otherwise: pointer rewiring:
-    // Invariant to maintain: x1 and x2 must remain as pointers to the head of first and second lists
-    Node<Key> temp=x2; // copy a reference to the head of the second list
-    // advance the x2 pointer the the next node:
-    x2=x2.next; // now x2 is pointing the second node in the second list (we're done with the second list and second list is NOT modified)
+    Node<Key> temp=source; // copy a reference to the head of the second list
+    // advance the source pointer the the next node:
+    source=source.next; // now x2 is pointing the second node in the second list (we're done with the second list)
 
     // set the temp to point to the x1:
-    temp.next=x1;
-    // set the x1 pointer, now point to temp:
-    x1=temp;
+    temp.next=dest;
+    // set the dest pointer, now point to temp:
+    dest=temp;
     
     // Done!
-    return x1;
+    return ;
   }
 
-  /* 12 — AlternatingSplit()
+   12 — AlternatingSplit()
    Write a function AlternatingSplit() that takes one list and divides up its nodes to make
    two smaller lists. The sublists should be made from alternating elements in the original
    list. So if the original list is {a, b, a, b, a}, then one sublist should be {a, a, a} and the
    other should be {b, b}. You may want to use MoveNode() as a helper. The elements in
    the new lists may be in any order
- */
-  private static <Key> void alternatingSplit(Node<Key> x) {
-    // declare two reference to head of two list that are going to be constructed from x
-    Node<Key> x1=null;
-    Node<Key> x2=null;
-  
+
+  private static <Key> void alternatingSplit(Node<Key> x, Node<Key> x1, Node<Key> x2) {
     // iterate over the x list from the head to the tail:
     while(x!=null) {
       // add nodes the head of x1 and x2 alternatively without destructing the structure of x
-      x1=moveNode(x1, x);
+      moveNode(x1, x);
       // advance the pointer on the x list:
       x=x.next;
       // check if x has been reached the tail of the list:
       if(x==null) break;
       // otherwise:
-      x2=moveNode(x2,x);
+      moveNode(x2,x);
       // advance the x pointer:
       x=x.next;
     }
   }
+*/
 
   public static void main(String[] args){
+
+    Node<Integer> head1=null;
+    Node<Integer> head2=null;
+    Random random=new Random();
+
+    // insert 6 random keys to the list:
+    int items=6;
+    for(int i=0; i<items; i++)
+      head1=insertNth(head1, random.nextInt(), 0);
+    for(int i=0; i<items; i++)
+      head2=insertNth(head2, random.nextInt(), 0);
   }
 }
