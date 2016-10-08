@@ -12,7 +12,7 @@ public class SeparateChainingHashST<Key, Value> implements Iterable<Key> {
     size=0; // keeps track of number of keys added to the table
     // instantiate an array of linked list:
     // array represent m buckets and each bucket is a reference to a linked list:
-    table = (Node[]) new Object[m]; // UGLY cast: Java does NOT allow GENERIC array creation
+    table = new Node[m];
     for(int i=0; i<m; i++) {
       // each hash buck is a reference to a Linked List:
       table[i]=new Node();
@@ -24,6 +24,13 @@ public class SeparateChainingHashST<Key, Value> implements Iterable<Key> {
     private Object key;
     private Object value;
     private Node next;
+  
+    // Constructor:
+    public Node(){}
+    public Node(Object key, Object value){
+      this.key=key;
+      this.value=value;
+    }
   }
 
   // Hash function to reduce key into a 32-bits integer (that can represent -2^31 to 2^31 - 1) value and map that integer into 0 to m-1 (HashST index)
