@@ -12,7 +12,7 @@ public class SeparateChainingHashST<Key, Value> implements Iterable<Key> {
     size=0; // keeps track of number of keys added to the table
     // instantiate an array of linked list:
     // array represent m buckets and each bucket is a reference to a linked list:
-    table = new Node[m];
+    table =(Node[]) new Object[m];
     for(int i=0; i<m; i++) {
       // each hash buck is a reference to a Linked List:
       table[i]=new Node();
@@ -68,11 +68,7 @@ public class SeparateChainingHashST<Key, Value> implements Iterable<Key> {
     }
 
     // case 2: if it the key was not in the chain associated with key's hashIndex bucket: add key to the front of its corresponding bucket:
-    Node oldFirst=table[hashIndex];
-    table[hashIndex]=new Node();
-    table[hashIndex].key=key;
-    table[hashIndex].value=val;
-    table[hashIndex].next=oldFirst;
+    table[hashIndex]=addFirst(table[hashIndex], key, val);
     size++; // update the number of element in the table
   }
 
@@ -99,6 +95,14 @@ public class SeparateChainingHashST<Key, Value> implements Iterable<Key> {
   public Value remove(Key key) {return null;}
 
   private void resize(int capacity) {}
+  private Node addFirst(Node head, Key key, Value value) {
+    // create a new node:
+    Node newNode=new Node(key, value);
+    // add the new node to the head of the list
+    newNode.next=head;
+    head.next=newNode;
+    return head;
+  }
 
   /* in order to implement java iterable interface, we have override
      its abstract method: iterator:
