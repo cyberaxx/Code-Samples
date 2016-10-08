@@ -12,7 +12,7 @@ public class SeparateChainingHashST<Key, Value> implements Iterable<Key> {
     size=0; // keeps track of number of keys added to the table
     // instantiate an array of linked list:
     // array represent m buckets and each bucket is a reference to a linked list:
-    table =(Node[]) new Object[m];
+    table=new Node[m];
     for(int i=0; i<m; i++) {
       // each hash buck is a reference to a Linked List:
       table[i]=new Node();
@@ -20,7 +20,7 @@ public class SeparateChainingHashST<Key, Value> implements Iterable<Key> {
   }
 
   // Linked List data definition:
-  private class Node {
+  private static class Node {
     private Object key;
     private Object value;
     private Node next;
