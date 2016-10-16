@@ -35,6 +35,6 @@ public class Counting {
     // 5. copy the sorted array back to the original array
     System.arraycopy(aux, 0, input, 0, aux.length);
 
-  }
+  } // O(R+N) Extra memory requirement, running time: O(N+R)
 
 }
