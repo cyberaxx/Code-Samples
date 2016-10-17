@@ -114,15 +114,11 @@ public class TrieST<Value> {
   private void keys(Node x, String key, Deque<String> q) {
     // termination conditon:
     if(x==null) return ;
-    
+    // if the given node have a value associated with it:
+    if(x.value!=null) q.offer(key);
     // from left to right
-    for(char c=0; c<R; c++) {
-      if(x.next[c]!=null) {
-        keys(x.next[c], key+c, q);
-        // at the leaf node:
-        if(x.value!=null) q.offer(key);
-      }
-    }  
+    for(char c=0; c<R; c++)
+      keys(x.next[c], key+c, q);
   }
 
   // keys with prefix: as the given prefix:
@@ -131,7 +127,7 @@ public class TrieST<Value> {
     Node x=get(root, prefix, 0);
     // traverse the trie rooted at node x:
     Deque<String> q=new ArrayDeque<String>();
-    keys(x, "", q);
+    keys(x, prefix, q);
     return q;
   }
   
@@ -148,10 +144,9 @@ public class TrieST<Value> {
   private int lengthOfPrefix(Node x, String key, int d, int len) {
     // termination condition: 
     if(x==null) return len;
-    if(d==key.length()) return len;
-    
-    // Otherwise:
     if(x.value!=null) len=d; // this string in the collection could be a candidate for the longest prefix of key
+    if(d==key.length()) return len;
+    // Otherwise:
     // recursively look for a longer prefix:
     return lengthOfPrefix(x.next[key.charAt(d)], key, d+1, len);
   }
