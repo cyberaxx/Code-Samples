@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class TrieST<Value> {
   private static final int R=256; // radix of the allphabet
   
@@ -36,7 +38,7 @@ public class TrieST<Value> {
 
     // Otherwise:
     // 1. scan the next char from the key:
-    char c=key.charAt(d+1);
+    char c=key.charAt(d);
     // 2. check if there exist a link from node x to a node through char c
     x.next[c]=put(x.next[c], key, value, d+1);
     // 3. return a link back up:
@@ -61,18 +63,14 @@ public class TrieST<Value> {
     if(d==key.length()) return x;
     
     // read the next character from the key string:
-    char c=key.charAt(d+1);
+    char c=key.charAt(d);
     return get(x.next[c], key, d+1);
-  }
-  
-  
-  
-  
-  
-  
-  
+  }  
   public boolean contains(String key){return get(key)!=null;}
-  public void remove(String key){}
+  
+  public void remove(String key) {
+  
+  }
   public int size(){return size;}
   public boolean isEmpty(){return root==null;}
   
