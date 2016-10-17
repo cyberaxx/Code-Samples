@@ -24,13 +24,13 @@ public class LSD {
      using key-index counting from the LSD (right most char of the string) to the
      MSD (left most char) for all N string:
      Performance : for N strings of fixed length M
-     Time: O(M*(N+R)) Space: O(N+R)
+     Time: O(M*(N+R)) Space: O(MN+R)
 	*/
 	public static void lsd(String[] keys, int m) {
 		// radix of extended ascii
 		int R=256;
 		// aux array of strings:
-		String[] aux=new String[keys.length];
+		String[] aux=new String[keys.length]; // O(MN) extra space + R for the count array (for each char in the alphabet)
 		
 		// from the right most char in the string to the left most one
 		for(int d=m-1; d>=0; d--) {
