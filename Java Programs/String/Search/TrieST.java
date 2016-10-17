@@ -141,19 +141,19 @@ public class TrieST<Value> {
     if(key==null) throw new NullPointerException();
     
     // starting from the root of the trie, search for the given key, return the longest prefix of the given in the collection if key itself is not in the collection:
-    int tail=longestPrefixOf(root, key, 0, 0);
+    int tail=lengthOfPrefix(root, key, 0, 0);
     
-    return key.substring(0, tail+1);
+    return key.substring(0, tail);
   }
-  
   private int lengthOfPrefix(Node x, String key, int d, int len) {
     // termination condition: 
     if(x==null) return len;
     if(d==key.length()) return len;
     
     // Otherwise:
-    
-    
+    if(x.value!=null) len=d; // this string in the collection could be a candidate for the longest prefix of key
+    // recursively look for a longer prefix:
+    return lengthOfPrefix(x.next[key.charAt(d)], key, d+1, len);
   }
 
 }
