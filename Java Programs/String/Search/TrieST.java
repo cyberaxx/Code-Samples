@@ -131,12 +131,13 @@ public class TrieST<Value> {
     Node x=get(root, prefix, 0);
     // traverse the trie rooted at node x:
     Deque<String> q=new ArrayDeque<String>();
-    return keys(x, "", q);
+    keys(x, "", q);
+    return q;
   }
   
   // longest prefix of the given string in the collection of strings:
   public String longestPrefixOf(String key) {
-    
+    return null;
   }
   
 
