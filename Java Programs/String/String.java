@@ -30,8 +30,18 @@ public final class String implements Comparable<String>{
   }
   public String substring(int lo, int hi) {
     return new String(value, hi-lo+1, lo);
-  }
+  } // O(1)
   
+  public String concat(String that) {
+    // length of the new string:
+    int len=this.length+that.length;
+    // instantiate a new array of characters:
+    char[] newString=new char[len]; // O(N) initializing the new char array
+    
+    // return the new string:
+    return new String(newString, len, 0);
+  }
+    
   @Override
   public int compareTo(String that){
     int len=Math.min(this.length, that.length);
