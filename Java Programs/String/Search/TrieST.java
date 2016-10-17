@@ -125,5 +125,12 @@ public class TrieST<Value> {
     }  
   }
 
+  // keys with prefix: as the given prefix:
+  public Iterable<String> keysWithPrefix(String prefix){return null;}
+  
+  // longest prefix of the given string in the collection of strings:
+  public String longestPrefixOf(String key){return null;}
+  
+
 }
 
