@@ -33,14 +33,20 @@ public class TrieST<Value> {
   private Node put(Node x, String key, Value value, int d) {
     // termination condition:
     if(x==null) x=new Node();
+    
     // if all characters from the key string has been inserted to the trie already terminated the recursion:
-    if(d==key.length()) {x.value=key; return x;}
+    if(d==key.length()) {
+      if(x.value==null) sizee++;
+      x.value=key;
+      return x;
+    }
 
     // Otherwise:
     // 1. scan the next char from the key:
     char c=key.charAt(d);
     // 2. check if there exist a link from node x to a node through char c
     x.next[c]=put(x.next[c], key, value, d+1);
+    
     // 3. return a link back up:
     return x;
   }
@@ -80,11 +86,13 @@ public class TrieST<Value> {
     // termination condition:
     // failed to find such a key in the trie
     if(x==null) throw new NoSuchElementException();
-    if(d==key.length()){x.value=null;} // set the value associated with the key to null
+    if(d==key.length()){x.value=null; size--;} // set the value associated with the key to null
     
-    // Otherwise: search for the given key by looking for its next character:
-    char c=key.charAt(d);
-    x.next[c]=remove(x.next[c], key, d+1);
+    else {
+      // Otherwise: search for the given key by looking for its next character:
+      char c=key.charAt(d);
+      x.next[c]=remove(x.next[c], key, d+1);
+    }
     
     // On the way back up if node x is null remove it:
     if(x.value!=null) return x;
