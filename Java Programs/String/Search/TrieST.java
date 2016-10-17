@@ -36,7 +36,7 @@ public class TrieST<Value> {
     
     // if all characters from the key string has been inserted to the trie already terminated the recursion:
     if(d==key.length()) {
-      if(x.value==null) sizee++;
+      if(x.value==null) size++;
       x.value=key;
       return x;
     }
