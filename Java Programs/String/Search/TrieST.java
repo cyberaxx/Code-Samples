@@ -42,7 +42,35 @@ public class TrieST<Value> {
     // 3. return a link back up:
     return x;
   }
-  public Value get(String key){return null;}
+  public Value get(String key) {
+    // if the kye is null:
+    if(key==null) throw new NullPointerException();
+    
+    // Recursively search the trie rooted ant node root for a path which sums up to the given String key, return the value associated to the leaf of such a path
+    Node x=get(root, key, 0); // from the MSD letter to LSD letter
+    if(x==null) return null;
+    
+    // cast the value:
+    return (Value) x.value;
+  }
+  private Node get(Node x, String key, int d) {
+    // termination condition:
+    if(x==null) return x;
+    
+    // if all characters of the given string has been read already:
+    if(d==key.length()) return x;
+    
+    // read the next character from the key string:
+    char c=key.charAt(d+1);
+    return get(x.next[c], key, d+1);
+  }
+  
+  
+  
+  
+  
+  
+  
   public boolean contains(String key){return get(key)!=null;}
   public void remove(String key){}
   public int size(){return size;}
