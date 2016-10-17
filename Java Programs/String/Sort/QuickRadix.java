@@ -2,6 +2,8 @@ import java.io.File;
 import java.util.*;
 
 public class QuickRadix{
+  private static final int CUTOFF=10;
+  
   public static void main(String[] args) {
     File file=new File("shells.txt");
 
@@ -36,6 +38,11 @@ public class QuickRadix{
 	  // termination condition:
 	  if(hi<=lo) return ;
 	  
+	  if(hi-lo<=CUTOFF) {
+	  	insertion(keys, lo, hi, d);
+	  	return ;
+	  }
+	  
 	  // use 3-way partitioning
 	  int lt=lo; // always points to the pivot element
 	  int gt=hi;
@@ -67,6 +74,16 @@ public class QuickRadix{
     String temp=keys[i];
     keys[i]=keys[j];
     keys[j]=temp;
+  }
+  
+  /* insertion sort: stable, comparison based sort */
+  private static void insertion(String[] keys, int lo, int hi, int d) {
+    for(int i=lo; i<=hi; i++) {
+      for(int j=i; j>lo; j--) {
+        if(keys[j].substring(d).compareTo(keys[j-1].substring(d))<0) exch(keys, j, j-1);
+        else break;
+      }
+    }
   }
 
 }
