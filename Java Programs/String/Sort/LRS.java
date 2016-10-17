@@ -13,7 +13,7 @@ public class LRS {
     String[] suffixes=suffix.suffixes();
     
     // 2. sort the array of suffixes to get close suffixes together
-    Arrays.sort(suffixes);
+    QuickRadix.sort(suffixes);
     
     // 3. sorted array of suffixes, scan one pass from top to the bottom and find the longest common prefix
     int index=0;
