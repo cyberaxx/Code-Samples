@@ -158,6 +158,5 @@ public class TrieST<Value> {
     // recursively look for a longer prefix:
     return lengthOfPrefix(x.next[key.charAt(d)], key, d+1, len);
   }
-
 }
 
