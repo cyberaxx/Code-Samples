@@ -137,9 +137,24 @@ public class TrieST<Value> {
   
   // longest prefix of the given string in the collection of strings:
   public String longestPrefixOf(String key) {
-    return null;
+    // if key is null:
+    if(key==null) throw new NullPointerException();
+    
+    // starting from the root of the trie, search for the given key, return the longest prefix of the given in the collection if key itself is not in the collection:
+    int tail=longestPrefixOf(root, key, 0, 0);
+    
+    return key.substring(0, tail+1);
   }
   
+  private int lengthOfPrefix(Node x, String key, int d, int len) {
+    // termination condition: 
+    if(x==null) return len;
+    if(d==key.length()) return len;
+    
+    // Otherwise:
+    
+    
+  }
 
 }
 
