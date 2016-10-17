@@ -18,18 +18,23 @@ public final class String implements Comparable<String>{
     // if hashCode has been already computed return it:
     if(hashCode!=0) return hashCode();
     // Otherwise: use Horner's method to compute a 32-bits hashCode
-    for(int i=0; i<length; i++)
+    for(int i=offset; i<length; i++)
       hashCode=hashCode*31+value[i]; 
     // hashCode is a base-32 integer
     return hashCode;
   }
-  public char[] toCharArray(){return value;}
+  public char[] toCharArray(){
+    char[] charArray=new char[length-offset];
+    for(int i=offset; i<length; i++)
+      charArray[i-offset]=value[i];
+    return charArray;
+  }
   public char charAt(int index){
     if(index<0 || index>=length) throw new IndexOutOfBoundsException();
-    return value[index];
+    return value[offset+index];
   }
   public String substring(int lo, int hi) {
-    return new String(value, hi-lo+1, lo);
+    return new String(value, hi-lo, offset+lo);
   } // O(1)
   
   public String concat(String that) {
