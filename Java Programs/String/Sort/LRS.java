@@ -3,7 +3,7 @@ import java.util.Arrays;
 public class LRS {
 
   public static void main(String[] args){
-    System.out.println(lrs("aaaaaaaaa"));
+    System.out.println(lrs("aaaaaaaaaaaaaaaaaaaaaaaaaa"));
   }
 
   /* find the longest reapted substring in a string */

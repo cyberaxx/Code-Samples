@@ -36,29 +36,33 @@ public class QuickRadix{
 	/* recursive helper method that sorts array of strings with variable lengths from the left most digit (MST) index 0 to index right most digits */
 	private static void sort(String[] keys, int lo, int hi, int d) {
 	  // termination condition:
-	  if(hi<=lo) return ;
+	  if(hi<=lo) return ; 
 	  
-	  if(hi-lo<=CUTOFF) {
-	  	insertion(keys, lo, hi, d);
-	  	return ;
-	  }
-	  
+    if(hi-lo<=CUTOFF) {
+      insertion(keys, lo, hi, d);
+      return ;
+   }
+
 	  // use 3-way partitioning
+    // pivot character:
+	  int pivot=charAt(keys[lo],d);
 	  int lt=lo; // always points to the pivot element
 	  int gt=hi;
 	  int i=lo+1; // moving pointer on the sub-array
+	  
 	  while(i<=gt) {
+	    int currnet=charAt(keys[i],d);
 	    // 1. if the given key at digit d is less than the pivot, move the key to the left of the pivot, advance the pointer and the pivot
-	    if(charAt(keys[i],d) < charAt(keys[lt],d)) exch(keys, i++, lt++);
+	    if(currnet<pivot) exch(keys, i++, lt++);
  	    // 2. if the given key at digit d is greater than the pivot, move the key to the end of sub-array, advance the gt pointer
- 	    if(charAt(keys[i],d) > charAt(keys[lt],d)) exch(keys, i, gt--);
+ 	    if(currnet>pivot) exch(keys, i, gt--);
  	    // 3. if equal, advance the i pointer
  	    else i++;
 	  }
 	  
 	  // sort 3-sub-arrays recursively:
 	  sort(keys, lo, lt-1, d);
-	  if(charAt(keys[lt], d+1) >=0) sort(keys, lt, gt, d+1);
+	  if(pivot>=0) sort(keys, lt, gt, d+1);
 	  sort(keys, gt+1, hi, d);
 
 	}
