@@ -10,13 +10,16 @@ public class Kadane {
 		int num=scanner.nextInt();
 		// NOTE: matrix datatype (may not be int)
 		int[][] testMatrix=matrixTestReader(scanner, num);
-		
-		// Path stack
-		Deque<Integer> path=new ArrayDeque<Integer>();
+		scanner.close();
+
 		for(int i=0; i<num; i++) {
+			// Path stack
+   		Deque<Integer> path=new ArrayDeque<Integer>();
 		  System.out.println(kadane(testMatrix[i], path));
  		  System.out.println(path);
 		}
+		
+
 	}
 	
 	// scanner and number of test cases:
