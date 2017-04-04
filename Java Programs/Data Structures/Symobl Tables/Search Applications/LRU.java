@@ -6,24 +6,24 @@ class LRU {
     private LinkedList<Integer> history; /* to keep track of LRU */
     private final int capacity; /* immutable */
     
-    
     /* Modularity: encapsulation - private helper methods helping delivering API operations: */
-    private boolean cacheFull(){return lookUpTable.size()==capacity;} /* check if the lookup table is full or not */
-    private boolean cacheMiss(int key){return !lookUpTable.containsKey(key);}
-    private int pageValue(int key) {return lookUpTable.get(key);}
     /* history manipulation: */
     private void removeFromHistory(int key){history.removeLastOccurrence(key);}
     private void addToHistory(int key){history.addFirst(key);}
-    private int getLastPage(){return history.getLast();}
-    /* look up manipulation: */
-    private void lookUpValueUpdate(int key, int value){lookUpTable.put(key, value);}
-    private void evict(int key) {lookUpTable.remove(key);}
     private void hitHistoryUpdate(int key) {
         /* remove it from the history: */
         removeFromHistory(key);
         /* move it to the front of the histoy queue*/
         addToHistory(key);   
     }
+    
+    /* look up manipulation: */
+    private void lookUpValueUpdate(int key, int value){lookUpTable.put(key, value);}
+    private void evict(int key) {lookUpTable.remove(key);}
+    /* look up query: */
+    private boolean cacheFull(){return lookUpTable.size()==capacity;} /* check if the lookup table is full or not */
+    private boolean cacheMiss(int key){return !lookUpTable.containsKey(key);}
+    private int pageValue(int key) {return lookUpTable.get(key);}
     
     /*Inititalize an LRU cache with size N */
     public LRUCache(int N) {
