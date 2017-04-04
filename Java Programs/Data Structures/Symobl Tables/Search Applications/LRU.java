@@ -1,5 +1,5 @@
 /*You are required to complete below class */
-class LRUCache {
+class LRU {
     
     /* Structure: instance variables: */
     private HashMap<Integer, Integer> lookUpTable;
