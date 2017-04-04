@@ -1,4 +1,3 @@
-// you can add other public classes to this editor in any order
 /*You are required to complete below class */
 class LRUCache {
     
