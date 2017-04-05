@@ -1,10 +1,8 @@
-// you can add other public classes to this editor in any order
-/*You are required to complete below class */
-class LRUCache {
+class LRU {
     
     /* Structure: instance variables: */
     private HashMap<Integer, Integer> lookUpTable;
-    private LinkedList<Integer> history; /* to keep track of LRU */
+    private Deque<Integer> history; /* to keep track of LRU */
     private final int capacity; /* immutable */   
     
     /* Modularity: encapsulation - private helper methods helping delivering API operations: */
@@ -31,7 +29,7 @@ class LRUCache {
        //Your code here
        this.capacity=N;
        this.lookUpTable=new HashMap<Integer, Integer>(); /* empty hash table */
-       this.history=new LinkedList<Integer>(); /* empty DList */
+       this.history=new ArrayDeque<Integer>(); /* empty DList */
     }
     
     /*Returns the value of the key x if 
